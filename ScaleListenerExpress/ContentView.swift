@@ -69,7 +69,7 @@ private func scaleDegreeLabels(for scaleType: ScaleType) -> [String] {
 struct ContentView: View {
     @State private var selectedKey: PitchClass = .c
     @State private var selectedScale: ScaleType = .major
-    @State private var selectedTempo: TempoOption = .oneTwenty
+    @State private var selectedTempo: TempoOption = .sixty
     @State private var displayMode: DisplayMode = .note
     @State private var currentSymbolIndex: Int = 0
     @State private var scaleSymbols: [String] = []
@@ -149,6 +149,26 @@ struct ContentView: View {
                 
                 // Bottom Section - Controls
                 VStack(spacing: 16) {
+                    // Toggle Controls
+                    HStack(spacing: 20) {
+                        // Note Toggle
+                        Toggle("Notes", isOn: binding(for: .note))
+                            .toggleStyle(.button)
+                        
+                        // Degree Toggle
+                        Toggle("Degrees", isOn: binding(for: .degree))
+                            .toggleStyle(.button)
+                        
+                        // Solfege Toggle
+                        Toggle("Solfege", isOn: binding(for: .solfege))
+                            .toggleStyle(.button)
+                        
+                        // Interval Toggle
+                        Toggle("Intervals", isOn: binding(for: .interval))
+                            .toggleStyle(.button)
+                    }
+                    .padding(.horizontal)
+                    
                     // Play/Stop Buttons
                     HStack(spacing: 20) {
                         Button(action: {
@@ -175,26 +195,6 @@ struct ContentView: View {
                         }
                         .disabled(!isCycling)
                     }
-                    
-                    // Toggle Controls
-                    HStack(spacing: 20) {
-                        // Note Toggle
-                        Toggle("Notes", isOn: binding(for: .note))
-                            .toggleStyle(.button)
-                        
-                        // Degree Toggle
-                        Toggle("Degrees", isOn: binding(for: .degree))
-                            .toggleStyle(.button)
-                        
-                        // Solfege Toggle
-                        Toggle("Solfege", isOn: binding(for: .solfege))
-                            .toggleStyle(.button)
-                        
-                        // Interval Toggle
-                        Toggle("Intervals", isOn: binding(for: .interval))
-                            .toggleStyle(.button)
-                    }
-                    .padding(.horizontal)
                 }
                 .frame(height: geometry.size.height * 0.4)
             }
@@ -227,8 +227,20 @@ struct ContentView: View {
     
     private func updateScale() {
         let scale = Scale(root: selectedKey, spelling: .sharps, type: selectedScale)
-        scaleSymbols = scale.type.semitoneOffsetsFromRoot.map { offset in
-            let noteIndex = (PitchClass.allCases.firstIndex(of: selectedKey)! + offset) % 12
+        let offsets = scale.type.semitoneOffsetsFromRoot
+        
+        // Build ascending scale (up one octave)
+        let ascendOffsets = offsets
+        
+        // Build descending scale (back down, excluding the top octave note)
+        let descendOffsets = Array(ascendOffsets.dropLast().reversed())
+        
+        // Combine: ascend + top note + descend
+        let fullScaleOffsets = ascendOffsets + [ascendOffsets.last!] + descendOffsets
+        
+        scaleSymbols = fullScaleOffsets.map { offset in
+            let rootIndex = PitchClass.allCases.firstIndex(of: selectedKey)!
+            let noteIndex = (rootIndex + offset) % 12
             return PitchClass.allCases[noteIndex].displayName
         }
         currentSymbolIndex = 0
@@ -243,19 +255,37 @@ struct ContentView: View {
         
         switch displayMode {
         case .note:
-            scaleSymbols = offsets.map { offset in
-                let rootIndex = PitchClass.allCases.firstIndex(of: selectedKey)!
-                let noteIndex = (rootIndex + offset) % 12
-                return PitchClass.allCases[noteIndex].displayName
-            }
+            // Already handled in updateScale() - no change needed
+            break
+            
         case .degree:
-            scaleSymbols = scaleDegreeLabels(for: selectedScale)
+            // Build ascending degrees (1,2,3,4,5,6,7,8)
+            let ascendDegrees = Array(1...offsets.count).map { String($0) }
+            let topDegree = ascendDegrees.last!
+            // Build descending degrees (7,6,5,4,3,2,1)
+            let descendDegrees = Array(stride(from: ascendDegrees.count - 1, to: 0, by: -1)).map { String($0) }
+            // Combine: ascend + top + descend
+            scaleSymbols = ascendDegrees + [topDegree] + descendDegrees
+            
         case .solfege:
-            scaleSymbols = scaleSolfege[selectedScale] ?? ["?"]
+            // Get scale-specific solfege
+            let ascendSolfege = scaleSolfege[selectedScale] ?? ["?"]
+            let topSolfege = ascendSolfege.last!
+            // Build descending (excluding top note)
+            let descendSolfege = Array(ascendSolfege.dropLast().reversed())
+            // Combine: ascend + top + descend
+            scaleSymbols = ascendSolfege + [topSolfege] + descendSolfege
+            
         case .interval:
-            scaleSymbols = offsets.map { offset in
-                return intervalNames[offset] ?? "?"
+            // Get intervals for ascending
+            let ascendIntervals = offsets.map { offset in
+                intervalNames[offset] ?? "?"
             }
+            let topInterval = ascendIntervals.last!
+            // Build descending (excluding top note)
+            let descendIntervals = Array(ascendIntervals.dropLast().reversed())
+            // Combine: ascend + top + descend
+            scaleSymbols = ascendIntervals + [topInterval] + descendIntervals
         }
         
         currentSymbolIndex = 0
