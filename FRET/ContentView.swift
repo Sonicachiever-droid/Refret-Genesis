@@ -54,15 +54,15 @@ struct ContentView: View {
                             .position(x: geometry.size.width - 10, y: 50)
                     }
                                     
-                    // Thumb buttons anchored to bottom - unchanged
-                    ThumbButtonView(gameManager: gameManager, screenWidth: geometry.size.width, skinManager: skinManager)
-                        .frame(height: geometry.size.height * 0.25)
-                        .offset(y: -220) // Moved up 70 points to position D button top at phone coordinate 320
-                    
-                    // Guitar neck positioned at dots level
+                    // Guitar neck positioned in middle area
                     GuitarNeckView(screenWidth: geometry.size.width, litCircleIndex: gameManager.litCircleIndex, wrongPressCircle: gameManager.wrongPressCircle, showingNote: gameManager.showingNote, currentLitNote: gameManager.currentLitNote, lastLitCircleIndex: gameManager.lastLitCircleIndex, gameManager: gameManager, gamePhase: gameManager.gamePhase, skinManager: skinManager)
-                        .frame(height: geometry.size.height * 0.3)
-                        .position(x: geometry.size.width / 2, y: geometry.size.height * 0.9 - 500)
+                        .frame(height: 200)
+                        .position(x: geometry.size.width / 2, y: geometry.size.height * 0.4)
+                    
+                    // Thumb buttons anchored to bottom
+                    ThumbButtonView(gameManager: gameManager, screenWidth: geometry.size.width, skinManager: skinManager)
+                        .frame(height: 100)
+                        .position(x: geometry.size.width / 2, y: geometry.size.height - 100)
                     
                     // Paintbrush icon button at bottom
                     VStack {
