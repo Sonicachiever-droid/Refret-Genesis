@@ -13,6 +13,15 @@
 		A1000001000000000000010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000009 /* Assets.xcassets */; };
 		A1000001000000000000012 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000011 /* LaunchScreen.storyboard */; };
 		A1000001000000000000014 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000013 /* main.m */; };
+		A1000001000000000000030 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000031 /* ContentView.swift */; };
+		A1000001000000000000032 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000033 /* GameManager.swift */; };
+		A1000001000000000000034 /* SkinManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000035 /* SkinManager.swift */; };
+		A1000001000000000000036 /* GuitarNeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000037 /* GuitarNeckView.swift */; };
+		A1000001000000000000038 /* ThumbButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000039 /* ThumbButtonView.swift */; };
+		A1000001000000000000040 /* ThemedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000041 /* ThemedTextView.swift */; };
+		A1000001000000000000042 /* SkinSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000043 /* SkinSelectorView.swift */; };
+		A1000001000000000000044 /* DynamicBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000045 /* DynamicBackgroundView.swift */; };
+		A1000001000000000000046 /* HardwareDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000000000000047 /* HardwareDetailsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +32,15 @@
 		A1000001000000000000011 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1000001000000000000013 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A1000001000000000000015 /* FRET.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FRET.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1000001000000000000031 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A1000001000000000000033 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
+		A1000001000000000000035 /* SkinManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinManager.swift; sourceTree = "<group>"; };
+		A1000001000000000000037 /* GuitarNeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuitarNeckView.swift; sourceTree = "<group>"; };
+		A1000001000000000000039 /* ThumbButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbButtonView.swift; sourceTree = "<group>"; };
+		A1000001000000000000041 /* ThemedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTextView.swift; sourceTree = "<group>"; };
+		A1000001000000000000043 /* SkinSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSelectorView.swift; sourceTree = "<group>"; };
+		A1000001000000000000045 /* DynamicBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBackgroundView.swift; sourceTree = "<group>"; };
+		A1000001000000000000047 /* HardwareDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +68,15 @@
 				A1000001000000000000002 /* AppDelegate.swift */,
 				A1000001000000000000003 /* SceneDelegate.swift */,
 				A1000001000000000000005 /* ViewController.swift */,
+				A1000001000000000000031 /* ContentView.swift */,
+				A1000001000000000000033 /* GameManager.swift */,
+				A1000001000000000000035 /* SkinManager.swift */,
+				A1000001000000000000037 /* GuitarNeckView.swift */,
+				A1000001000000000000039 /* ThumbButtonView.swift */,
+				A1000001000000000000041 /* ThemedTextView.swift */,
+				A1000001000000000000043 /* SkinSelectorView.swift */,
+				A1000001000000000000045 /* DynamicBackgroundView.swift */,
+				A1000001000000000000047 /* HardwareDetailsView.swift */,
 				A1000001000000000000009 /* Assets.xcassets */,
 				A1000001000000000000011 /* LaunchScreen.storyboard */,
 				A1000001000000000000013 /* main.m */,
@@ -138,6 +165,15 @@
 				A1000001000000000000001 /* AppDelegate.swift in Sources */,
 				A1000001000000000000004 /* SceneDelegate.swift in Sources */,
 				A1000001000000000000006 /* ViewController.swift in Sources */,
+				A1000001000000000000030 /* ContentView.swift in Sources */,
+				A1000001000000000000032 /* GameManager.swift in Sources */,
+				A1000001000000000000034 /* SkinManager.swift in Sources */,
+				A1000001000000000000036 /* GuitarNeckView.swift in Sources */,
+				A1000001000000000000038 /* ThumbButtonView.swift in Sources */,
+				A1000001000000000000040 /* ThemedTextView.swift in Sources */,
+				A1000001000000000000042 /* SkinSelectorView.swift in Sources */,
+				A1000001000000000000044 /* DynamicBackgroundView.swift in Sources */,
+				A1000001000000000000046 /* HardwareDetailsView.swift in Sources */,
 				A1000001000000000000014 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

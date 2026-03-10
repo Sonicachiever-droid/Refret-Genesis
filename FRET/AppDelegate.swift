@@ -1,21 +1,18 @@
 import UIKit
+import SwiftUI
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        print("🚀 App did finish launching")
         window = UIWindow(frame: UIScreen.main.bounds)
-        print("🪟 Window created")
         
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .red
-        print("🎨 View controller created with red background")
+        let contentView = ContentView()
+        let hostingController = UIHostingController(rootView: contentView)
         
-        window?.rootViewController = viewController
+        window?.rootViewController = hostingController
         window?.makeKeyAndVisible()
-        print("✅ Window made key and visible")
         
         return true
     }
