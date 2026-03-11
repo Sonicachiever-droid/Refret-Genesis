@@ -48,7 +48,6 @@ struct ContentView: View {
     @State private var appPhase: AppPhase = .welcome
     @State private var isToggleOn: Bool = false
     @State private var currentRound: Int = 1
-    @State private var woodOnlyMode: Bool = true
 
     private let notePool: [String] = [
         "E", "F", "F♯", "G", "G♯", "A", "A♯", "B", "C", "C♯", "D", "D♯"
@@ -80,52 +79,51 @@ struct ContentView: View {
                     )
                     .padding(.horizontal, gridPadding)
                     .padding(.top, gridPadding)
-                    if !woodOnlyMode {
-                        bindingOverlay(
-                            width: gridWidth,
-                            rowHeight: rowHeight,
-                            rowSpacing: rowSpacing,
-                            offsetRows: fretsShiftedDown ? 1 : 0
-                        )
-                        .padding(.horizontal, gridPadding)
-                        .padding(.top, gridPadding)
 
-                        fretWireOverlay(
-                            width: gridWidth,
-                            rowHeight: rowHeight,
-                            rowSpacing: rowSpacing,
-                            offsetRows: fretsShiftedDown ? 1 : 0
-                        )
-                        .padding(.horizontal, gridPadding)
-                        .padding(.top, gridPadding)
+                    bindingOverlay(
+                        width: gridWidth,
+                        rowHeight: rowHeight,
+                        rowSpacing: rowSpacing,
+                        offsetRows: fretsShiftedDown ? 1 : 0
+                    )
+                    .padding(.horizontal, gridPadding)
+                    .padding(.top, gridPadding)
 
-                        markerOverlay(
-                            width: gridWidth,
-                            rowHeight: rowHeight,
-                            rowSpacing: rowSpacing,
-                            offsetRows: fretsShiftedDown ? 1 : 0
-                        )
-                        .padding(.horizontal, gridPadding)
-                        .padding(.top, gridPadding)
+                    fretWireOverlay(
+                        width: gridWidth,
+                        rowHeight: rowHeight,
+                        rowSpacing: rowSpacing,
+                        offsetRows: fretsShiftedDown ? 1 : 0
+                    )
+                    .padding(.horizontal, gridPadding)
+                    .padding(.top, gridPadding)
 
-                        nutOverlay(
-                            width: gridWidth,
-                            rowHeight: rowHeight,
-                            rowSpacing: rowSpacing,
-                            offsetRows: fretsShiftedDown ? 1 : 0
-                        )
-                        .padding(.horizontal, gridPadding)
-                        .padding(.top, gridPadding)
+                    markerOverlay(
+                        width: gridWidth,
+                        rowHeight: rowHeight,
+                        rowSpacing: rowSpacing,
+                        offsetRows: fretsShiftedDown ? 1 : 0
+                    )
+                    .padding(.horizontal, gridPadding)
+                    .padding(.top, gridPadding)
 
-                        LazyVGrid(columns: columns, spacing: rowSpacing) {
-                            ForEach(0..<totalCells, id: \.self) { index in
-                                Color.clear
-                                    .frame(height: rowHeight)
-                                    .overlay(highlightOverlay(for: index))
-                            }
+                    nutOverlay(
+                        width: gridWidth,
+                        rowHeight: rowHeight,
+                        rowSpacing: rowSpacing,
+                        offsetRows: fretsShiftedDown ? 1 : 0
+                    )
+                    .padding(.horizontal, gridPadding)
+                    .padding(.top, gridPadding)
+
+                    LazyVGrid(columns: columns, spacing: rowSpacing) {
+                        ForEach(0..<totalCells, id: \.self) { index in
+                            Color.clear
+                                .frame(height: rowHeight)
+                                .overlay(highlightOverlay(for: index))
                         }
-                        .padding(gridPadding)
                     }
+                    .padding(gridPadding)
                 }
             }
             .overlay(alignment: .bottomTrailing) {
@@ -182,7 +180,7 @@ struct ContentView: View {
     ) -> some View {
         let nutHeight = rowHeight * 0.35
         let bevelHeight = nutHeight * 0.25
-        let baseRow: CGFloat = 1
+        let baseRow: CGFloat = 2
         let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
         return ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: 6)
@@ -222,7 +220,7 @@ struct ContentView: View {
             .padding(.horizontal, width * 0.04)
         )
         .padding(.bottom, rowSpacing)
-        .offset(y: totalOffset - rowHeight - rowSpacing * 0.5)
+        .offset(y: totalOffset - (rowHeight * 1.5) + nutHeight * 3)
         .allowsHitTesting(false)
     }
 
@@ -583,23 +581,22 @@ struct ContentView: View {
     ) -> some View {
         let rowsCovered: CGFloat = 3
         let overlayHeight = rowsCovered * rowHeight + (rowsCovered - 1) * rowSpacing
-        let baseRow: CGFloat = 2 // align with highlighted fret range (cells 9-20)
+        let baseRow: CGFloat = 2
         let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
-        let parameters = WoodShaderParameters(
-            ringDensity: 14,
-            grainRoughness: 0.55,
-            colorVariation: 0.28,
-            stretch: 5.5,
-            orientation: .pi / 2,
-            sheenStrength: 0.08,
-            lightColor: Color(red: 0.93, green: 0.80, blue: 0.60),
-            darkColor: Color(red: 0.54, green: 0.33, blue: 0.18)
-        )
 
         return RoundedRectangle(cornerRadius: 10)
-            .fill(Color.white)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.93, green: 0.80, blue: 0.60),
+                        Color(red: 0.74, green: 0.56, blue: 0.39),
+                        Color(red: 0.54, green: 0.33, blue: 0.18)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
             .frame(width: width, height: overlayHeight)
-            .woodShader(parameters)
             .overlay(
                 VStack(spacing: rowSpacing) {
                     ForEach(0..<3, id: \.self) { _ in
