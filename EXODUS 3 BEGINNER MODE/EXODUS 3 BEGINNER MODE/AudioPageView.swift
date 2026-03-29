@@ -35,15 +35,12 @@ struct AudioPageView: View {
                 }
 
                 Section("Backing Track") {
-                    Toggle("Backing Track Enabled", isOn: $audioSettings.backingTrackEnabled)
-                        .disabled(!hasBackingTracks)
-
                     Picker("Arrangement", selection: $audioSettings.selectedBackingArrangement) {
                         ForEach(BackingArrangementPreset.allCases) { preset in
                             Text(preset.rawValue).tag(preset)
                         }
                     }
-                    .disabled(!hasBackingTracks || !audioSettings.backingTrackEnabled)
+                    .disabled(!hasBackingTracks)
 
                     if availableBackingTracks.isEmpty {
                         Text("No bundled backing tracks yet")
@@ -57,7 +54,7 @@ struct AudioPageView: View {
                                 Text(track.title).tag(track.id)
                             }
                         }
-                        .disabled(!audioSettings.backingTrackEnabled)
+                        .disabled(!hasBackingTracks)
                     }
                 }
 

@@ -106,12 +106,15 @@ final class GuitarNoteEngine {
     private func loadInstrument(for preset: GuitarTonePreset) {
         guard let descriptor = instrumentByPreset[preset] else { return }
 
-        let bundledCandidates: [URL?] = [
+        // Try GeneralUser GS SoundFont first (has good guitar sounds)
+        let soundFontCandidates: [URL?] = [
+            Bundle.main.url(forResource: "GeneralUser GS v1.472", withExtension: "sf2", subdirectory: "GeneralUser GS 1.472"),
+            Bundle.main.url(forResource: "GeneralUser GS v1.472", withExtension: "sf2"),
             Bundle.main.url(forResource: descriptor.bundledResourceName, withExtension: descriptor.bundledFileExtension),
             Bundle.main.url(forResource: descriptor.bundledResourceName, withExtension: "dls")
         ]
 
-        for candidate in bundledCandidates {
+        for candidate in soundFontCandidates {
             guard let instrumentURL = candidate else { continue }
             do {
                 try sampler.loadSoundBankInstrument(
@@ -120,11 +123,13 @@ final class GuitarNoteEngine {
                     bankMSB: UInt8(kAUSampler_DefaultMelodicBankMSB),
                     bankLSB: 0
                 )
+                print("GuitarNoteEngine: Loaded guitar sounds from \(instrumentURL.lastPathComponent)")
                 return
             } catch {
             }
         }
 
+        // Fallback to system sounds
         for fallbackURL in fallbackSoundBankURLs() {
             do {
                 try sampler.loadSoundBankInstrument(
@@ -133,6 +138,7 @@ final class GuitarNoteEngine {
                     bankMSB: UInt8(kAUSampler_DefaultMelodicBankMSB),
                     bankLSB: 0
                 )
+                print("GuitarNoteEngine: Using system sound bank fallback")
                 return
             } catch {
             }

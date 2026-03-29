@@ -47,7 +47,6 @@ final class AudioSettings {
     var guitarTonePreset: GuitarTonePreset = .acoustic
     var reverbLevel: AudioEffectLevel = .off
     var delayLevel: AudioEffectLevel = .off
-    var backingTrackEnabled: Bool = false
     var selectedBackingArrangement: BackingArrangementPreset = .epDrumsPad
     var selectedBackingTrackID: String? = nil
     var tempoIncreasePerRound: TempoIncreasePerRound = .off

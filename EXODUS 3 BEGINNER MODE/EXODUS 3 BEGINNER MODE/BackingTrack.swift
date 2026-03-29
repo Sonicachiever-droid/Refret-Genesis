@@ -10,12 +10,33 @@ struct BackingTrack: Identifiable, Equatable, Hashable {
     }
 
     func resourceURL(in bundle: Bundle = .main) -> URL? {
-        bundle.url(forResource: resourceName, withExtension: fileExtension)
+        if let url = bundle.url(forResource: resourceName, withExtension: fileExtension) {
+            return url
+        }
+        #if DEBUG
+        // Development fallback: load directly from the project folder when not bundled
+        let devPath = "/Users/thomaskane/CascadeProjects/Project Exodus/EXODUS 4 BEGINNER MODE/EXODUS 4 BEGINNER MODE/\(resourceName).\(fileExtension)"
+        let devURL = URL(fileURLWithPath: devPath)
+        if FileManager.default.fileExists(atPath: devURL.path) {
+            return devURL
+        }
+        #endif
+        return nil
     }
 
     static func discoverBundledTracks(in bundle: Bundle = .main) -> [BackingTrack] {
         let midiExtensions = ["mid", "midi"]
-        let urls = midiExtensions.flatMap { bundle.urls(forResourcesWithExtension: $0, subdirectory: nil) ?? [] }
+        var urls = midiExtensions.flatMap { bundle.urls(forResourcesWithExtension: $0, subdirectory: nil) ?? [] }
+        #if DEBUG
+        if urls.isEmpty {
+            // Development fallback: read from project folder if not bundled
+            let devDir = URL(fileURLWithPath: "/Users/thomaskane/CascadeProjects/Project Exodus/EXODUS 4 BEGINNER MODE/EXODUS 4 BEGINNER MODE")
+            if let contents = try? FileManager.default.contentsOfDirectory(at: devDir, includingPropertiesForKeys: nil) {
+                let devURLs = contents.filter { midiExtensions.contains($0.pathExtension.lowercased()) }
+                urls.append(contentsOf: devURLs)
+            }
+        }
+        #endif
         let tracks = urls.map { url in
             BackingTrack(
                 title: url.deletingPathExtension().lastPathComponent.replacingOccurrences(of: "_", with: " ").uppercased(),
