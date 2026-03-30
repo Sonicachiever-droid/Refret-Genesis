@@ -18,6 +18,7 @@ final class SimpleMIDIEngine: ObservableObject {
     private var isLooping: Bool = true
     private var loopTimer: Timer?
     private let loopLengthInBeats: TimeInterval = 16
+    private var bassTransposeSemitones: Int = 0
     
     init() {
         self.sequencer = AVAudioSequencer(audioEngine: engine)
@@ -105,6 +106,7 @@ final class SimpleMIDIEngine: ObservableObject {
             
             // Route tracks to appropriate samplers
             routeTracksToSamplers()
+            applyBassTranspose()
             
             // Use track-level looping (reliable, tiny gap acceptable)
             if loop {
@@ -173,6 +175,15 @@ final class SimpleMIDIEngine: ObservableObject {
             track.isLoopingEnabled = true
         }
         print("[SimpleMIDIEngine] Track-level looping configured (\(loopLengthInBeats) beats)")
+    }
+
+    func setBassTransposeSemitones(_ semitones: Int) {
+        bassTransposeSemitones = semitones
+        applyBassTranspose()
+    }
+
+    private func applyBassTranspose() {
+        bassSampler.globalTuning = Float(bassTransposeSemitones * 100)
     }
     
     func muteTrack1() {

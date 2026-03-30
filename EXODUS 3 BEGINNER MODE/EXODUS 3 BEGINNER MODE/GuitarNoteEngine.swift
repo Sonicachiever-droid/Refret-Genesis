@@ -21,6 +21,7 @@ final class GuitarNoteEngine {
     private let reverb = AVAudioUnitReverb()
     private var activeMIDINote: UInt8?
     private var notePlaybackToken: UInt64 = 0
+    private var chordPlaybackToken: UInt64 = 0
     private var toneConfiguration = ToneConfiguration(
         preset: .acoustic,
         reverbLevel: .off,
@@ -101,6 +102,37 @@ final class GuitarNoteEngine {
             self.sampler.stopNote(noteValue, onChannel: 0)
             self.activeMIDINote = nil
         }
+    }
+
+    @discardableResult
+    func playChord(midiNotes: [Int], velocity: Float = 0.92, sustainMultiplier: Double = 1.0) -> TimeInterval {
+        let clampedNotes = Array(Set(midiNotes.map { min(max($0, 24), 88) })).sorted()
+        guard !clampedNotes.isEmpty else { return 0 }
+
+        startEngineIfNeeded()
+        if let activeMIDINote {
+            sampler.stopNote(activeMIDINote, onChannel: 0)
+            self.activeMIDINote = nil
+        }
+
+        engine.mainMixerNode.outputVolume = max(0.15, min(velocity, 1.0))
+        let velocityValue = UInt8(max(1, min(Int(velocity * 127.0), 127)))
+        let noteValues = clampedNotes.map(UInt8.init)
+        for noteValue in noteValues {
+            sampler.startNote(noteValue, withVelocity: velocityValue, onChannel: 0)
+        }
+
+        chordPlaybackToken &+= 1
+        let playbackToken = chordPlaybackToken
+        let releaseDelay = noteLength(for: toneConfiguration.preset) * max(sustainMultiplier, 0.1)
+        DispatchQueue.main.asyncAfter(deadline: .now() + releaseDelay) { [weak self] in
+            guard let self else { return }
+            guard self.chordPlaybackToken == playbackToken else { return }
+            for noteValue in noteValues {
+                self.sampler.stopNote(noteValue, onChannel: 0)
+            }
+        }
+        return releaseDelay
     }
 
     private func loadInstrument(for preset: GuitarTonePreset) {
