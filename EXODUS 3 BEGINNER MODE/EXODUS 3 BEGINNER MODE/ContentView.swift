@@ -19,6 +19,7 @@ enum GameplayMenuOption: String, CaseIterable, Identifiable {
         case .audio: return "AUDIO"
         }
     }
+
 }
 
 enum RefretMode: String, CaseIterable, Identifiable {
@@ -265,7 +266,6 @@ private struct WhiteNoteBoxOverlay: View {
     let neckWidth: CGFloat
     let activeStringNumbers: [Int]
     let answerFeedback: ThumbGlowState?
-    let currentQuestionIsAccidental: Bool
     let blinkingActive: Bool
     let blinkOrange: Bool
     let revealedNoteText: String?
@@ -293,14 +293,13 @@ private struct WhiteNoteBoxOverlay: View {
         let maxBoxWidthFromSpacing = max(minCenterSpacing - spacingGap, 0)
         let boxWidth = min(clampedBoxHeight * 1.8, maxBoxWidthFromSpacing)
         let activeSet = Set(activeStringNumbers)
-        let accidentalInRevealedNote = (revealedNoteText?.contains("#") == true) || (revealedNoteText?.contains("b") == true)
-        let accidentalInPerStringNotes = revealedNoteTextByString?.values.contains(where: { $0.contains("#") || $0.contains("b") }) == true
-        let shouldUseAccidentalStyle = currentQuestionIsAccidental || accidentalInRevealedNote || accidentalInPerStringNotes
-
         return ZStack {
             ForEach(0..<totalStrings, id: \.self) { index in
                 let stringNumber = totalStrings - index
                 let isActive = activeSet.contains(stringNumber)
+                let displayedNoteText = revealedNoteTextByString?[stringNumber] ?? revealedNoteText
+                let noteIsAccidental = (displayedNoteText?.contains("#") == true) || (displayedNoteText?.contains("b") == true)
+                let shouldUseAccidentalStyle = noteIsAccidental
                 let fillColor: Color = {
                     guard isActive else { return Color.clear }
                     switch answerFeedback {
@@ -354,7 +353,6 @@ private struct WhiteNoteBoxOverlay: View {
                     .shadow(color: auraColor.opacity(0.55), radius: 8)
                     .frame(width: boxWidth, height: clampedBoxHeight)
                     .overlay {
-                        let displayedNoteText = revealedNoteTextByString?[stringNumber] ?? revealedNoteText
                         if isActive, let displayedNoteText, !displayedNoteText.isEmpty {
                             Text(displayedNoteText)
                                 .font(.system(size: min(clampedBoxHeight * 0.78, 28), weight: .black, design: .monospaced))
@@ -1313,7 +1311,7 @@ private struct DeveloperConsoleFrame: View {
                 )
                 .padding(1.5)
 
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(
                     celebrationActive
                         ? LinearGradient(
@@ -1329,7 +1327,7 @@ private struct DeveloperConsoleFrame: View {
                             endPoint: .bottom
                         )
                 )
-                .padding(8)
+                .padding(4)
                 .overlay {
                     Group {
                         if isScreensaverMode {
@@ -1459,7 +1457,6 @@ private struct DeveloperConsoleFrame: View {
                         }
                     }
                 }
-                .padding(8)
         }
         .scaleEffect(isHintVisible ? 1.02 : 1.0)
         .frame(width: width, height: height)
@@ -1476,9 +1473,9 @@ private struct DeveloperConsoleFrame: View {
     private func adaptiveProgressFontSize(for progressLine: String) -> CGFloat {
         let compact = progressLine.replacingOccurrences(of: " ", with: "")
         let count = max(compact.count, 1)
-        let base = min(width * 0.175, 46)
-        let reduction = CGFloat(max(count - 4, 0)) * 3.2
-        return max(22, base - reduction)
+        let base = min(width * 0.205, 54)
+        let reduction = CGFloat(max(count - 4, 0)) * 2.9
+        return max(26, base - reduction)
     }
 }
 
@@ -1770,6 +1767,10 @@ struct ContentView: View {
     @State private var beginnerRewardTargetBeatPosition: Double? = nil
     @State private var beginnerRewardSelectedString: Int? = nil
     @State private var beginnerRewardNoteTextByString: [Int: String]? = nil
+    @State private var beginnerRewardScheduledStrings: [Int] = []
+    @State private var beginnerRewardScheduledMIDINotes: [Int] = []
+    @State private var beginnerRewardScheduledNoteTextByString: [Int: String] = [:]
+    @State private var beginnerRewardSustainMultiplier: Double = 3.0
 
     private enum StartupSpeechPhase {
         case idle
@@ -1793,6 +1794,18 @@ struct ContentView: View {
         let endsCycle: Bool
     }
 
+    private struct BeginnerRewardPolicyKey: Hashable {
+        let stageIndex: Int
+        let fret: Int?
+    }
+
+    private struct BeginnerRewardPolicy {
+        let isRewardEnabled: Bool
+        let delayBeats: Double
+        let sustainMultiplier: Double
+        let preferredStrings: [Int]?
+    }
+
     @State private var startupSpeechPhase: StartupSpeechPhase = .idle
     @State private var availableBackingTracks: [BackingTrack] = []
 
@@ -1814,9 +1827,17 @@ struct ContentView: View {
         BeginnerStageTemplate(root: "G", titleSuffix: "6", intervals: [0, 4, 7, 9], bassSemitoneTarget: 3, endsCycle: false),
         BeginnerStageTemplate(root: "G", titleSuffix: "ADD 9", intervals: [0, 2, 4, 7], bassSemitoneTarget: 3, endsCycle: false),
         BeginnerStageTemplate(root: "G", titleSuffix: "6/9", intervals: [0, 2, 4, 7, 9], bassSemitoneTarget: 3, endsCycle: false),
-        BeginnerStageTemplate(root: "A", titleSuffix: "SUS 2", intervals: [0, 2, 7], bassSemitoneTarget: 5, endsCycle: false),
-        BeginnerStageTemplate(root: "D", titleSuffix: "SUS 4", intervals: [0, 5, 7], bassSemitoneTarget: 10, endsCycle: true)
+        BeginnerStageTemplate(root: "A", titleSuffix: "SUS 2", intervals: [0, 7, 2], bassSemitoneTarget: 5, endsCycle: false),
+        BeginnerStageTemplate(root: "D", titleSuffix: "SUS 4", intervals: [0, 7, 5], bassSemitoneTarget: 10, endsCycle: true)
     ]
+
+    private func normalizedBeginnerChordDisplay(_ text: String) -> String {
+        text.replacingOccurrences(
+            of: #"\b([A-G](?:#|b)?)\s+(\d+)\b"#,
+            with: "$1$2",
+            options: .regularExpression
+        )
+    }
 
     private var beginnerScaleStages: [BeginnerScaleStage] {
         beginnerScaleTemplates.map { template in
@@ -1825,7 +1846,7 @@ struct ContentView: View {
                 transposedSharpNote(template.root, by: beginnerScaleCycleSemitoneOffset + interval)
             }
             return BeginnerScaleStage(
-                title: "\(root) \(template.titleSuffix)",
+                title: normalizedBeginnerChordDisplay("\(root) \(template.titleSuffix)"),
                 notes: notes,
                 bassSemitoneTarget: template.bassSemitoneTarget + beginnerScaleCycleSemitoneOffset,
                 endsCycle: template.endsCycle
@@ -1848,6 +1869,20 @@ struct ContentView: View {
 
     private var beginnerCurrentBassSemitoneTarget: Int {
         beginnerCurrentScaleStage.bassSemitoneTarget
+    }
+
+    private var beginnerRewardPolicies: [BeginnerRewardPolicyKey: BeginnerRewardPolicy] {
+        var table: [BeginnerRewardPolicyKey: BeginnerRewardPolicy] = [:]
+        let defaultPolicy = BeginnerRewardPolicy(
+            isRewardEnabled: true,
+            delayBeats: 3.0,
+            sustainMultiplier: 3.0,
+            preferredStrings: nil
+        )
+        for stageIndex in 1..<max(beginnerScaleStages.count, 1) {
+            table[BeginnerRewardPolicyKey(stageIndex: stageIndex, fret: nil)] = defaultPolicy
+        }
+        return table
     }
 
     private var beginnerPentatonicProgressText: String {
@@ -2031,6 +2066,10 @@ struct ContentView: View {
             let topStatusOuterHeight = max(min(gridRowHeight * 1.35, 120), 74)
             let topStatusBottomGap = max(gridRowHeight * 0.18, 10)
             let topStatusCenterY = (windowTopY - topStatusBottomGap) - (topStatusOuterHeight / 2)
+            let sideWindowGap = max((proxy.size.width - highlightWidth) / 4, 18)
+            let leftFretIndicatorX = (proxy.size.width / 2) - (highlightWidth / 2) - sideWindowGap
+            let rightFretIndicatorX = (proxy.size.width / 2) + (highlightWidth / 2) + sideWindowGap
+            let fretIndicatorText = "\(min(max(currentRound, 0), 12))"
 
             let unsignedN = abs(currentFretStart)
             let activeMidpointIndex: Int = {
@@ -2187,6 +2226,23 @@ struct ContentView: View {
                     .allowsHitTesting(false)
                 }
 
+                if !isCodeScreensaverMode {
+                    Group {
+                        Text(fretIndicatorText)
+                            .font(.system(size: 24, weight: .black, design: .monospaced))
+                            .foregroundStyle(Color.white.opacity(0.96))
+                            .shadow(color: Color.black.opacity(0.72), radius: 3, x: 0, y: 1)
+                            .position(x: leftFretIndicatorX, y: orangeGreenUnitCenterY)
+
+                        Text(fretIndicatorText)
+                            .font(.system(size: 24, weight: .black, design: .monospaced))
+                            .foregroundStyle(Color.white.opacity(0.96))
+                            .shadow(color: Color.black.opacity(0.72), radius: 3, x: 0, y: 1)
+                            .position(x: rightFretIndicatorX, y: orangeGreenUnitCenterY)
+                    }
+                    .allowsHitTesting(false)
+                }
+
                 if showFretboardGuide && !isCodeScreensaverMode {
                     let guideBoxHeight = topStatusOuterHeight * 0.5
                     let guideBoxWidth = neckWidth
@@ -2194,22 +2250,36 @@ struct ContentView: View {
                     let guideBoxCenterY = windowBottomY - (guideBoxHeight / 2) - 4
                     let stringCenters = GuitarStringLayout.stringCenters(containerWidth: proxy.size.width, neckWidth: neckWidth)
                     let fretboardStrings = (0..<GuitarStringLayout.totalStrings).map { GuitarStringLayout.highestStringNumber - $0 }
+                    let minGuideSpacing = zip(stringCenters.dropFirst(), stringCenters).map(-).min() ?? (guideBoxWidth / CGFloat(max(fretboardStrings.count, 1)))
+                    let guideTileWidth = max(minGuideSpacing * 0.82, 18)
+                    let guideTileHeight = guideBoxHeight * 0.86
                     ZStack {
                         RoundedRectangle(cornerRadius: guideBoxCornerRadius, style: .continuous)
-                            .fill(Color.black.opacity(0.92))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: guideBoxCornerRadius, style: .continuous)
-                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                            )
+                            .fill(Color.black.opacity(0.42))
                             .frame(width: guideBoxWidth, height: guideBoxHeight)
                             .position(x: proxy.size.width / 2, y: guideBoxCenterY)
 
                         ForEach(Array(fretboardStrings.enumerated()), id: \.offset) { index, stringNumber in
                             let note = noteName(forString: stringNumber, fret: max(currentRound, 0), useFlats: beginnerUsesFlats)
-                            Text(note)
-                                .font(.system(size: guideBoxHeight * 0.5, weight: .black, design: .monospaced))
-                                .foregroundStyle(Color.white)
-                                .shadow(color: Color.black.opacity(0.6), radius: 4, x: 0, y: 1)
+                            let noteIsAccidental = note.contains("#") || note.contains("b")
+                            let tileFill = noteIsAccidental ? Color.black.opacity(0.94) : Color.white.opacity(0.96)
+                            let tileStroke = noteIsAccidental ? Color.white.opacity(0.7) : Color.black.opacity(0.68)
+                            let textColor = noteIsAccidental ? Color.white.opacity(0.98) : Color.black.opacity(0.95)
+
+                            RoundedRectangle(cornerRadius: guideBoxCornerRadius * 0.45, style: .continuous)
+                                .fill(tileFill)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: guideBoxCornerRadius * 0.45, style: .continuous)
+                                        .stroke(tileStroke, lineWidth: 1.2)
+                                )
+                                .frame(width: guideTileWidth, height: guideTileHeight)
+                                .overlay {
+                                    Text(note)
+                                        .font(.system(size: guideBoxHeight * 0.48, weight: .black, design: .monospaced))
+                                        .minimumScaleFactor(0.45)
+                                        .lineLimit(1)
+                                        .foregroundStyle(textColor)
+                                }
                                 .position(x: stringCenters[index], y: guideBoxCenterY)
                         }
                     }
@@ -2321,14 +2391,13 @@ struct ContentView: View {
                             neckWidth: neckWidth,
                             activeStringNumbers: activePickedStringNumbers,
                             answerFeedback: activeAnswerFeedback,
-                            currentQuestionIsAccidental: currentQuestionIsAccidental,
                             blinkingActive: shouldBlinkQuestionBox,
                             blinkOrange: questionBoxPulsePhase,
                             revealedNoteText: layoutMode == .beginner
                                 ? (hasBeginnerSelectedNote ? beginnerLastPickedNote : nil)
                                 : (activeAnswerFeedback == .green ? currentCorrectNote : nil),
                             revealedNoteTextByString: layoutMode == .beginner ? beginnerRewardNoteTextByString : nil,
-                            revealedNoteTextColor: currentQuestionIsAccidental ? Color.white.opacity(0.96) : Color.black.opacity(0.96)
+                            revealedNoteTextColor: Color.black.opacity(0.96)
                         )
                         .allowsHitTesting(false)
                         .offset(y: questionBoxOffsetY)
@@ -2432,6 +2501,7 @@ struct ContentView: View {
                     let rightButtonX = proxy.size.width * 0.7665
                     let beginnerScreenWidth = lowerScreenWidth * 0.54
                     let beginnerScreenHeight = lowerScreenHeight * 0.76
+                    let noteScreenCenterYOffset = -beginnerButtonDiameter * 0.13
                     let screenInset = beginnerButtonDiameter * 0.88
                     let leftScreenX = leftButtonX + screenInset
                     let rightScreenX = rightButtonX - screenInset
@@ -2451,7 +2521,7 @@ struct ContentView: View {
                                 height: beginnerScreenHeight,
                                 fontScale: 0.78
                             )
-                            .position(x: leftScreenX, y: rowYs[idx])
+                            .position(x: leftScreenX, y: rowYs[idx] + noteScreenCenterYOffset)
 
                             Button(action: {
                                 handleBeginnerConsoleButtonPress(selectedNote: buttonNote, selectedString: selectedString)
@@ -2476,7 +2546,7 @@ struct ContentView: View {
                                 height: beginnerScreenHeight,
                                 fontScale: 0.78
                             )
-                            .position(x: rightScreenX, y: rowYs[idx])
+                            .position(x: rightScreenX, y: rowYs[idx] + noteScreenCenterYOffset)
 
                             Button(action: {
                                 handleBeginnerConsoleButtonPress(selectedNote: buttonNote, selectedString: selectedString)
@@ -2522,83 +2592,17 @@ struct ContentView: View {
                 }
             }
             .overlay {
-                let transportTrackName = resolvedTransportTrack()?.resourceName ?? "NONE"
-                let drumsEnabled = audioSettings.selectedBackingArrangement.rawValue.contains("Drums")
-                let bassEnabled = audioSettings.selectedBackingArrangement.rawValue.contains("Drums") && !audioSettings.selectedBackingArrangement.rawValue.contains("Only")
-
-                VStack(spacing: 3) {
-                    TransportControlsView(
-                        isPlaying: isBackingTrackPlaying,
-                        onStop: {
-                            handleTransportStopButton()
-                        },
-                        onStart: {
-                            handleTransportStartButton()
-                        }
-                    )
-                    .frame(width: min((proxy.size.width - 24) * 0.88, 370), height: 50)
-
-                    Text(isBackingTrackPlaying ? "AUDIO: PLAYING" : "AUDIO: STOPPED")
-                        .font(.system(size: 8, weight: .bold, design: .monospaced))
-                        .foregroundStyle(isBackingTrackPlaying ? Color.green.opacity(0.92) : Color.white.opacity(0.74))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.black.opacity(0.55), in: Capsule())
-                        .overlay(
-                            Capsule().stroke(Color.white.opacity(0.14), lineWidth: 0.7)
-                        )
-
-                    Text("TRACK: \(transportTrackName)")
-                        .font(.system(size: 8, weight: .bold, design: .monospaced))
-                        .foregroundStyle(Color.white.opacity(0.82))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.black.opacity(0.55), in: Capsule())
-                        .overlay(
-                            Capsule().stroke(Color.white.opacity(0.14), lineWidth: 0.7)
-                        )
-
-                    Text("STATUS: \(transportStatusDetail)")
-                        .font(.system(size: 8, weight: .bold, design: .monospaced))
-                        .foregroundStyle(Color.white.opacity(0.82))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.black.opacity(0.55), in: Capsule())
-                        .overlay(
-                            Capsule().stroke(Color.white.opacity(0.14), lineWidth: 0.7)
-                        )
-
-                    Text("DRUMS: \(drumsEnabled ? "ON" : "OFF")")
-                        .font(.system(size: 8, weight: .bold, design: .monospaced))
-                        .foregroundStyle(drumsEnabled ? Color.white.opacity(0.82) : Color.white.opacity(0.5))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.black.opacity(0.55), in: Capsule())
-                        .overlay(
-                            Capsule().stroke(Color.white.opacity(0.14), lineWidth: 0.7)
-                        )
-
-                    Text("BASS: \(bassEnabled ? "ON" : "OFF")")
-                        .font(.system(size: 8, weight: .bold, design: .monospaced))
-                        .foregroundStyle(bassEnabled ? Color.white.opacity(0.82) : Color.white.opacity(0.5))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.black.opacity(0.55), in: Capsule())
-                        .overlay(
-                            Capsule().stroke(Color.white.opacity(0.14), lineWidth: 0.7)
-                        )
-
-                    Text("PATH: \(playbackPathUsed)")
-                        .font(.system(size: 8, weight: .bold, design: .monospaced))
-                        .foregroundStyle(Color.white.opacity(0.82))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.black.opacity(0.55), in: Capsule())
-                        .overlay(
-                            Capsule().stroke(Color.white.opacity(0.14), lineWidth: 0.7)
-                        )
-                }
-                .position(x: proxy.size.width / 2, y: transportCenterY + 6)
+                TransportControlsView(
+                    isPlaying: isBackingTrackPlaying,
+                    onStop: {
+                        handleTransportStopButton()
+                    },
+                    onStart: {
+                        handleTransportStartButton()
+                    }
+                )
+                .frame(width: min((proxy.size.width - 24) * 0.88, 370), height: 50)
+                .position(x: proxy.size.width / 2, y: transportCenterY - 22)
                 .opacity(codenameNemoEnabled ? 0 : 1)
             }
             .overlay {
@@ -2747,6 +2751,7 @@ struct ContentView: View {
                 handlePendingBeginnerRewardPlaybackIfNeeded()
                 ensureBeginnerRoundOneRevealSequenceStarted(currentDate: date)
                 updateBeginnerRoundOneRevealSequence(currentDate: date)
+                handleBeginnerAutoPlayIfNeeded(currentDate: date)
 
                 let trackPlayingNow = midiEngine.isPlaying
                 if isBackingTrackPlaying != trackPlayingNow {
@@ -2867,12 +2872,9 @@ struct ContentView: View {
                     beginnerCelebrationNextFlashDate = nil
                 }
 
-                if layoutMode == .beginner {
-                    beginnerAutoPlayNextDate = nil
-                }
             }
             .onChange(of: beginnerAutoPlayEnabled) { _, isEnabled in
-                if layoutMode == .beginner {
+                if layoutMode != .beginner {
                     beginnerAutoPlayEnabled = false
                     beginnerAutoPlayNextDate = nil
                     return
@@ -2881,7 +2883,9 @@ struct ContentView: View {
                     beginnerAutoPlayNextDate = nil
                     return
                 }
-                beginnerAutoPlayNextDate = nil
+                let revealReady = !beginnerRoundOneIntroActive
+                    && beginnerPentatonicRevealCount >= beginnerCurrentScaleNotes.count
+                beginnerAutoPlayNextDate = revealReady ? Date().addingTimeInterval(0.2) : nil
             }
             .offset(y: globalContentShiftY)
         }
@@ -2889,7 +2893,7 @@ struct ContentView: View {
 
     private func shiftFretSpan(by delta: Int) {
         guard delta != 0 else { return }
-        withAnimation(.easeInOut(duration: 0.5)) {
+        withAnimation(.easeInOut(duration: 1.3)) {
             currentFretStart = min(max(currentFretStart + delta, minFretOffset), maxFretOffset)
         }
     }
@@ -2968,25 +2972,103 @@ struct ContentView: View {
         beginnerRewardTargetBeatPosition = nil
         beginnerRewardSelectedString = nil
         beginnerRewardNoteTextByString = nil
+        beginnerRewardScheduledStrings = []
+        beginnerRewardScheduledMIDINotes = []
+        beginnerRewardScheduledNoteTextByString = [:]
+        beginnerRewardSustainMultiplier = 3.0
         applyBeginnerBassTransposeForCurrentStage()
         prepareCurrentQuestion()
     }
 
-    private func shouldTriggerEMinorRewardChord() -> Bool {
-        layoutMode == .beginner
-            && beginnerCoursePhase == .round1Ascending
-            && beginnerScaleStageIndex == 1
+    private func beginnerRewardPolicyForCurrentStage() -> BeginnerRewardPolicy? {
+        guard layoutMode == .beginner,
+              beginnerCoursePhase == .round1Ascending
+        else { return nil }
+
+        let currentFret = max(currentRound, 0)
+        let specificKey = BeginnerRewardPolicyKey(stageIndex: beginnerScaleStageIndex, fret: currentFret)
+        if let policy = beginnerRewardPolicies[specificKey], policy.isRewardEnabled {
+            return policy
+        }
+
+        let fallbackKey = BeginnerRewardPolicyKey(stageIndex: beginnerScaleStageIndex, fret: nil)
+        if let policy = beginnerRewardPolicies[fallbackKey], policy.isRewardEnabled {
+            return policy
+        }
+
+        return nil
     }
 
-    private func beginnerRewardChordPayloadForCurrentStage() -> (notesByString: [Int: String], midiNotes: [Int]) {
-        let rewardStrings = [4, 3, 2]
-        let chordNotes = Array(beginnerCurrentScaleNotes.prefix(rewardStrings.count))
-        let notesByString = Dictionary(uniqueKeysWithValues: zip(rewardStrings, chordNotes))
-        let midiNotes: [Int] = rewardStrings.compactMap { (stringNumber: Int) -> Int? in
-            guard let noteName = notesByString[stringNumber] else { return nil }
-            return beginnerRewardMIDINote(for: noteName, stringNumber: stringNumber)
+    private func beginnerRewardStringAssignments(forChordNotes chordNotes: [String], preferredStrings: [Int]?) -> [(Int, String)] {
+        let allStringsDescending = [6, 5, 4, 3, 2, 1]
+        let preferredSequence = preferredStrings ?? []
+        let fallbackSequence = allStringsDescending.filter { !preferredSequence.contains($0) }
+        let candidateSequence = preferredSequence + fallbackSequence
+        let rewardDisplayFret = max(currentRound, 0)
+        let stageTitle = beginnerCurrentScaleStage.title
+        let stageTitleUpper = stageTitle.uppercased()
+        let stageTitleUpperCompact = stageTitleUpper.replacingOccurrences(of: " ", with: "")
+        let stageRootRange = stageTitle.range(of: #"^[A-G](?:#|b)?"#, options: .regularExpression)
+        let stageRoot = stageRootRange.map { String(stageTitle[$0]) } ?? ""
+        let isSixChord = stageTitleUpperCompact.range(of: #"^[A-G](?:#|B)?6$"#, options: .regularExpression) != nil
+        let shouldPrioritizeHighRootForChord = stageTitleUpperCompact.contains("SUS2") || stageTitleUpperCompact.contains("6/9") || isSixChord
+        var unusedStrings = candidateSequence
+        var assignments: [(Int, String)] = []
+
+        for chordNote in chordNotes {
+            let noteSpecificOrder: [Int] = {
+                if shouldPrioritizeHighRootForChord,
+                   !stageRoot.isEmpty,
+                   chordNote == stageRoot {
+                    return [1, 2, 3, 4, 5, 6]
+                }
+                if stageTitleUpper.hasPrefix("G ") && chordNote == "E" {
+                    return [1, 2, 3, 4, 5, 6]
+                }
+                return unusedStrings
+            }()
+
+            guard let matchedString = noteSpecificOrder.first(where: {
+                unusedStrings.contains($0)
+                    && noteName(forString: $0, fret: rewardDisplayFret, useFlats: false) == chordNote
+            }) ?? noteSpecificOrder.first(where: {
+                unusedStrings.contains($0)
+                    && noteName(forString: $0, fret: rewardDisplayFret, useFlats: beginnerUsesFlats) == chordNote
+            }) ?? noteSpecificOrder.first(where: { unusedStrings.contains($0) }) else {
+                continue
+            }
+            assignments.append((matchedString, chordNote))
+            unusedStrings.removeAll { $0 == matchedString }
         }
-        return (notesByString, midiNotes)
+
+        if assignments.count < chordNotes.count {
+            let remainingNotes = chordNotes.dropFirst(assignments.count)
+            for (noteName, stringNumber) in zip(remainingNotes, unusedStrings) {
+                assignments.append((stringNumber, noteName))
+            }
+        }
+
+        return assignments
+    }
+
+    private func beginnerRewardChordPayloadForCurrentStage(
+        policy: BeginnerRewardPolicy
+    ) -> (strings: [Int], notesByString: [Int: String], midiNotes: [Int]) {
+        let chordNotes = Array(beginnerCurrentScaleNotes.prefix(5))
+        let rewardPairs = beginnerRewardStringAssignments(forChordNotes: chordNotes, preferredStrings: policy.preferredStrings)
+
+        var strings: [Int] = []
+        var notesByString: [Int: String] = [:]
+        var midiNotes: [Int] = []
+
+        for (stringNumber, noteName) in rewardPairs {
+            guard let midiNote = beginnerRewardMIDINote(for: noteName, stringNumber: stringNumber) else { continue }
+            strings.append(stringNumber)
+            notesByString[stringNumber] = noteName
+            midiNotes.append(midiNote)
+        }
+
+        return (strings, notesByString, midiNotes)
     }
 
     private func beginnerRewardMIDINote(for noteName: String, stringNumber: Int) -> Int? {
@@ -3002,14 +3084,45 @@ struct ContentView: View {
         return openMIDINote + fretOffset
     }
 
-    private func scheduleBeginnerRewardChordThenAdvance(selectedString: Int) {
+    private func scheduleBeginnerRewardChordThenAdvance(selectedString: Int, policy: BeginnerRewardPolicy) {
+        let rewardPayload = beginnerRewardChordPayloadForCurrentStage(policy: policy)
+        guard !rewardPayload.midiNotes.isEmpty else {
+            advanceBeginnerScaleStage(afterCompletionFromString: selectedString, playTransitionNote: false)
+            return
+        }
+
         beginnerPendingRewardStageAdvance = true
         beginnerRewardSelectedString = selectedString
-        beginnerRewardTargetBeatPosition = midiEngine.currentBeatPosition() + 3.0
-        activePickedStringNumbers = []
-        beginnerLastPickedNote = nil
+        beginnerRewardTargetBeatPosition = midiEngine.currentBeatPosition() + policy.delayBeats
+        beginnerRewardScheduledStrings = rewardPayload.strings
+        beginnerRewardScheduledMIDINotes = rewardPayload.midiNotes
+        beginnerRewardScheduledNoteTextByString = rewardPayload.notesByString
+        beginnerRewardSustainMultiplier = policy.sustainMultiplier
         beginnerRewardNoteTextByString = nil
-        beginnerAnswerBoxReady = false
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.65) {
+            guard beginnerPendingRewardStageAdvance,
+                  beginnerRewardSelectedString == selectedString,
+                  beginnerRewardTargetBeatPosition != nil else { return }
+            activePickedStringNumbers = []
+            beginnerLastPickedNote = nil
+            beginnerAnswerBoxReady = false
+        }
+    }
+
+    private func scheduleBeginnerAdvanceAfterFinalNoteHold(selectedString: Int, holdSeconds: Double = 0.65) {
+        beginnerPendingRewardStageAdvance = true
+        beginnerRewardSelectedString = selectedString
+        beginnerRewardTargetBeatPosition = nil
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + holdSeconds) {
+            guard beginnerPendingRewardStageAdvance,
+                  beginnerRewardSelectedString == selectedString,
+                  beginnerRewardTargetBeatPosition == nil else { return }
+            beginnerPendingRewardStageAdvance = false
+            beginnerRewardSelectedString = nil
+            advanceBeginnerScaleStage(afterCompletionFromString: selectedString, playTransitionNote: false)
+        }
     }
 
     private func handlePendingBeginnerRewardPlaybackIfNeeded() {
@@ -3022,25 +3135,36 @@ struct ContentView: View {
 
         beginnerRewardTargetBeatPosition = nil
 
-        let rewardPayload = beginnerRewardChordPayloadForCurrentStage()
-        guard !rewardPayload.midiNotes.isEmpty else {
+        guard !beginnerRewardScheduledMIDINotes.isEmpty else {
             beginnerPendingRewardStageAdvance = false
             beginnerRewardSelectedString = nil
+            beginnerRewardScheduledStrings = []
+            beginnerRewardScheduledMIDINotes = []
+            beginnerRewardScheduledNoteTextByString = [:]
+            beginnerRewardSustainMultiplier = 3.0
             advanceBeginnerScaleStage(afterCompletionFromString: selectedString, playTransitionNote: false)
             return
         }
 
-        activePickedStringNumbers = [4, 3, 2]
+        activePickedStringNumbers = beginnerRewardScheduledStrings
         beginnerAnswerBoxReady = true
         beginnerLastPickedNote = nil
-        beginnerRewardNoteTextByString = rewardPayload.notesByString
-        let rewardChordRingDuration = guitarNoteEngine.playChord(midiNotes: rewardPayload.midiNotes, velocity: 0.98, sustainMultiplier: 3.0)
+        beginnerRewardNoteTextByString = beginnerRewardScheduledNoteTextByString
+        let rewardChordRingDuration = guitarNoteEngine.playChord(
+            midiNotes: beginnerRewardScheduledMIDINotes,
+            velocity: 0.98,
+            sustainMultiplier: beginnerRewardSustainMultiplier
+        )
 
         DispatchQueue.main.asyncAfter(deadline: .now() + rewardChordRingDuration) {
             guard beginnerPendingRewardStageAdvance,
                   beginnerRewardSelectedString == selectedString else { return }
             beginnerPendingRewardStageAdvance = false
             beginnerRewardSelectedString = nil
+            beginnerRewardScheduledStrings = []
+            beginnerRewardScheduledMIDINotes = []
+            beginnerRewardScheduledNoteTextByString = [:]
+            beginnerRewardSustainMultiplier = 3.0
             advanceBeginnerScaleStage(afterCompletionFromString: selectedString, playTransitionNote: false)
         }
     }
@@ -3048,13 +3172,35 @@ struct ContentView: View {
     private func advanceBeginnerScaleStage(afterCompletionFromString selectedString: Int, playTransitionNote: Bool = true) {
         let completedStageWasCycleEnd = beginnerCurrentScaleStage.endsCycle
         beginnerRewardNoteTextByString = nil
+        beginnerRewardScheduledStrings = []
+        beginnerRewardScheduledMIDINotes = []
+        beginnerRewardScheduledNoteTextByString = [:]
+        beginnerRewardSustainMultiplier = 3.0
         beginnerScaleRepetitionsRemaining = 1
         if completedStageWasCycleEnd {
-            beginnerScaleCycleSemitoneOffset = 1
-            beginnerScaleStageIndex = 0
-            currentRound = 1
-            currentFretStart = 1
-            prepareCurrentQuestion()
+            if currentRound < 12 {
+                let nextFret = currentRound + 1
+                beginnerScaleCycleSemitoneOffset = nextFret
+                beginnerScaleStageIndex = 0
+                currentRound = nextFret
+                withAnimation(.easeInOut(duration: 1.3)) {
+                    currentFretStart = nextFret
+                }
+                prepareCurrentQuestion()
+            } else {
+                beginnerScaleCycleSemitoneOffset = currentRound
+                beginnerScaleStageIndex = 0
+                beginnerScaleSequenceIndex = 0
+                beginnerPentatonicRevealCount = 0
+                beginnerRoundOneIntroActive = false
+                beginnerRoundOneSequenceStartDate = nil
+                beginnerRevealStartBeatBucket = nil
+                beginnerAnswerBoxReady = false
+                beginnerLastPickedNote = nil
+                activePickedStringNumbers = []
+                armBeginnerRoundTwo()
+                return
+            }
         } else {
             beginnerScaleStageIndex = min(beginnerScaleStageIndex + 1, beginnerScaleStages.count - 1)
         }
@@ -3135,6 +3281,76 @@ struct ContentView: View {
             beginnerRevealStartBeatBucket = nil
             beginnerAnswerBoxReady = true
         }
+    }
+
+    private func handleBeginnerAutoPlayIfNeeded(currentDate: Date) {
+        guard layoutMode == .beginner,
+              beginnerAutoPlayEnabled,
+              beginnerCoursePhase == .round1Ascending,
+              !isCodeScreensaverMode,
+              !startupSequenceActivated,
+              !isResolvingAnswer,
+              !beginnerPendingRewardStageAdvance
+        else {
+            if layoutMode != .beginner || !beginnerAutoPlayEnabled || beginnerCoursePhase != .round1Ascending {
+                beginnerAutoPlayNextDate = nil
+            }
+            return
+        }
+
+        guard !beginnerRoundOneIntroActive,
+              beginnerPentatonicRevealCount >= beginnerCurrentScaleNotes.count,
+              !beginnerCurrentScaleNotes.isEmpty
+        else {
+            beginnerAutoPlayNextDate = nil
+            return
+        }
+
+        if beginnerAutoPlayNextDate == nil {
+            beginnerAutoPlayNextDate = currentDate.addingTimeInterval(0.38)
+            return
+        }
+
+        guard let nextDate = beginnerAutoPlayNextDate, currentDate >= nextDate else { return }
+
+        let expectedNote = beginnerCurrentScaleNotes[beginnerScaleSequenceIndex]
+        let fret = max(currentRound, 0)
+        let preferredStringOrder = beginnerAutoPlayPreferredStringOrder(for: expectedNote)
+        let matchedString = preferredStringOrder.first {
+            noteName(forString: $0, fret: fret, useFlats: false) == expectedNote
+        } ?? preferredStringOrder.first {
+            noteName(forString: $0, fret: fret, useFlats: beginnerUsesFlats) == expectedNote
+        }
+
+        guard let selectedString = matchedString else {
+            beginnerAutoPlayNextDate = currentDate.addingTimeInterval(0.38)
+            return
+        }
+
+        handleBeginnerConsoleButtonPress(selectedNote: expectedNote, selectedString: selectedString)
+        beginnerAutoPlayNextDate = currentDate.addingTimeInterval(0.38)
+    }
+
+    private func beginnerAutoPlayPreferredStringOrder(for expectedNote: String) -> [Int] {
+        let lowToHigh = [6, 5, 4, 3, 2, 1]
+        let highToLow = [1, 2, 3, 4, 5, 6]
+        let stageTitle = beginnerCurrentScaleStage.title.uppercased()
+        let stageTokens = stageTitle.split(separator: " ")
+        let stageRoot = stageTokens.first.map(String.init) ?? ""
+
+        if stageTitle.hasPrefix("G ") && expectedNote == "E" {
+            return highToLow
+        }
+
+        let isFinalNoteInStage = beginnerScaleSequenceIndex == max(beginnerCurrentScaleNotes.count - 1, 0)
+        if stageTitle.contains("MINOR PENTATONIC")
+            && !stageRoot.isEmpty
+            && expectedNote == stageRoot
+            && isFinalNoteInStage {
+            return highToLow
+        }
+
+        return lowToHigh
     }
 
     private func submitAnswer(_ side: AnswerSide, force: Bool = false) {
@@ -3218,10 +3434,8 @@ struct ContentView: View {
 
     private func advanceGame(afterCorrectAnswer isCorrect: Bool) {
         if !isCorrect {
-            animateBankResetToZero {
-                startGameFromBeginning()
-                isResolvingAnswer = false
-            }
+            isResolvingAnswer = false
+            prepareCurrentQuestion()
             return
         }
 
@@ -3294,16 +3508,14 @@ struct ContentView: View {
             beatQuestionDeadline = nil
         }
 
-        withAnimation(.easeInOut(duration: 0.9)) {
+        withAnimation(.easeInOut(duration: 1.3)) {
             currentFretStart = fret
         }
     }
 
     private func payoutForRound(_ round: Int) -> Int {
-        if layoutMode == .beginner { return 5 }
-        let clamped = min(max(round, 0), 20)
-        let baseValue = Int(pow(2.0, Double(clamped)))
-        return max(1, Int((Double(baseValue) * modePayoutMultiplier).rounded()))
+        _ = round
+        return 5
     }
 
     private func animateBankResetToZero(completion: @escaping () -> Void) {
@@ -3415,11 +3627,12 @@ struct ContentView: View {
             if selectedNote == expectedNote {
                 if beginnerScaleSequenceIndex == currentScaleNotes.count - 1 {
                     if beginnerScaleRepetitionsRemaining <= 1 {
-                        if shouldTriggerEMinorRewardChord() {
+                        if let rewardPolicy = beginnerRewardPolicyForCurrentStage() {
                             playGuitarNote(forString: selectedString, fret: max(currentRound, 0), velocity: 0.98)
-                            scheduleBeginnerRewardChordThenAdvance(selectedString: selectedString)
+                            scheduleBeginnerRewardChordThenAdvance(selectedString: selectedString, policy: rewardPolicy)
                         } else {
-                            advanceBeginnerScaleStage(afterCompletionFromString: selectedString)
+                            playGuitarNote(forString: selectedString, fret: max(currentRound, 0), velocity: 0.98)
+                            scheduleBeginnerAdvanceAfterFinalNoteHold(selectedString: selectedString)
                         }
                         return
                     } else {
@@ -3594,6 +3807,13 @@ struct ContentView: View {
         activeAnswerFeedback = nil
         questionBoxAssistActive = false
         beginnerAutoPlayNextDate = nil
+        beginnerRoundOneIntroActive = false
+        beginnerRoundOneSequenceStartDate = nil
+        beginnerRevealStartBeatBucket = nil
+        beginnerPentatonicRevealCount = 0
+        beginnerAnswerBoxReady = false
+        beginnerLastPickedNote = nil
+        activePickedStringNumbers = []
         beginnerCelebrationFlashOn = true
         beginnerCelebrationNextFlashDate = .now.addingTimeInterval(0.32)
     }
