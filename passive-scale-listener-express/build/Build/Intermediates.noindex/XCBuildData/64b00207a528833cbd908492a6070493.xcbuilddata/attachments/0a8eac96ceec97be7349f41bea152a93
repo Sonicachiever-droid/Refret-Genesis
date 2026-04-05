@@ -1,0 +1,59 @@
+{
+  "" : {
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpress-primary.dia",
+    "emit-module-dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpress-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpress-primary-emit-module.dia",
+    "pch" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpress-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpress-primary.swiftdeps"
+  },
+  "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/ScaleListenerExpress/ContentView.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/ScaleListenerExpress/Item.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Item.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Item.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Item.dia",
+    "index-unit-output-path" : "/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Item.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Item.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Item.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Item.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Item~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/ScaleListenerExpress/Models.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Models.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Models.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Models.dia",
+    "index-unit-output-path" : "/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Models.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Models.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Models.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Models.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/Models~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/ScaleListenerExpress/ScaleListenerExpressApp.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpressApp.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpressApp.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpressApp.dia",
+    "index-unit-output-path" : "/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpressApp.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpressApp.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpressApp.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpressApp.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/ScaleListenerExpressApp~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/ScaleListenerExpress.build/Debug/ScaleListenerExpress.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}
