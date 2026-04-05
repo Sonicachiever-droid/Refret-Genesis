@@ -1,0 +1,12 @@
+{
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/ContentView.swift" : {
+    "abi-baseline-json" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET_TOO.abi.json",
+    "const-values" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary.dia",
+    "objc-header" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET_TOO-Swift.h",
+    "swiftdoc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET_TOO.swiftdoc",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET_TOO.swiftmodule",
+    "swiftsourceinfo" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET_TOO.swiftsourceinfo"
+  }
+}

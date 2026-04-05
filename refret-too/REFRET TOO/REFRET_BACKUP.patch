@@ -1,0 +1,1482 @@
+diff --git a/REFRET TOO/Assets.xcassets/ChromeSet.imageset/Contents.json b/REFRET TOO/Assets.xcassets/ChromeSet.imageset/Contents.json
+new file mode 100644
+index 0000000..a771069
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/ChromeSet.imageset/Contents.json	
+@@ -0,0 +1,21 @@
++{
++  "images" : [
++    {
++      "filename" : "chrome.jpg.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/ChromeSet.imageset/chrome.jpg.jpeg b/REFRET TOO/Assets.xcassets/ChromeSet.imageset/chrome.jpg.jpeg
+new file mode 100644
+index 0000000..36c28b6
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/ChromeSet.imageset/chrome.jpg.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Contents.json b/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Contents.json
+new file mode 100644
+index 0000000..198b9bf
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "Panel 1.jpg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "panel 2.jpg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "Panel 3.jpg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Panel 1.jpg b/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Panel 1.jpg
+new file mode 100644
+index 0000000..77ba003
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Panel 1.jpg differ
+diff --git a/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Panel 3.jpg b/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Panel 3.jpg
+new file mode 100644
+index 0000000..77ba003
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/Panel 3.jpg differ
+diff --git a/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/panel 2.jpg b/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/panel 2.jpg
+new file mode 100644
+index 0000000..dd98168
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/ControlPanelSET.imageset/panel 2.jpg differ
+diff --git a/REFRET TOO/Assets.xcassets/DisplayExamplesTwoA.imageset/Contents.json b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoA.imageset/Contents.json
+new file mode 100644
+index 0000000..7490e15
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoA.imageset/Contents.json	
+@@ -0,0 +1,21 @@
++{
++  "images" : [
++    {
++      "filename" : "TubeExampleTwoA.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/DisplayExamplesTwoA.imageset/TubeExampleTwoA.jpeg b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoA.imageset/TubeExampleTwoA.jpeg
+new file mode 100644
+index 0000000..fcaeb54
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoA.imageset/TubeExampleTwoA.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/DisplayExamplesTwoB.imageset/Contents.json b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoB.imageset/Contents.json
+new file mode 100644
+index 0000000..29666e1
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoB.imageset/Contents.json	
+@@ -0,0 +1,21 @@
++{
++  "images" : [
++    {
++      "filename" : "TubeExampleTwoB.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/DisplayExamplesTwoB.imageset/TubeExampleTwoB.jpeg b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoB.imageset/TubeExampleTwoB.jpeg
+new file mode 100644
+index 0000000..750ff92
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoB.imageset/TubeExampleTwoB.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/DisplayExamplesTwoC.imageset/Contents.json b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoC.imageset/Contents.json
+new file mode 100644
+index 0000000..dd1c8a5
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoC.imageset/Contents.json	
+@@ -0,0 +1,21 @@
++{
++  "images" : [
++    {
++      "filename" : "TubeExampleTwoC.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/DisplayExamplesTwoC.imageset/TubeExampleTwoC.jpeg b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoC.imageset/TubeExampleTwoC.jpeg
+new file mode 100644
+index 0000000..20f98d6
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/DisplayExamplesTwoC.imageset/TubeExampleTwoC.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/Contents.json b/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/Contents.json
+new file mode 100644
+index 0000000..073caca
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "fretboard 1.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "fretboard 2.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "fretboard 3.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 1.jpeg b/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 1.jpeg
+new file mode 100644
+index 0000000..6bc132e
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 1.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 2.jpeg b/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 2.jpeg
+new file mode 100644
+index 0000000..314fab9
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 2.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 3.jpeg b/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 3.jpeg
+new file mode 100644
+index 0000000..65e7e6f
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/FRETBOARDSSET.imageset/fretboard 3.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/Contents.json b/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/Contents.json
+new file mode 100644
+index 0000000..c15b631
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "Rosewood 1.jpg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "ROSEWOOD 2.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "ROSEWOOD 3.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/ROSEWOOD 2.jpeg b/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/ROSEWOOD 2.jpeg
+new file mode 100644
+index 0000000..f0a9a4c
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/ROSEWOOD 2.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/ROSEWOOD 3.jpeg b/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/ROSEWOOD 3.jpeg
+new file mode 100644
+index 0000000..4c4059d
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/ROSEWOOD 3.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/Rosewood 1.jpg b/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/Rosewood 1.jpg
+new file mode 100644
+index 0000000..5db424b
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/FretWOODSET !.imageset/Rosewood 1.jpg differ
+diff --git a/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/Contents.json b/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/Contents.json
+new file mode 100644
+index 0000000..e6d9398
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/Contents.json	
+@@ -0,0 +1,22 @@
++{
++  "images" : [
++    {
++      "filename" : "MAPLE !.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "ebony 1.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/MAPLE !.jpeg b/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/MAPLE !.jpeg
+new file mode 100644
+index 0000000..a47a8a2
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/MAPLE !.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/ebony 1.jpeg b/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/ebony 1.jpeg
+new file mode 100644
+index 0000000..fdb3e6c
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/FretWoodSET 2.imageset/ebony 1.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/Contents.json b/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/Contents.json
+new file mode 100644
+index 0000000..1ecee68
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "volume knob.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "retroknob pointer.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "toggle.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/retroknob pointer.jpeg b/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/retroknob pointer.jpeg
+new file mode 100644
+index 0000000..258bea7
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/retroknob pointer.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/toggle.jpeg b/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/toggle.jpeg
+new file mode 100644
+index 0000000..b805acf
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/toggle.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/volume knob.jpeg b/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/volume knob.jpeg
+new file mode 100644
+index 0000000..8adee5e
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/KNOBSET !.imageset/volume knob.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/PointyKnob.imageset/Contents.json b/REFRET TOO/Assets.xcassets/PointyKnob.imageset/Contents.json
+new file mode 100644
+index 0000000..dbaaae1
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/PointyKnob.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "pointy-knob.jpg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "pointy-knob.jpg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "pointy-knob.jpg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/PointyKnob.imageset/pointy-knob.jpg b/REFRET TOO/Assets.xcassets/PointyKnob.imageset/pointy-knob.jpg
+new file mode 100644
+index 0000000..258bea7
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/PointyKnob.imageset/pointy-knob.jpg differ
+diff --git a/REFRET TOO/Assets.xcassets/RosewoodOne.imageset/Contents.json b/REFRET TOO/Assets.xcassets/RosewoodOne.imageset/Contents.json
+new file mode 100644
+index 0000000..9f236af
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/RosewoodOne.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "rosewood-1.jpg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "rosewood-1.jpg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "rosewood-1.jpg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/RosewoodOne.imageset/rosewood-1.jpg b/REFRET TOO/Assets.xcassets/RosewoodOne.imageset/rosewood-1.jpg
+new file mode 100644
+index 0000000..5db424b
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/RosewoodOne.imageset/rosewood-1.jpg differ
+diff --git a/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/Contents.json
+new file mode 100644
+index 0000000..bbce1a0
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "TV 15.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "TV 14.png",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "TV 16.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 14.png b/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 14.png
+new file mode 100644
+index 0000000..77ecdab
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 14.png differ
+diff --git a/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 15.jpeg b/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 15.jpeg
+new file mode 100644
+index 0000000..870294c
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 15.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 16.jpeg b/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 16.jpeg
+new file mode 100644
+index 0000000..8ef2b04
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TESTPATTERN SET.imageset/TV 16.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Contents.json
+new file mode 100644
+index 0000000..9ddb71b
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "Tube 7.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "Tube 8.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "Tube 9.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 7.jpeg b/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 7.jpeg
+new file mode 100644
+index 0000000..a0a7b5e
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 7.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 8.jpeg b/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 8.jpeg
+new file mode 100644
+index 0000000..03b7007
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 8.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 9.jpeg b/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 9.jpeg
+new file mode 100644
+index 0000000..90331f0
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TUBE SET 3.imageset/Tube 9.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TVSET.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TVSET.imageset/Contents.json
+new file mode 100644
+index 0000000..e16a2f0
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TVSET.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "tv 2.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "tv 1.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "tv4.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/TVSET.imageset/tv 1.jpeg b/REFRET TOO/Assets.xcassets/TVSET.imageset/tv 1.jpeg
+new file mode 100644
+index 0000000..d8f6d49
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TVSET.imageset/tv 1.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TVSET.imageset/tv 2.jpeg b/REFRET TOO/Assets.xcassets/TVSET.imageset/tv 2.jpeg
+new file mode 100644
+index 0000000..f27b381
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TVSET.imageset/tv 2.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TVSET.imageset/tv4.jpeg b/REFRET TOO/Assets.xcassets/TVSET.imageset/tv4.jpeg
+new file mode 100644
+index 0000000..0ad56b3
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TVSET.imageset/tv4.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/Contents.json
+new file mode 100644
+index 0000000..019046a
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "TV 16.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "TV 14.png",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "TV 15.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 14.png b/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 14.png
+new file mode 100644
+index 0000000..77ecdab
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 14.png differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 15.jpeg b/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 15.jpeg
+new file mode 100644
+index 0000000..870294c
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 15.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 16.jpeg b/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 16.jpeg
+new file mode 100644
+index 0000000..8ef2b04
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSET 4.imageset/TV 16.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Contents.json
+new file mode 100644
+index 0000000..7f2102f
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "Tube 1.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "Tube 2.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "Tube 3.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 1.jpeg b/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 1.jpeg
+new file mode 100644
+index 0000000..fcaeb54
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 1.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 2.jpeg b/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 2.jpeg
+new file mode 100644
+index 0000000..750ff92
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 2.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 3.jpeg b/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 3.jpeg
+new file mode 100644
+index 0000000..20f98d6
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSet !.imageset/Tube 3.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Contents.json
+new file mode 100644
+index 0000000..2675a99
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "Tube 4.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "Tube 5.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "Tube 6.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 4.jpeg b/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 4.jpeg
+new file mode 100644
+index 0000000..7bdeb53
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 4.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 5.jpeg b/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 5.jpeg
+new file mode 100644
+index 0000000..367511a
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 5.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 6.jpeg b/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 6.jpeg
+new file mode 100644
+index 0000000..1548de9
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TubeSet 2.imageset/Tube 6.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TweedSample.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TweedSample.imageset/Contents.json
+new file mode 100644
+index 0000000..99a5a58
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TweedSample.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "Screenshot 2026-03-11 at 9.20.31 AM.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "Screenshot 2026-03-11 at 8.16.49 AM.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "s-l1600.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git "a/REFRET TOO/Assets.xcassets/TweedSample.imageset/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg" "b/REFRET TOO/Assets.xcassets/TweedSample.imageset/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg"
+new file mode 100644
+index 0000000..a0240e9
+Binary files /dev/null and "b/REFRET TOO/Assets.xcassets/TweedSample.imageset/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg" differ
+diff --git "a/REFRET TOO/Assets.xcassets/TweedSample.imageset/Screenshot 2026-03-11 at 9.20.31\342\200\257AM.jpeg" "b/REFRET TOO/Assets.xcassets/TweedSample.imageset/Screenshot 2026-03-11 at 9.20.31\342\200\257AM.jpeg"
+new file mode 100644
+index 0000000..17ac10a
+Binary files /dev/null and "b/REFRET TOO/Assets.xcassets/TweedSample.imageset/Screenshot 2026-03-11 at 9.20.31\342\200\257AM.jpeg" differ
+diff --git a/REFRET TOO/Assets.xcassets/TweedSample.imageset/s-l1600.jpeg b/REFRET TOO/Assets.xcassets/TweedSample.imageset/s-l1600.jpeg
+new file mode 100644
+index 0000000..8906f67
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TweedSample.imageset/s-l1600.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/TweedSampleTwo 1.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TweedSampleTwo 1.imageset/Contents.json
+new file mode 100644
+index 0000000..b8023fa
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TweedSampleTwo 1.imageset/Contents.json	
+@@ -0,0 +1,21 @@
++{
++  "images" : [
++    {
++      "filename" : "Screenshot 2026-03-11 at 8.16.49 AM.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git "a/REFRET TOO/Assets.xcassets/TweedSampleTwo 1.imageset/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg" "b/REFRET TOO/Assets.xcassets/TweedSampleTwo 1.imageset/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg"
+new file mode 100644
+index 0000000..a0240e9
+Binary files /dev/null and "b/REFRET TOO/Assets.xcassets/TweedSampleTwo 1.imageset/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg" differ
+diff --git a/REFRET TOO/Assets.xcassets/TweedSampleTwo.imageset/Contents.json b/REFRET TOO/Assets.xcassets/TweedSampleTwo.imageset/Contents.json
+new file mode 100644
+index 0000000..80076ca
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/TweedSampleTwo.imageset/Contents.json	
+@@ -0,0 +1,21 @@
++{
++  "images" : [
++    {
++      "filename" : "tweed-sample-two.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/TweedSampleTwo.imageset/tweed-sample-two.jpeg b/REFRET TOO/Assets.xcassets/TweedSampleTwo.imageset/tweed-sample-two.jpeg
+new file mode 100644
+index 0000000..a0240e9
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/TweedSampleTwo.imageset/tweed-sample-two.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/Contents.json b/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/Contents.json
+new file mode 100644
+index 0000000..2da6452
+--- /dev/null
++++ b/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/Contents.json	
+@@ -0,0 +1,23 @@
++{
++  "images" : [
++    {
++      "filename" : "VU METER 4.jpeg",
++      "idiom" : "universal",
++      "scale" : "1x"
++    },
++    {
++      "filename" : "VU METER 3.jpeg",
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "filename" : "VU METER 2.jpeg",
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "author" : "xcode",
++    "version" : 1
++  }
++}
+diff --git a/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 2.jpeg b/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 2.jpeg
+new file mode 100644
+index 0000000..073f959
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 2.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 3.jpeg b/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 3.jpeg
+new file mode 100644
+index 0000000..ffa6422
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 3.jpeg differ
+diff --git a/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 4.jpeg b/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 4.jpeg
+new file mode 100644
+index 0000000..b803c49
+Binary files /dev/null and b/REFRET TOO/Assets.xcassets/VU METERSET !.imageset/VU METER 4.jpeg differ
+diff --git a/REFRET TOO/ContentView.swift b/REFRET TOO/ContentView.swift
+index 458657e..3905449 100644
+--- a/REFRET TOO/ContentView.swift	
++++ b/REFRET TOO/ContentView.swift	
+@@ -40,6 +40,14 @@ enum AppPhase: Equatable {
+     }
+ }
+ 
++enum TweedBackgroundMode: String, CaseIterable, Identifiable {
++    case sampled
++
++    var id: Self { self }
++
++    var label: String { "Image" }
++}
++
+ struct ContentView: View {
+     @State private var fretsShiftedDown: Bool = true
+     @State private var noteOptions: [String] = []
+@@ -63,10 +71,10 @@ struct ContentView: View {
+             let rowHeight = proxy.size.height / CGFloat(rows) - rowSpacing
+             let gridWidth = proxy.size.width - gridPadding * 2
+             ZStack {
+-                Color(red: 0.92, green: 0.92, blue: 0.9)
++                TweedBackground()
+                     .ignoresSafeArea()
+                 VStack(spacing: 8) {
+-                    textScreenView(height: (proxy.size.height / CGFloat(rows)) * 1.2)
++                    tvDisplay(height: (proxy.size.height / CGFloat(rows)) * 1.2)
+                         .padding(.horizontal, 24)
+                     Spacer()
+                 }
+@@ -124,6 +132,9 @@ struct ContentView: View {
+                         }
+                     }
+                     .padding(gridPadding)
++
++                    gridOverlay(width: gridWidth, rowHeight: rowHeight, rowSpacing: rowSpacing, columns: 4, rows: rows)
++                        .padding(gridPadding)
+                 }
+             }
+             .overlay(alignment: .bottomTrailing) {
+@@ -136,11 +147,6 @@ struct ContentView: View {
+                 }
+                 .padding(16)
+             }
+-            .overlay(alignment: .bottomLeading) {
+-                ampToggleView()
+-                    .padding(.leading, 16)
+-                    .padding(.bottom, 32)
+-            }
+         }
+         .onAppear(perform: generateNoteOptions)
+     }
+@@ -149,6 +155,50 @@ struct ContentView: View {
+         EmptyView()
+     }
+ 
++    private func gridOverlay(
++        width: CGFloat,
++        rowHeight: CGFloat,
++        rowSpacing: CGFloat,
++        columns: Int,
++        rows: Int
++    ) -> some View {
++        let columnSpacing = rowSpacing
++        let cellWidth = (width - CGFloat(columns - 1) * columnSpacing) / CGFloat(columns)
++        let gridHeight = CGFloat(rows) * rowHeight + CGFloat(rows - 1) * rowSpacing
++
++        return ZStack(alignment: .topLeading) {
++            Path { path in
++                for row in 0...rows {
++                    let y = CGFloat(row) * (rowHeight + rowSpacing) - (row == rows ? rowSpacing : 0)
++                    path.move(to: CGPoint(x: 0, y: min(y, gridHeight)))
++                    path.addLine(to: CGPoint(x: width, y: min(y, gridHeight)))
++                }
++
++                for column in 0...columns {
++                    let x = CGFloat(column) * (cellWidth + columnSpacing) - (column == columns ? columnSpacing : 0)
++                    path.move(to: CGPoint(x: min(x, width), y: 0))
++                    path.addLine(to: CGPoint(x: min(x, width), y: gridHeight))
++                }
++            }
++            .stroke(Color.red.opacity(0.55), lineWidth: 0.6)
++
++            ForEach(0..<rows, id: \.self) { row in
++                ForEach(0..<columns, id: \.self) { column in
++                    let index = row * columns + column + 1
++                    Text("\(index)")
++                        .font(.system(size: 9, weight: .semibold, design: .monospaced))
++                        .foregroundColor(Color.red.opacity(0.8))
++                        .position(
++                            x: CGFloat(column) * (cellWidth + columnSpacing) + cellWidth * 0.12,
++                            y: CGFloat(row) * (rowHeight + rowSpacing) + rowHeight * 0.18
++                        )
++                }
++            }
++        }
++        .frame(width: width, height: gridHeight)
++        .allowsHitTesting(false)
++    }
++
+     private func jewelIndicator(isOn: Bool) -> some View {
+         Circle()
+             .fill(
+@@ -339,41 +389,246 @@ struct ContentView: View {
+             .shadow(color: Color.black.opacity(0.15), radius: 4, x: 1, y: 0)
+     }
+ 
+-    private func textScreenView(height: CGFloat) -> some View {
+-        let subtitle = appPhase.subtitle
+-        let accent = Color(red: 0.36, green: 0.24, blue: 0.12)
+-        return VStack(alignment: .leading, spacing: 8) {
++    private func tvDisplay(height: CGFloat) -> some View {
++        woodConsoleTV(height: height)
++    }
++
++    private func woodConsoleTV(height: CGFloat) -> some View {
++        let outerCorner: CGFloat = 22
++        let innerCorner: CGFloat = 18
++        let screenCorner: CGFloat = 24
++        let woodGradient = LinearGradient(
++            colors: [
++                Color(red: 0.38, green: 0.21, blue: 0.09),
++                Color(red: 0.22, green: 0.12, blue: 0.05)
++            ],
++            startPoint: .topLeading,
++            endPoint: .bottomTrailing
++        )
++        let chromeSurface = Image("ChromeSet")
++            .resizable()
++            .scaledToFill()
++            .rotationEffect(.degrees(90))
++
++        let screenGradient = LinearGradient(
++            colors: [
++                Color(red: 0.83, green: 0.9, blue: 0.78),
++                Color(red: 0.47, green: 0.65, blue: 0.42)
++            ],
++            startPoint: .topLeading,
++            endPoint: .bottomTrailing
++        )
++
++        let ventBars = HStack(spacing: 6) {
++            ForEach(0..<5, id: \.self) { _ in
++                RoundedRectangle(cornerRadius: 3)
++                    .fill(Color.black.opacity(0.35))
++                    .frame(width: 6)
++            }
++        }
++        .padding(.vertical, 12)
++
++        let controlPanel = ZStack {
++            chromeSurface
++                .mask(
++                    RoundedRectangle(cornerRadius: 16, style: .continuous)
++                )
++                .overlay(
++                    RoundedRectangle(cornerRadius: 16, style: .continuous)
++                        .stroke(Color.white.opacity(0.15), lineWidth: 1)
++                )
++
++            VStack(spacing: 18) {
++                ventBars
++                pointyKnob()
++            }
++            .padding(.horizontal, 18)
++            .padding(.vertical, 16)
++        }
++        .frame(width: 130)
++        .padding(.trailing, 16)
++
++        let content = VStack(alignment: .leading, spacing: 8) {
+             Text(appPhase.title.uppercased())
+-                .font(.system(size: 13, weight: .semibold))
++                .font(.system(size: 16, weight: .heavy, design: .rounded))
++                .foregroundColor(Color(red: 0.16, green: 0.14, blue: 0.13))
+                 .kerning(1.2)
+-                .foregroundColor(accent)
+-
+-            Text(subtitle)
+-                .font(.system(size: 13, weight: .medium))
+-                .foregroundColor(accent.opacity(0.95))
++            Text(appPhase.subtitle)
++                .font(.system(size: 13, weight: .semibold, design: .rounded))
++                .foregroundColor(Color(red: 0.2, green: 0.22, blue: 0.2))
+                 .lineLimit(3)
+-
+             Text(promptDetail())
+-                .font(.system(size: 13, weight: .medium))
+-                .foregroundColor(accent.opacity(0.7))
++                .font(.system(size: 12.5, weight: .medium, design: .rounded))
++                .foregroundColor(Color(red: 0.24, green: 0.26, blue: 0.24))
+                 .lineLimit(3)
+         }
+-        .padding(20)
+-        .frame(maxWidth: .infinity, minHeight: height, alignment: .leading)
+-        .background(
+-            RoundedRectangle(cornerRadius: 18)
+-                .fill(
+-                    LinearGradient(colors: [
+-                        Color(red: 0.96, green: 0.90, blue: 0.78),
+-                        Color(red: 0.90, green: 0.82, blue: 0.68)
+-                    ], startPoint: .topLeading, endPoint: .bottomTrailing)
++        .padding(.horizontal, 24)
++        .padding(.vertical, 18)
++
++        return ZStack(alignment: .leading) {
++            RoundedRectangle(cornerRadius: outerCorner, style: .continuous)
++                .fill(woodGradient)
++                .shadow(color: Color.black.opacity(0.35), radius: 16, x: 0, y: 10)
++                .overlay(
++                    RoundedRectangle(cornerRadius: outerCorner, style: .continuous)
++                        .stroke(Color.black.opacity(0.4), lineWidth: 3)
+                 )
+-                .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 10)
++
++            HStack(spacing: 0) {
++                RoundedRectangle(cornerRadius: innerCorner, style: .continuous)
++                    .fill(Color(red: 0.12, green: 0.11, blue: 0.1))
++                    .padding(16)
++                    .overlay(
++                        RoundedRectangle(cornerRadius: innerCorner, style: .continuous)
++                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
++                            .blendMode(.screen)
++                    )
++                    .overlay(
++                        RoundedRectangle(cornerRadius: screenCorner, style: .continuous)
++                            .fill(screenGradient)
++                            .padding(32)
++                            .overlay(
++                                RoundedRectangle(cornerRadius: screenCorner, style: .continuous)
++                                    .stroke(Color.white.opacity(0.45), lineWidth: 2)
++                            )
++                            .overlay(
++                                RoundedRectangle(cornerRadius: screenCorner, style: .continuous)
++                                    .stroke(Color.black.opacity(0.18), lineWidth: 5)
++                                    .padding(4)
++                                    .blendMode(.multiply)
++                            )
++                            .overlay(
++                                LinearGradient(
++                                    colors: [Color.white.opacity(0.4), Color.clear, Color.black.opacity(0.25)],
++                                    startPoint: .topLeading,
++                                    endPoint: .bottomTrailing
++                                )
++                                .clipShape(RoundedRectangle(cornerRadius: screenCorner, style: .continuous))
++                            )
++                            .overlay(content)
++                    )
++
++                Divider()
++                    .frame(width: 1.2)
++                    .blendMode(.multiply)
++                    .padding(.vertical, 24)
++
++                controlPanel
++            }
++        }
++        .frame(maxWidth: .infinity, minHeight: height * 1.25, maxHeight: height * 1.25)
++    }
++
++    private func pointyKnob() -> some View {
++        Image("PointyKnob")
++            .resizable()
++            .scaledToFit()
++            .frame(width: 90)
++            .shadow(color: Color.black.opacity(0.35), radius: 6, x: 0, y: 4)
++    }
++
++    private func orangeBezelTV(height: CGFloat) -> some View {
++        let subtitle = appPhase.subtitle
++        let targetHeight = height * 1.35
++        let bezelCorner: CGFloat = 34
++        let screenCorner: CGFloat = 24
++        let bezelGradient = LinearGradient(
++            colors: [
++                Color(red: 1.0, green: 0.64, blue: 0.19),
++                Color(red: 0.86, green: 0.30, blue: 0.04)
++            ],
++            startPoint: .topLeading,
++            endPoint: .bottomTrailing
+         )
+-        .overlay(
+-            RoundedRectangle(cornerRadius: 18)
+-                .stroke(accent.opacity(0.25), lineWidth: 1.5)
++        let screenGradient = LinearGradient(
++            colors: [
++                Color(red: 0.93, green: 0.95, blue: 0.92),
++                Color(red: 0.66, green: 0.70, blue: 0.74)
++            ],
++            startPoint: .topLeading,
++            endPoint: .bottomTrailing
+         )
++
++        return ZStack {
++            RoundedRectangle(cornerRadius: bezelCorner, style: .continuous)
++                .fill(bezelGradient)
++                .shadow(color: Color.black.opacity(0.35), radius: 18, x: 0, y: 10)
++                .overlay(
++                    RoundedRectangle(cornerRadius: bezelCorner, style: .continuous)
++                        .stroke(Color.black.opacity(0.6), lineWidth: 4)
++                        .blendMode(.multiply)
++                )
++                .overlay(
++                    RoundedRectangle(cornerRadius: bezelCorner, style: .continuous)
++                        .stroke(Color.white.opacity(0.35), lineWidth: 1.4)
++                        .blur(radius: 1)
++                        .offset(x: -2, y: -2)
++                        .blendMode(.screen)
++                )
++
++            RoundedRectangle(cornerRadius: screenCorner, style: .continuous)
++                .fill(screenGradient)
++                .padding(14)
++                .overlay(
++                    RoundedRectangle(cornerRadius: screenCorner, style: .continuous)
++                        .stroke(Color.white.opacity(0.65), lineWidth: 2)
++                        .blendMode(.screen)
++                )
++                .overlay(
++                    RoundedRectangle(cornerRadius: screenCorner, style: .continuous)
++                        .stroke(Color.black.opacity(0.15), lineWidth: 4)
++                        .padding(4)
++                        .blendMode(.multiply)
++                )
++                .overlay(
++                    LinearGradient(
++                        colors: [Color.white.opacity(0.45), Color.clear, Color.black.opacity(0.25)],
++                        startPoint: .topLeading,
++                        endPoint: .bottomTrailing
++                    )
++                    .clipShape(RoundedRectangle(cornerRadius: screenCorner, style: .continuous))
++                )
++                .overlay(
++                    Canvas { context, size in
++                        let spacing: CGFloat = 4
++                        var y: CGFloat = 0
++                        while y < size.height {
++                            var path = Path()
++                            path.move(to: CGPoint(x: 0, y: y))
++                            path.addLine(to: CGPoint(x: size.width, y: y))
++                            context.stroke(path, with: .color(Color.black.opacity(0.08)), lineWidth: 0.5)
++                            y += spacing
++                        }
++                    }
++                    .clipShape(RoundedRectangle(cornerRadius: screenCorner, style: .continuous))
++                    .blendMode(.multiply)
++                    .opacity(0.25)
++                )
++                .overlay(
++                    VStack(alignment: .leading, spacing: 10) {
++                        Text(appPhase.title.uppercased())
++                            .font(.system(size: 16, weight: .heavy, design: .rounded))
++                            .foregroundColor(Color(red: 0.18, green: 0.16, blue: 0.16))
++                            .kerning(1.8)
++
++                        Text(subtitle)
++                            .font(.system(size: 14, weight: .semibold, design: .rounded))
++                            .foregroundColor(Color(red: 0.24, green: 0.20, blue: 0.18))
++                            .lineLimit(3)
++
++                        Divider()
++                            .overlay(Color.black.opacity(0.2))
++
++                        Text(promptDetail())
++                            .font(.system(size: 13, weight: .medium, design: .rounded))
++                            .foregroundColor(Color(red: 0.22, green: 0.25, blue: 0.28))
++                            .lineLimit(3)
++                    }
++                    .padding(.horizontal, 24)
++                    .padding(.vertical, 18)
++                )
++        }
++        .frame(maxWidth: .infinity, minHeight: targetHeight, maxHeight: targetHeight)
+     }
+ 
+     private func promptDetail() -> String {
+@@ -391,54 +646,6 @@ struct ContentView: View {
+         }
+     }
+ 
+-    private func ampToggleView() -> some View {
+-        VStack(spacing: 10) {
+-            Text("START")
+-                .font(.system(size: 12, weight: .semibold))
+-                .foregroundColor(.black.opacity(0.7))
+-            Button(action: toggleAmpSwitch) {
+-                ZStack {
+-                    Capsule()
+-                        .fill(
+-                            LinearGradient(colors: [
+-                                Color(red: 0.78, green: 0.80, blue: 0.82),
+-                                Color(red: 0.58, green: 0.60, blue: 0.62)
+-                            ], startPoint: .top, endPoint: .bottom)
+-                        )
+-                        .frame(width: 36, height: 108)
+-                        .overlay(
+-                            Capsule()
+-                                .stroke(Color.black.opacity(0.25), lineWidth: 1)
+-                        )
+-
+-                    RoundedRectangle(cornerRadius: 6)
+-                        .fill(Color(red: 0.85, green: 0.86, blue: 0.88))
+-                        .frame(width: 12, height: 60)
+-                        .shadow(color: Color.black.opacity(0.3), radius: 3, x: 0, y: 2)
+-                        .offset(y: isToggleOn ? 25 : -25)
+-                        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: isToggleOn)
+-                }
+-            }
+-            .buttonStyle(.plain)
+-
+-            Text("NEXT")
+-                .font(.system(size: 12, weight: .semibold))
+-                .foregroundColor(.black.opacity(0.7))
+-
+-            jewelIndicator(isOn: appPhase != .welcome)
+-        }
+-        .padding(10)
+-        .background(
+-            RoundedRectangle(cornerRadius: 10)
+-                .fill(Color(red: 0.92, green: 0.91, blue: 0.88))
+-                .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 4)
+-        )
+-        .overlay(
+-            RoundedRectangle(cornerRadius: 10)
+-                .stroke(Color.black.opacity(0.1), lineWidth: 1)
+-        )
+-    }
+-
+     private func markerOverlay(
+         width: CGFloat,
+         rowHeight: CGFloat,
+@@ -584,19 +791,29 @@ struct ContentView: View {
+         let baseRow: CGFloat = 2
+         let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
+ 
+-        return RoundedRectangle(cornerRadius: 10)
+-            .fill(
+-                LinearGradient(
+-                    colors: [
+-                        Color(red: 0.93, green: 0.80, blue: 0.60),
+-                        Color(red: 0.74, green: 0.56, blue: 0.39),
+-                        Color(red: 0.54, green: 0.33, blue: 0.18)
+-                    ],
+-                    startPoint: .topLeading,
+-                    endPoint: .bottomTrailing
+-                )
+-            )
++        let texture = Image("RosewoodOne")
++            .resizable()
++            .scaledToFill()
+             .frame(width: width, height: overlayHeight)
++            .clipped()
++
++        return texture
++            .clipShape(RoundedRectangle(cornerRadius: 10))
++            .overlay(
++                RoundedRectangle(cornerRadius: 10)
++                    .fill(
++                        LinearGradient(
++                            colors: [
++                                Color.black.opacity(0.12),
++                                Color.clear,
++                                Color.black.opacity(0.18)
++                            ],
++                            startPoint: .top,
++                            endPoint: .bottom
++                        )
++                    )
++                    .blendMode(.multiply)
++            )
+             .overlay(
+                 VStack(spacing: rowSpacing) {
+                     ForEach(0..<3, id: \.self) { _ in
+@@ -789,31 +1006,26 @@ struct HeadstockShape: Shape {
+ struct TweedBackground: View {
+     var body: some View {
+         GeometryReader { proxy in
+-            let size = max(proxy.size.width, proxy.size.height)
+-            ZStack {
+-                Color(red: 0.95, green: 0.90, blue: 0.78)
+-                LinearGradient(
+-                    colors: [
+-                        Color(red: 0.96, green: 0.92, blue: 0.82).opacity(0.9),
+-                        Color(red: 0.90, green: 0.84, blue: 0.70).opacity(0.9)
+-                    ],
+-                    startPoint: .topLeading,
+-                    endPoint: .bottomTrailing
++            Rectangle()
++                .fill(
++                    ImagePaint(
++                        image: Image("TweedSample"),
++                        sourceRect: CGRect(x: 0, y: 0, width: 1, height: 1),
++                        scale: 1.0
++                    )
++                )
++                .frame(width: proxy.size.width, height: proxy.size.height)
++                .overlay(
++                    Color.black.opacity(0.12)
++                        .blendMode(.multiply)
++                )
++                .overlay(
++                    LinearGradient(
++                        colors: [Color.white.opacity(0.08), Color.clear, Color.black.opacity(0.15)],
++                        startPoint: .topLeading,
++                        endPoint: .bottomTrailing
++                    )
+                 )
+-                Canvas { context, _ in
+-                    let stripeColor = Color(red: 0.82, green: 0.72, blue: 0.56).opacity(0.25)
+-                    let stripeWidth: CGFloat = 6
+-                    let spacing: CGFloat = 14
+-                    for index in -2...Int(size / spacing) + 2 {
+-                        var path = Path()
+-                        let offset = CGFloat(index) * spacing
+-                        path.move(to: CGPoint(x: offset, y: -size))
+-                        path.addLine(to: CGPoint(x: offset + size, y: size * 2))
+-                        context.stroke(path, with: .color(stripeColor), lineWidth: stripeWidth)
+-                    }
+-                }
+-                .blendMode(.multiply)
+-            }
+         }
+     }
+ }
+diff --git a/REFRET TOO/MAPLE !.jpeg b/REFRET TOO/MAPLE !.jpeg
+new file mode 100644
+index 0000000..a47a8a2
+Binary files /dev/null and b/REFRET TOO/MAPLE !.jpeg differ
+diff --git a/REFRET TOO/Panel 1.jpg b/REFRET TOO/Panel 1.jpg
+new file mode 100644
+index 0000000..77ba003
+Binary files /dev/null and b/REFRET TOO/Panel 1.jpg differ
+diff --git a/REFRET TOO/Panel 3.jpg b/REFRET TOO/Panel 3.jpg
+new file mode 100644
+index 0000000..17e9c72
+Binary files /dev/null and b/REFRET TOO/Panel 3.jpg differ
+diff --git a/REFRET TOO/ROSEWOOD 2.jpeg b/REFRET TOO/ROSEWOOD 2.jpeg
+new file mode 100644
+index 0000000..f0a9a4c
+Binary files /dev/null and b/REFRET TOO/ROSEWOOD 2.jpeg differ
+diff --git a/REFRET TOO/ROSEWOOD 3.jpeg b/REFRET TOO/ROSEWOOD 3.jpeg
+new file mode 100644
+index 0000000..4c4059d
+Binary files /dev/null and b/REFRET TOO/ROSEWOOD 3.jpeg differ
+diff --git a/REFRET TOO/Rosewood 1.jpg b/REFRET TOO/Rosewood 1.jpg
+new file mode 100644
+index 0000000..5db424b
+Binary files /dev/null and b/REFRET TOO/Rosewood 1.jpg differ
+diff --git "a/REFRET TOO/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg" "b/REFRET TOO/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg"
+new file mode 100644
+index 0000000..a0240e9
+Binary files /dev/null and "b/REFRET TOO/Screenshot 2026-03-11 at 8.16.49\342\200\257AM.jpeg" differ
+diff --git "a/REFRET TOO/Screenshot 2026-03-11 at 9.20.31\342\200\257AM.jpeg" "b/REFRET TOO/Screenshot 2026-03-11 at 9.20.31\342\200\257AM.jpeg"
+new file mode 100644
+index 0000000..17ac10a
+Binary files /dev/null and "b/REFRET TOO/Screenshot 2026-03-11 at 9.20.31\342\200\257AM.jpeg" differ
+diff --git a/REFRET TOO/TV 10.jpeg b/REFRET TOO/TV 10.jpeg
+new file mode 100644
+index 0000000..3efb1a0
+Binary files /dev/null and b/REFRET TOO/TV 10.jpeg differ
+diff --git a/REFRET TOO/TV 11.jpeg b/REFRET TOO/TV 11.jpeg
+new file mode 100644
+index 0000000..f697778
+Binary files /dev/null and b/REFRET TOO/TV 11.jpeg differ
+diff --git a/REFRET TOO/TV 13.jpeg b/REFRET TOO/TV 13.jpeg
+new file mode 100644
+index 0000000..3efb1a0
+Binary files /dev/null and b/REFRET TOO/TV 13.jpeg differ
+diff --git a/REFRET TOO/TV 14.png b/REFRET TOO/TV 14.png
+new file mode 100644
+index 0000000..77ecdab
+Binary files /dev/null and b/REFRET TOO/TV 14.png differ
+diff --git a/REFRET TOO/TV 15.jpeg b/REFRET TOO/TV 15.jpeg
+new file mode 100644
+index 0000000..870294c
+Binary files /dev/null and b/REFRET TOO/TV 15.jpeg differ
+diff --git a/REFRET TOO/TV 16.jpeg b/REFRET TOO/TV 16.jpeg
+new file mode 100644
+index 0000000..8ef2b04
+Binary files /dev/null and b/REFRET TOO/TV 16.jpeg differ
+diff --git a/REFRET TOO/Tube 1.jpeg b/REFRET TOO/Tube 1.jpeg
+new file mode 100644
+index 0000000..fcaeb54
+Binary files /dev/null and b/REFRET TOO/Tube 1.jpeg differ
+diff --git a/REFRET TOO/Tube 2.jpeg b/REFRET TOO/Tube 2.jpeg
+new file mode 100644
+index 0000000..750ff92
+Binary files /dev/null and b/REFRET TOO/Tube 2.jpeg differ
+diff --git a/REFRET TOO/Tube 3.jpeg b/REFRET TOO/Tube 3.jpeg
+new file mode 100644
+index 0000000..20f98d6
+Binary files /dev/null and b/REFRET TOO/Tube 3.jpeg differ
+diff --git a/REFRET TOO/Tube 4.jpeg b/REFRET TOO/Tube 4.jpeg
+new file mode 100644
+index 0000000..7bdeb53
+Binary files /dev/null and b/REFRET TOO/Tube 4.jpeg differ
+diff --git a/REFRET TOO/Tube 5.jpeg b/REFRET TOO/Tube 5.jpeg
+new file mode 100644
+index 0000000..367511a
+Binary files /dev/null and b/REFRET TOO/Tube 5.jpeg differ
+diff --git a/REFRET TOO/Tube 6.jpeg b/REFRET TOO/Tube 6.jpeg
+new file mode 100644
+index 0000000..1548de9
+Binary files /dev/null and b/REFRET TOO/Tube 6.jpeg differ
+diff --git a/REFRET TOO/Tube 7.jpeg b/REFRET TOO/Tube 7.jpeg
+new file mode 100644
+index 0000000..a0a7b5e
+Binary files /dev/null and b/REFRET TOO/Tube 7.jpeg differ
+diff --git a/REFRET TOO/Tube 8.jpeg b/REFRET TOO/Tube 8.jpeg
+new file mode 100644
+index 0000000..03b7007
+Binary files /dev/null and b/REFRET TOO/Tube 8.jpeg differ
+diff --git a/REFRET TOO/Tube 9.jpeg b/REFRET TOO/Tube 9.jpeg
+new file mode 100644
+index 0000000..90331f0
+Binary files /dev/null and b/REFRET TOO/Tube 9.jpeg differ
+diff --git a/REFRET TOO/VU METER !.jpeg b/REFRET TOO/VU METER !.jpeg
+new file mode 100644
+index 0000000..af7f6a2
+Binary files /dev/null and b/REFRET TOO/VU METER !.jpeg differ
+diff --git a/REFRET TOO/VU METER 2.jpeg b/REFRET TOO/VU METER 2.jpeg
+new file mode 100644
+index 0000000..073f959
+Binary files /dev/null and b/REFRET TOO/VU METER 2.jpeg differ
+diff --git a/REFRET TOO/VU METER 3.jpeg b/REFRET TOO/VU METER 3.jpeg
+new file mode 100644
+index 0000000..ffa6422
+Binary files /dev/null and b/REFRET TOO/VU METER 3.jpeg differ
+diff --git a/REFRET TOO/VU METER 4.jpeg b/REFRET TOO/VU METER 4.jpeg
+new file mode 100644
+index 0000000..b803c49
+Binary files /dev/null and b/REFRET TOO/VU METER 4.jpeg differ
+diff --git a/REFRET TOO/chrome.jpg.jpeg b/REFRET TOO/chrome.jpg.jpeg
+new file mode 100644
+index 0000000..36c28b6
+Binary files /dev/null and b/REFRET TOO/chrome.jpg.jpeg differ
+diff --git a/REFRET TOO/ebony 1.jpeg b/REFRET TOO/ebony 1.jpeg
+new file mode 100644
+index 0000000..fdb3e6c
+Binary files /dev/null and b/REFRET TOO/ebony 1.jpeg differ
+diff --git a/REFRET TOO/fretboard 1.jpeg b/REFRET TOO/fretboard 1.jpeg
+new file mode 100644
+index 0000000..6bc132e
+Binary files /dev/null and b/REFRET TOO/fretboard 1.jpeg differ
+diff --git a/REFRET TOO/fretboard 2.jpeg b/REFRET TOO/fretboard 2.jpeg
+new file mode 100644
+index 0000000..314fab9
+Binary files /dev/null and b/REFRET TOO/fretboard 2.jpeg differ
+diff --git a/REFRET TOO/fretboard 3.jpeg b/REFRET TOO/fretboard 3.jpeg
+new file mode 100644
+index 0000000..65e7e6f
+Binary files /dev/null and b/REFRET TOO/fretboard 3.jpeg differ
+diff --git a/REFRET TOO/panel 2.jpg b/REFRET TOO/panel 2.jpg
+new file mode 100644
+index 0000000..dd98168
+Binary files /dev/null and b/REFRET TOO/panel 2.jpg differ
+diff --git a/REFRET TOO/retroknob pointer.jpeg b/REFRET TOO/retroknob pointer.jpeg
+new file mode 100644
+index 0000000..258bea7
+Binary files /dev/null and b/REFRET TOO/retroknob pointer.jpeg differ
+diff --git a/REFRET TOO/s-l1600.jpeg b/REFRET TOO/s-l1600.jpeg
+new file mode 100644
+index 0000000..8906f67
+Binary files /dev/null and b/REFRET TOO/s-l1600.jpeg differ
+diff --git a/REFRET TOO/s-l1600.webp b/REFRET TOO/s-l1600.webp
+new file mode 100644
+index 0000000..5343982
+Binary files /dev/null and b/REFRET TOO/s-l1600.webp differ
+diff --git a/REFRET TOO/telecaster.jpeg b/REFRET TOO/telecaster.jpeg
+new file mode 100644
+index 0000000..2c13507
+Binary files /dev/null and b/REFRET TOO/telecaster.jpeg differ
+diff --git a/REFRET TOO/toggle.jpeg b/REFRET TOO/toggle.jpeg
+new file mode 100644
+index 0000000..b805acf
+Binary files /dev/null and b/REFRET TOO/toggle.jpeg differ
+diff --git a/REFRET TOO/tv 1.jpeg b/REFRET TOO/tv 1.jpeg
+new file mode 100644
+index 0000000..d8f6d49
+Binary files /dev/null and b/REFRET TOO/tv 1.jpeg differ
+diff --git a/REFRET TOO/tv 2.jpeg b/REFRET TOO/tv 2.jpeg
+new file mode 100644
+index 0000000..f27b381
+Binary files /dev/null and b/REFRET TOO/tv 2.jpeg differ
+diff --git a/REFRET TOO/tv3.jpeg b/REFRET TOO/tv3.jpeg
+new file mode 100644
+index 0000000..bbfc2ee
+Binary files /dev/null and b/REFRET TOO/tv3.jpeg differ
+diff --git a/REFRET TOO/tv4.jpeg b/REFRET TOO/tv4.jpeg
+new file mode 100644
+index 0000000..0ad56b3
+Binary files /dev/null and b/REFRET TOO/tv4.jpeg differ
+diff --git a/REFRET TOO/tv5.png b/REFRET TOO/tv5.png
+new file mode 100644
+index 0000000..49bf497
+Binary files /dev/null and b/REFRET TOO/tv5.png differ
+diff --git a/REFRET TOO/volume knob.jpeg b/REFRET TOO/volume knob.jpeg
+new file mode 100644
+index 0000000..8adee5e
+Binary files /dev/null and b/REFRET TOO/volume knob.jpeg differ

@@ -1,0 +1,48 @@
+{
+  "source": "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/ContentView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Lift Frets",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 286
+        }
+      },
+      {
+        "comment": "",
+        "key": "Drop Frets",
+        "location": {
+          "startingColumn": 61,
+          "startingLine": 286
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 336
+        }
+      },
+      {
+        "comment": "",
+        "key": "Correct",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 1014
+        }
+      },
+      {
+        "comment": "",
+        "key": "Try Again",
+        "location": {
+          "startingColumn": 65,
+          "startingLine": 1014
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/Release/REFRET TOO.app/Contents/MacOS/REFRET TOO'
+relocations:     []
+...
