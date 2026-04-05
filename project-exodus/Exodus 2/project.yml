@@ -1,0 +1,34 @@
+name: Exodus 2
+options:
+  developmentLanguage: en
+settings:
+  base:
+    PRODUCT_BUNDLE_IDENTIFIER: com.cascade.Exodus2
+    SWIFT_VERSION: 5.9
+    IPHONEOS_DEPLOYMENT_TARGET: 16.0
+packages: []
+targets:
+  Exodus 2:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: .
+        excludes:
+          - project.yml
+    info:
+      path: Exodus2-Info.plist
+      properties:
+        CFBundleDisplayName: Exodus 2
+        UILaunchScreen: {}
+    settings:
+      base:
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0
+schemes:
+  Exodus 2:
+    build:
+      targets:
+        Exodus 2: all
+    run:
+      config: Debug

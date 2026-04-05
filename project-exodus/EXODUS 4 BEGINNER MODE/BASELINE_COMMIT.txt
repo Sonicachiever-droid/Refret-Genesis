@@ -1,0 +1,3 @@
+Baseline commit (tracked files):
+d1a970da44f67057fc81ea3283ec75e75cad7c91
+d1a970d Stabilize beginner baseline before MIDI loop debugging
