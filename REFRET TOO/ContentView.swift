@@ -1,11 +1,5 @@
-//
-//  ContentView.swift
-//  REFRET TOO
-//
-//  Created by Thomas Kane on 3/10/26.
-//
-
 import SwiftUI
+import UIKit
 
 enum AppPhase: Equatable {
     case welcome
@@ -15,641 +9,676 @@ enum AppPhase: Equatable {
 
     var title: String {
         switch self {
-        case .welcome:
-            return "Welcome"
-        case .instructions:
-            return "How to Play"
-        case .round(let number, _):
-            return "Round \(number)"
-        case .chord(let name, _):
-            return "Chord Quiz: \(name)"
+        case .welcome: return "Welcome"
+        case .instructions: return "How to Play"
+        case .round(let number, _): return "Round \(number)"
+        case .chord(let name, _): return "Chord Quiz: \(name)"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .welcome:
-            return "Tap START to wake the fretboard"
-        case .instructions:
-            return "Match the lit string by tapping the correct note"
-        case .round(_, let description):
-            return description
-        case .chord(_, let hint):
-            return hint
+        case .welcome: return "Tap START to wake the fretboard"
+        case .instructions: return "Match the lit string by tapping the correct note"
+        case .round(_, let description): return description
+        case .chord(_, let hint): return hint
         }
     }
 }
 
+// MARK: - GENESIS ALIGNMENT MATH (exact same as your original Genesis file)
+private func baselineNutTargetY(highlightTopGridLineY: CGFloat, gridRowHeight: CGFloat) -> CGFloat {
+    highlightTopGridLineY + 2 * gridRowHeight
+}
+
+private func resolvedNeckTopY(
+    currentFretStart: Int,
+    nutTargetY: CGFloat,
+    highlightCenterY: CGFloat,
+    activeMidpoint: CGFloat
+) -> CGFloat {
+    if currentFretStart == 0 {
+        return nutTargetY
+    }
+    return highlightCenterY - activeMidpoint
+}
+
+private enum FretMath {
+    static func fretPositionRatios(totalFrets: Int, scaleLength: Double) -> [CGFloat] {
+        guard totalFrets > 0, scaleLength > 0 else { return [] }
+        return (0...totalFrets).map { fret in
+            let distance = scaleLength - scaleLength / pow(2.0, Double(fret) / 12.0)
+            return CGFloat(distance / scaleLength)
+        }
+    }
+}
+
+private struct StringLineOverlay: View {
+    let neckWidth: CGFloat
+    let horizontalPadding: CGFloat
+    private let totalStrings: Int = 6
+    private let stratNutWidthInches: CGFloat = 1.650
+    private let stratStringSpanInches: CGFloat = 1.362
+
+    var body: some View {
+        GeometryReader { geo in
+            let nutWidth = neckWidth * 0.99
+            let overallWidth = geo.size.width
+            let overallPadding = (overallWidth - nutWidth) / 2
+            
+            let widthPerInch = nutWidth / stratNutWidthInches
+            let interStringSpacing = (stratStringSpanInches / CGFloat(totalStrings - 1)) * widthPerInch
+            let edgeMargin = ((stratNutWidthInches - stratStringSpanInches) / 2) * widthPerInch
+            let grooveCenters = (0..<totalStrings).map { index in
+                overallPadding + edgeMargin + CGFloat(index) * interStringSpacing
+            }
+
+            ZStack {
+                ForEach(0..<totalStrings, id: \.self) { index in
+                    let stringX = grooveCenters[index]
+                    let isLowString = index <= 2
+                    
+                    if isLowString {
+                        BrassStringView(
+                            stringX: stringX,
+                            stringHeight: geo.size.height,
+                            stringNumber: 6 - index
+                        )
+                    } else {
+                        Rectangle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color(red: 0.9, green: 0.9, blue: 0.85),
+                                        Color(red: 0.7, green: 0.7, blue: 0.65),
+                                        Color(red: 0.5, green: 0.5, blue: 0.45)
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                            .frame(width: 1.5, height: geo.size.height)
+                            .position(x: stringX, y: geo.size.height / 2)
+                    }
+                }
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+        }
+        .allowsHitTesting(false)
+        .ignoresSafeArea()
+    }
+}
+
+private struct BrassStringView: View {
+    let stringX: CGFloat
+    let stringHeight: CGFloat
+    let stringNumber: Int
+    
+    private var stringThickness: CGFloat {
+        switch stringNumber {
+        case 6: return 4.0
+        case 5: return 3.5
+        case 4: return 3.0
+        default: return 2.5
+        }
+    }
+    
+    private var segmentCount: Int {
+        switch stringNumber {
+        case 6: return 8
+        case 5: return 7
+        case 4: return 6
+        default: return 5
+        }
+    }
+
+    var body: some View {
+        let segmentHeight: CGFloat = stringHeight / CGFloat(segmentCount)
+        
+        VStack(spacing: 0) {
+            ForEach(0..<segmentCount, id: \.self) { segment in
+                BrassStringSegment(
+                    width: stringThickness,
+                    height: segmentHeight,
+                    segmentIndex: segment,
+                    totalSegments: segmentCount
+                )
+            }
+        }
+        .position(x: stringX, y: stringHeight / 2)
+    }
+}
+
+private struct BrassStringSegment: View {
+    let width: CGFloat
+    let height: CGFloat
+    let segmentIndex: Int
+    let totalSegments: Int
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: width / 2, style: .continuous)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.96, green: 0.94, blue: 0.88),
+                        Color(red: 0.82, green: 0.69, blue: 0.47),
+                        Color(red: 0.65, green: 0.50, blue: 0.30),
+                        Color(red: 0.85, green: 0.75, blue: 0.60)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: width / 2)
+                    .stroke(Color.black.opacity(0.2), lineWidth: 0.3)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: width / 2)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.6), .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.5
+                    )
+            )
+            .shadow(color: Color.black.opacity(0.3), radius: 1, x: 0, y: 0.5)
+            .frame(width: width, height: max(height, 2))
+    }
+}
+
+private struct NutSlotDotsOverlay: View {
+    let neckWidth: CGFloat
+    let horizontalPadding: CGFloat
+    let highlightTopY: CGFloat
+    private let totalStrings: Int = 6
+    private let dotDiameter: CGFloat = 12
+    private let stratNutWidthInches: CGFloat = 1.650
+    private let stratStringSpanInches: CGFloat = 1.362
+
+    var body: some View {
+        GeometryReader { geo in
+            let nutWidth = neckWidth * 0.99
+            let overallWidth = geo.size.width
+            let overallPadding = (overallWidth - nutWidth) / 2
+            
+            let widthPerInch = nutWidth / stratNutWidthInches
+            let interStringSpacing = (stratStringSpanInches / CGFloat(totalStrings - 1)) * widthPerInch
+            let edgeMargin = ((stratNutWidthInches - stratStringSpanInches) / 2) * widthPerInch
+            let grooveCenters = (0..<totalStrings).map { index in
+                overallPadding + edgeMargin + CGFloat(index) * interStringSpacing
+            }
+            
+            let clampedY = min(max(highlightTopY, 0), geo.size.height)
+
+            ZStack {
+                ForEach(0..<totalStrings, id: \.self) { index in
+                    let stringX = grooveCenters[index]
+
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: dotDiameter, height: dotDiameter)
+                        .position(x: stringX, y: clampedY)
+                }
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+        }
+        .allowsHitTesting(false)
+        .ignoresSafeArea()
+    }
+}
+
+private struct NoteIndicatorLayer: View {
+    @ObservedObject var gameManager: GameManager
+    let highlightWidth: CGFloat
+    let centerY: CGFloat
+    let availableSize: CGSize
+    let boxHeight: CGFloat
+    let neckWidth: CGFloat
+    private let totalStrings: Int = 6
+    private let stratNutWidthInches: CGFloat = 1.650
+    private let stratStringSpanInches: CGFloat = 1.362
+
+    var body: some View {
+        let clampedBoxHeight = min(boxHeight, availableSize.height)
+        let nutWidth = neckWidth * 0.99
+        let overallWidth = availableSize.width
+        let overallPadding = (overallWidth - nutWidth) / 2
+
+        let widthPerInch = nutWidth / stratNutWidthInches
+        let interStringSpacing = (stratStringSpanInches / CGFloat(totalStrings - 1)) * widthPerInch
+        let edgeMargin = ((stratNutWidthInches - stratStringSpanInches) / 2) * widthPerInch
+        let grooveCenters = (0..<totalStrings).map { index in
+            overallPadding + edgeMargin + CGFloat(index) * interStringSpacing
+        }
+
+        let minCenterSpacing = grooveCenters.enumerated().dropFirst().map { idx, center in
+            center - grooveCenters[idx - 1]
+        }.min() ?? interStringSpacing
+        let spacingGap = max(minCenterSpacing * 0.12, 6)
+        let maxBoxWidthFromSpacing = max(minCenterSpacing - spacingGap, 0)
+        let boxWidth = min(boxHeight * 1.8, maxBoxWidthFromSpacing)
+
+        return ZStack {
+            ForEach(0..<totalStrings, id: \.self) { index in
+                let xPosition = grooveCenters[index]
+
+                NoteIndicatorBox(
+                    isLit: gameManager.litCircleIndex == index,
+                    isWrong: gameManager.wrongPressCircle == index,
+                    shownNote: gameManager.shownNotes.first(where: { $0.index == index })?.note,
+                    isShowingNote: gameManager.showingNote
+                )
+                .frame(width: boxWidth, height: clampedBoxHeight)
+                .position(x: xPosition, y: centerY)
+            }
+        }
+    }
+}
+
+private struct NoteIndicatorBox: View {
+    let isLit: Bool
+    let isWrong: Bool
+    let shownNote: String?
+    let isShowingNote: Bool
+
+    var body: some View {
+        let baseColor: Color = isWrong ? .red : (isLit ? .green : Color.white)
+
+        return ZStack {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .fill(baseColor)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(Color.black, lineWidth: 2)
+                )
+
+            if isShowingNote, let note = shownNote {
+                Text(note)
+                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                    .foregroundColor(.black)
+            }
+        }
+        .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+    }
+}
+
+private struct MapleSegmentedBackground: View {
+    let fretRatios: [CGFloat]
+    let cornerRadius: CGFloat
+
+    var body: some View {
+        GeometryReader { geometry in
+            let neckHeight = geometry.size.height
+            let neckWidth = geometry.size.width
+            let segments = segmentBounds(from: fretRatios)
+            let bindingInset = max(neckWidth * 0.02, 6)
+            let mapleTexture = Image("FretWoodSET2Maple")
+
+            ZStack(alignment: .top) {
+                VStack(spacing: 0) {
+                    ForEach(Array(segments.enumerated()), id: \.offset) { index, bounds in
+                        let segmentHeight = max((bounds.end - bounds.start) * neckHeight, 1)
+                        mapleTexture
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: neckWidth, height: segmentHeight)
+                            .clipped()
+                    }
+                }
+                .padding(.horizontal, bindingInset)
+
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
+
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.black.opacity(0.14),
+                                Color.clear,
+                                Color.black.opacity(0.18)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .blendMode(.multiply)
+
+                VStack(spacing: 0) {
+                    ForEach(Array(segments.enumerated()), id: \.offset) { index, bounds in
+                        Spacer()
+                            .frame(height: max((bounds.end - bounds.start) * neckHeight, 1))
+                            .overlay(
+                                Rectangle()
+                                    .fill(Color.white.opacity(((index + 1) % 3 == 0) ? 0.065 : 0))
+                                    .frame(height: 1.2)
+                                    .opacity(bounds.end >= 1 ? 0 : 1)
+                            )
+                    }
+                }
+                .padding(.horizontal, bindingInset)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        }
+    }
+
+    private func segmentBounds(from ratios: [CGFloat]) -> [(start: CGFloat, end: CGFloat)] {
+        guard ratios.count >= 2 else { return [(0, 1)] }
+        var pairs: [(CGFloat, CGFloat)] = []
+        for index in 0..<(ratios.count - 1) {
+            let start = ratios[index]
+            let end = ratios[index + 1]
+            pairs.append((start, end))
+        }
+        if let last = ratios.last, last < 1 {
+            pairs.append((last, 1))
+        }
+        return pairs
+    }
+}
+
+private struct DeveloperButtonStack: View {
+    let windowShiftUp: () -> Void
+    let windowShiftDown: () -> Void
+    let neckShiftUp: () -> Void
+    let neckShiftDown: () -> Void
+    let canWindowShiftUp: Bool
+    let canWindowShiftDown: Bool
+    let canNeckShiftUp: Bool
+    let canNeckShiftDown: Bool
+
+    var body: some View {
+        HStack(spacing: 32) {
+            VStack(spacing: 8) {
+                devButton(icon: "arrow.up", action: neckShiftUp, isEnabled: canNeckShiftUp)
+                devButton(icon: "arrow.down", action: neckShiftDown, isEnabled: canNeckShiftDown)
+                Text("NECK")
+                    .font(.caption2)
+                    .foregroundColor(.white)
+                    .bold()
+            }
+            
+            VStack(spacing: 8) {
+                devButton(icon: "arrow.up", action: windowShiftUp, isEnabled: canWindowShiftUp)
+                devButton(icon: "arrow.down", action: windowShiftDown, isEnabled: canWindowShiftDown)
+                Text("WINDOW")
+                    .font(.caption2)
+                    .foregroundColor(.white)
+                    .bold()
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .fill(Color.black.opacity(0.45))
+                .blur(radius: 2)
+        )
+    }
+
+    private func devButton(icon: String, action: @escaping () -> Void, isEnabled: Bool) -> some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(.system(size: 24, weight: .bold))
+                .frame(width: 56, height: 56)
+                .background(
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(isEnabled ? 0.95 : 0.4),
+                                    Color.white.opacity(isEnabled ? 0.65 : 0.25)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .overlay(
+                            Circle()
+                                .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                        )
+                )
+                .foregroundColor(.white)
+                .shadow(color: Color.black.opacity(0.4), radius: 4, x: 0, y: 3)
+                .opacity(isEnabled ? 1 : 0.35)
+        }
+        .disabled(!isEnabled)
+    }
+}
+
 struct ContentView: View {
-    @State private var fretsShiftedDown: Bool = true
+    @StateObject private var gameManager = GameManager()
+    @State private var currentFretStart: Int = 0
+    @State private var currentWindowRow: Int = 2
     @State private var noteOptions: [String] = []
-    @State private var correctNote: String = ""
     @State private var selectedNote: String? = nil
     @State private var appPhase: AppPhase = .welcome
     @State private var isToggleOn: Bool = false
     @State private var currentRound: Int = 1
-
-    private let notePool: [String] = [
-        "E", "F", "F♯", "G", "G♯", "A", "A♯", "B", "C", "C♯", "D", "D♯"
-    ]
+    private let totalFrets: Int = 22
+    private let scaleLengthInches: Double = 25.5
+    private var maxFretOffset: Int { totalFrets }
+    private var minFretOffset: Int { -totalFrets }
+    private let topBannerMessages = ["Welcome", "Are you ready to start?", "Three", "Two", "One", "Go!"]
 
     var body: some View {
         GeometryReader { proxy in
-            let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 4)
-            let rows = 10
-            let totalCells = columns.count * rows
-            let gridPadding: CGFloat = 12
-            let rowSpacing: CGFloat = 2
-            let rowHeight = proxy.size.height / CGFloat(rows) - rowSpacing
-            let gridWidth = proxy.size.width - gridPadding * 2
+            let padding: CGFloat = 24
+            let neckWidth = (proxy.size.width - padding * 2) * 0.8
+            let fretRatios = FretMath.fretPositionRatios(totalFrets: totalFrets, scaleLength: scaleLengthInches)
+            let visibleFrets = min(totalFrets, 5)
+            let visibleFretIndex = min(visibleFrets, fretRatios.count - 1)
+            let visibleRatio = max(fretRatios[visibleFretIndex], 0.05)
+            let visibleClipHeight = proxy.size.height * 0.96
+            let unclippedHeight = visibleClipHeight / visibleRatio
+            let minimumNeckHeight = proxy.size.height * 1.35
+            let neckHeight = max(unclippedHeight, minimumNeckHeight)
+            let nutHeight = max(neckHeight * 0.02, 18)
+            let nutVisualHeight = nutHeight * 0.4
+            let debugGridColumns = 5
+            let debugGridRows = 8
+            let gridRowHeight = proxy.size.height / CGFloat(debugGridRows)
+            
+            let highlightHeight = 3 * gridRowHeight
+            let highlightTopGridLineY = CGFloat(currentWindowRow) * gridRowHeight
+            let pipingCenterY = highlightTopGridLineY + highlightHeight / 2
+            let highlightAvailableWidth = max(proxy.size.width - padding * 2, 0)
+            let highlightExtraWidth = max(highlightAvailableWidth - neckWidth, 0)
+            let highlightWidth = neckWidth + highlightExtraWidth / 2
+            let highlightCornerRadius = min(24, highlightWidth * 0.08)
+            let overlayAvailableSize = proxy.size
+            let fretTitle = currentFretStart == 0 ? fretLabel(for: gameManager.currentFret) : fretLabel(for: abs(currentFretStart))
+            let activeStringIndex = gameManager.litCircleIndex ?? gameManager.lastLitCircleIndex ?? 0
+            let clampedStringIndex = min(max(activeStringIndex, 0), 5)
+            let displayedStringNumber = 6 - clampedStringIndex
+            let stringTitle = "String \(displayedStringNumber)"
+            let topBannerMessage = topBannerMessages.first ?? "Welcome"
+
+            let unsignedN = abs(currentFretStart)
+            let activeMidpointIndex: Int = {
+                if currentFretStart > 0 {
+                    return max(currentFretStart - 1, 0)
+                }
+                return unsignedN
+            }()
+            let clampedN = min(activeMidpointIndex, fretRatios.count - 2)
+            let topRatio = fretRatios[clampedN]
+            let bottomRatio = fretRatios[clampedN + 1]
+            let midRatio = (topRatio + bottomRatio) / 2.0
+            let sign: CGFloat = currentFretStart >= 0 ? 1.0 : -1.0
+            let activeMidpoint = midRatio * neckHeight * sign
+
+            let nutTargetY = baselineNutTargetY(highlightTopGridLineY: highlightTopGridLineY, gridRowHeight: gridRowHeight)
+            let neckTopY = resolvedNeckTopY(
+                currentFretStart: currentFretStart,
+                nutTargetY: nutTargetY,
+                highlightCenterY: pipingCenterY,
+                activeMidpoint: activeMidpoint
+            )
+
+            let scale = UIScreen.main.scale
+            let neckOffsetY: CGFloat = {
+                if currentFretStart == 0 {
+                    let raw = neckTopY - proxy.size.height / 2 + neckHeight / 2
+                    return (raw * scale).rounded() / scale
+                } else {
+                    let raw = pipingCenterY - activeMidpoint - proxy.size.height / 2 + neckHeight / 2
+                    return (raw * scale).rounded() / scale
+                }
+            }()
+
+            // <<< THIS IS THE ONLY LINE YOU EVER CHANGE >>>
+            // More negative = blue lines move UP
+            // Less negative / positive = blue lines move DOWN
+            // We are very close now — try 0.55 first
+            let manualBlueAdjustment: CGFloat = -gridRowHeight * 0.55
+
+            let finalNeckOffsetY = neckOffsetY + manualBlueAdjustment
+
             ZStack {
-                Color(red: 0.92, green: 0.92, blue: 0.9)
+                Image("RosewoodOne")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                    .clipped()
                     .ignoresSafeArea()
-                VStack(spacing: 8) {
-                    textScreenView(height: (proxy.size.height / CGFloat(rows)) * 1.2)
-                        .padding(.horizontal, 24)
+                    .allowsHitTesting(false)
+
+                HStack {
+                    Spacer()
+                    ZStack {
+                        ZStack(alignment: .top) {
+                            ZStack {
+                                MapleSegmentedBackground(
+                                    fretRatios: fretRatios,
+                                    cornerRadius: 10
+                                )
+                                BindingLayer()
+                                FretWireLayer(fretRatios: fretRatios)
+                                FretMarkerLayer(fretRatios: fretRatios)
+                            }
+                            .frame(width: neckWidth, height: neckHeight)
+                            .overlay {
+                                ProjectLinebackerOverlay(fretRatios: fretRatios, neckHeight: neckHeight)
+                            }
+
+                            NutLayer(width: neckWidth * 0.99, height: nutVisualHeight)
+                                .frame(width: neckWidth * 0.99, height: nutVisualHeight)
+                                .offset(y: -nutVisualHeight * 0.85)
+                        }
+                        .frame(width: neckWidth, height: neckHeight)
+                        .offset(y: finalNeckOffsetY)
+                    }
+                    .frame(width: neckWidth, height: visibleClipHeight)
+                    .clipped()
                     Spacer()
                 }
-                ZStack(alignment: .topLeading) {
-                    fretWoodOverlay(
-                        width: gridWidth,
-                        rowHeight: rowHeight,
-                        rowSpacing: rowSpacing,
-                        offsetRows: fretsShiftedDown ? 1 : 0
-                    )
-                    .padding(.horizontal, gridPadding)
-                    .padding(.top, gridPadding)
+                .padding(.horizontal, padding)
 
-                    bindingOverlay(
-                        width: gridWidth,
-                        rowHeight: rowHeight,
-                        rowSpacing: rowSpacing,
-                        offsetRows: fretsShiftedDown ? 1 : 0
-                    )
-                    .padding(.horizontal, gridPadding)
-                    .padding(.top, gridPadding)
+                StringLineOverlay(
+                    neckWidth: neckWidth,
+                    horizontalPadding: padding
+                )
 
-                    fretWireOverlay(
-                        width: gridWidth,
-                        rowHeight: rowHeight,
-                        rowSpacing: rowSpacing,
-                        offsetRows: fretsShiftedDown ? 1 : 0
-                    )
-                    .padding(.horizontal, gridPadding)
-                    .padding(.top, gridPadding)
+                NutFirstFretHighlight(
+                    width: highlightWidth,
+                    height: highlightHeight,
+                    cornerRadius: highlightCornerRadius
+                )
+                .frame(width: highlightWidth, height: highlightHeight)
+                .position(x: proxy.size.width / 2, y: pipingCenterY)
+                .allowsHitTesting(false)
+                .ignoresSafeArea()
 
-                    markerOverlay(
-                        width: gridWidth,
-                        rowHeight: rowHeight,
-                        rowSpacing: rowSpacing,
-                        offsetRows: fretsShiftedDown ? 1 : 0
-                    )
-                    .padding(.horizontal, gridPadding)
-                    .padding(.top, gridPadding)
+                NoteIndicatorLayer(
+                    gameManager: gameManager,
+                    highlightWidth: highlightWidth,
+                    centerY: pipingCenterY,
+                    availableSize: overlayAvailableSize,
+                    boxHeight: gridRowHeight * 0.7,
+                    neckWidth: neckWidth
+                )
+                .allowsHitTesting(false)
+                .ignoresSafeArea()
 
-                    nutOverlay(
-                        width: gridWidth,
-                        rowHeight: rowHeight,
-                        rowSpacing: rowSpacing,
-                        offsetRows: fretsShiftedDown ? 1 : 0
-                    )
-                    .padding(.horizontal, gridPadding)
-                    .padding(.top, gridPadding)
+                Rectangle()
+                    .fill(Color.green)
+                    .frame(width: highlightWidth, height: 2)
+                    .position(x: proxy.size.width / 2, y: pipingCenterY)
+                    .allowsHitTesting(false)
+                    .ignoresSafeArea()
 
-                    LazyVGrid(columns: columns, spacing: rowSpacing) {
-                        ForEach(0..<totalCells, id: \.self) { index in
-                            Color.clear
-                                .frame(height: rowHeight)
-                                .overlay(highlightOverlay(for: index))
-                        }
-                    }
-                    .padding(gridPadding)
+                GeometryReader { matteGeo in
+                    DarkMatteOverlay(
+                        canvasSize: matteGeo.size,
+                        highlightWidth: highlightWidth,
+                        highlightHeight: highlightHeight,
+                        highlightCenter: CGPoint(x: matteGeo.size.width / 2, y: pipingCenterY),
+                        highlightCornerRadius: highlightCornerRadius
+                    )
                 }
+                .allowsHitTesting(false)
+                .ignoresSafeArea()
+
+                DeveloperButtonStack(
+                    windowShiftUp: { shiftWindow(by: -1) },
+                    windowShiftDown: { shiftWindow(by: 1) },
+                    neckShiftUp: { shiftFretSpan(by: 1) },
+                    neckShiftDown: { shiftFretSpan(by: -1) },
+                    canWindowShiftUp: currentWindowRow > 0,
+                    canWindowShiftDown: currentWindowRow < debugGridRows - 1,
+                    canNeckShiftUp: currentFretStart < maxFretOffset,
+                    canNeckShiftDown: currentFretStart > minFretOffset
+                )
+                .padding(.bottom, proxy.size.height * 0.05)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
             }
-            .overlay(alignment: .bottomTrailing) {
-                Button(action: toggleFrets) {
-                    Label(fretsShiftedDown ? "Lift Frets" : "Drop Frets", systemImage: "arrow.up.and.down")
-                        .font(.system(size: 14, weight: .semibold))
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 12)
-                        .background(Color.black.opacity(0.05), in: Capsule())
-                }
-                .padding(16)
+            .overlay(alignment: .top) {
+                TopStatusOverlay(
+                    topMessage: topBannerMessage,
+                    leftLabel: fretTitle,
+                    rightLabel: stringTitle,
+                    gapHeight: highlightTopGridLineY,
+                    horizontalPadding: padding
+                )
+                .frame(width: proxy.size.width)
             }
-            .overlay(alignment: .bottomLeading) {
-                ampToggleView()
-                    .padding(.leading, 16)
-                    .padding(.bottom, 32)
+            .overlay {
+                debugGridOverlay(size: proxy.size, columns: debugGridColumns, rows: debugGridRows)
+                    .allowsHitTesting(false)
+                    .opacity(0.8)
+            }
+            .overlay {
+                NutSlotDotsOverlay(
+                    neckWidth: neckWidth,
+                    horizontalPadding: padding,
+                    highlightTopY: highlightTopGridLineY
+                )
+                .allowsHitTesting(false)
             }
         }
         .onAppear(perform: generateNoteOptions)
     }
 
-    private func highlightOverlay(for index: Int) -> some View {
-        EmptyView()
-    }
-
-    private func jewelIndicator(isOn: Bool) -> some View {
-        Circle()
-            .fill(
-                RadialGradient(
-                    colors: [
-                        Color(red: 0.95, green: 0.2, blue: 0.2),
-                        Color(red: 0.55, green: 0, blue: 0)
-                    ],
-                    center: .center,
-                    startRadius: 2,
-                    endRadius: 18
-                )
-            )
-            .frame(width: 24, height: 24)
-            .overlay(
-                Circle()
-                    .stroke(Color.white.opacity(0.4), lineWidth: 1)
-            )
-            .shadow(color: Color.red.opacity(0.4), radius: 8, x: 0, y: 2)
-            .opacity(isOn ? 1 : 0.3)
-            .animation(.easeInOut(duration: 0.25), value: isOn)
-    }
-
-    private func nutOverlay(
-        width: CGFloat,
-        rowHeight: CGFloat,
-        rowSpacing: CGFloat,
-        offsetRows: Int
-    ) -> some View {
-        let nutHeight = rowHeight * 0.35
-        let bevelHeight = nutHeight * 0.25
-        let baseRow: CGFloat = 2
-        let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
-        return ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 6)
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color(red: 0.96, green: 0.94, blue: 0.88),
-                            Color(red: 0.90, green: 0.86, blue: 0.78)
-                        ],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 1)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.black.opacity(0.1), lineWidth: 1)
-                )
-                .frame(width: width, height: nutHeight + bevelHeight)
-
-            Rectangle()
-                .fill(Color.white.opacity(0.45))
-                .frame(width: width * 0.98, height: bevelHeight)
-                .offset(y: nutHeight * 0.15)
-                .mask(
-                    LinearGradient(gradient: Gradient(colors: [.clear, .white, .clear]), startPoint: .leading, endPoint: .trailing)
-                )
-        }
-        .overlay(
-            HStack(spacing: width / 6.5) {
-                ForEach(0..<6, id: \.self) { _ in
-                    Rectangle()
-                        .fill(Color.black.opacity(0.25))
-                        .frame(width: 1, height: nutHeight + bevelHeight * 0.6)
-                }
-            }
-            .padding(.horizontal, width * 0.04)
-        )
-        .padding(.bottom, rowSpacing)
-        .offset(y: totalOffset - (rowHeight * 1.5) + nutHeight * 3)
-        .allowsHitTesting(false)
-    }
-
-    private func headstockOverlay(
-        width: CGFloat,
-        rowHeight: CGFloat,
-        rowSpacing: CGFloat,
-        offsetRows: Int
-    ) -> some View {
-        let headstockWidth = width * 0.92
-        let headstockHeight = rowHeight * 4.8
-        let baseRow: CGFloat = 1
-        let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
-        let nutOverlap = rowHeight * 0.35
-        let additionalDrop = rowHeight * 2.2
-        let verticalOffset = totalOffset - headstockHeight + nutOverlap + additionalDrop
-
-        return HeadstockShape()
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.14, green: 0.12, blue: 0.12).opacity(0.75),
-                        Color(red: 0.05, green: 0.04, blue: 0.05).opacity(0.85)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-            .overlay(
-                HeadstockShape()
-                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
-            )
-            .overlay {
-                GeometryReader { geo in
-                    let h = geo.size.height
-                    let w = geo.size.width
-                    let positions: [CGFloat] = [0.28, 0.48, 0.68]
-                    ZStack {
-                        ForEach(positions, id: \.self) { pos in
-                            tunerHint()
-                                .offset(x: -w * 0.44, y: h * pos)
-                            tunerHint()
-                                .scaleEffect(x: -1, y: 1, anchor: .center)
-                                .offset(x: w * 0.44, y: h * pos)
-                        }
-                    }
-                }
-            }
-            .frame(width: headstockWidth, height: headstockHeight)
-            .opacity(0.2)
-            .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 6)
-            .offset(x: (width - headstockWidth) / 2, y: verticalOffset)
-            .blendMode(.multiply)
-            .allowsHitTesting(false)
-    }
-
-    private func tunerHint() -> some View {
-        Capsule()
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.86, green: 0.86, blue: 0.88),
-                        Color(red: 0.52, green: 0.53, blue: 0.56)
-                    ],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-            )
-            .frame(width: 22, height: 7)
-            .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
-    }
-
-    private func bindingOverlay(
-        width: CGFloat,
-        rowHeight: CGFloat,
-        rowSpacing: CGFloat,
-        offsetRows: Int
-    ) -> some View {
-        let rowsCovered: CGFloat = 3
-        let overlayHeight = rowsCovered * rowHeight + (rowsCovered - 1) * rowSpacing
-        let baseRow: CGFloat = 2
-        let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
-        let stripWidth: CGFloat = max(6, width * 0.02)
-
-        return HStack {
-            bindingStrip(width: stripWidth, height: overlayHeight)
-            Spacer()
-            bindingStrip(width: stripWidth, height: overlayHeight)
-        }
-        .frame(width: width, height: overlayHeight)
-        .offset(y: totalOffset)
-        .allowsHitTesting(false)
-    }
-
-    private func bindingStrip(width: CGFloat, height: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: width / 2)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.98, green: 0.96, blue: 0.90),
-                        Color(red: 0.92, green: 0.88, blue: 0.80)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-            .overlay(
-                VStack {
-                    Color.black.opacity(0.2)
-                        .frame(height: 1)
-                        .offset(x: width * 0.15)
-                    Spacer()
-                }
-            )
-            .frame(width: width, height: height)
-            .shadow(color: Color.black.opacity(0.15), radius: 4, x: 1, y: 0)
-    }
-
-    private func textScreenView(height: CGFloat) -> some View {
-        let subtitle = appPhase.subtitle
-        let accent = Color(red: 0.36, green: 0.24, blue: 0.12)
-        return VStack(alignment: .leading, spacing: 8) {
-            Text(appPhase.title.uppercased())
-                .font(.system(size: 13, weight: .semibold))
-                .kerning(1.2)
-                .foregroundColor(accent)
-
-            Text(subtitle)
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(accent.opacity(0.95))
-                .lineLimit(3)
-
-            Text(promptDetail())
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(accent.opacity(0.7))
-                .lineLimit(3)
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, minHeight: height, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 18)
-                .fill(
-                    LinearGradient(colors: [
-                        Color(red: 0.96, green: 0.90, blue: 0.78),
-                        Color(red: 0.90, green: 0.82, blue: 0.68)
-                    ], startPoint: .topLeading, endPoint: .bottomTrailing)
-                )
-                .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 10)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 18)
-                .stroke(accent.opacity(0.25), lineWidth: 1.5)
-        )
-    }
-
-    private func promptDetail() -> String {
-        switch appPhase {
-        case .welcome:
-            return "Press the chrome toggle to step through instructions and start practicing."
-        case .instructions:
-            return "Watch for highlighted notes above the fretboard, then tap the matching knob below."
-        case .round(let number, _):
-            if number == 1 { return "Focus on open strings and memorize their note names." }
-            if number == 2 { return "Shift up to the first fret—notes move one semitone higher." }
-            return "Keep climbing: each round drops the fretboard down a row."
-        case .chord(let name, _):
-            return "Identify each tone in \(name). Use the knobs to choose the correct notes."
+    private func shiftFretSpan(by delta: Int) {
+        guard delta != 0 else { return }
+        let proposed = currentFretStart + delta
+        let clamped = min(max(proposed, minFretOffset), maxFretOffset)
+        guard clamped != currentFretStart else { return }
+        withAnimation(.easeInOut(duration: 0.45)) {
+            currentFretStart = clamped
         }
     }
 
-    private func ampToggleView() -> some View {
-        VStack(spacing: 10) {
-            Text("START")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(.black.opacity(0.7))
-            Button(action: toggleAmpSwitch) {
-                ZStack {
-                    Capsule()
-                        .fill(
-                            LinearGradient(colors: [
-                                Color(red: 0.78, green: 0.80, blue: 0.82),
-                                Color(red: 0.58, green: 0.60, blue: 0.62)
-                            ], startPoint: .top, endPoint: .bottom)
-                        )
-                        .frame(width: 36, height: 108)
-                        .overlay(
-                            Capsule()
-                                .stroke(Color.black.opacity(0.25), lineWidth: 1)
-                        )
-
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Color(red: 0.85, green: 0.86, blue: 0.88))
-                        .frame(width: 12, height: 60)
-                        .shadow(color: Color.black.opacity(0.3), radius: 3, x: 0, y: 2)
-                        .offset(y: isToggleOn ? 25 : -25)
-                        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: isToggleOn)
-                }
-            }
-            .buttonStyle(.plain)
-
-            Text("NEXT")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(.black.opacity(0.7))
-
-            jewelIndicator(isOn: appPhase != .welcome)
+    private func shiftWindow(by delta: Int) {
+        let proposed = currentWindowRow + delta
+        let clamped = min(max(proposed, 0), 7)
+        guard clamped != currentWindowRow else { return }
+        withAnimation(.easeInOut(duration: 0.45)) {
+            currentWindowRow = clamped
         }
-        .padding(10)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(red: 0.92, green: 0.91, blue: 0.88))
-                .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 4)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.black.opacity(0.1), lineWidth: 1)
-        )
-    }
-
-    private func markerOverlay(
-        width: CGFloat,
-        rowHeight: CGFloat,
-        rowSpacing: CGFloat,
-        offsetRows: Int
-    ) -> some View {
-        let baseRow: CGFloat = 2
-        let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
-        let markerPositions = [2]
-        return ZStack {
-            ForEach(markerPositions, id: \.self) { index in
-                Circle()
-                    .fill(Color.white.opacity(0.8))
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black.opacity(0.25), lineWidth: 1)
-                    )
-                    .frame(width: rowHeight * 0.35, height: rowHeight * 0.35)
-                    .offset(
-                        x: 0,
-                        y: totalOffset + CGFloat(index) * (rowHeight + rowSpacing) + rowHeight / 2 - rowHeight * 0.175
-                    )
-                    .shadow(color: Color.black.opacity(0.2), radius: 2, x: 0, y: 1)
-            }
-        }
-        .frame(width: width, alignment: .center)
-        .allowsHitTesting(false)
-    }
-
-    private func notePadOverlay(
-        width: CGFloat,
-        rowHeight: CGFloat,
-        rowSpacing: CGFloat
-    ) -> some View {
-        let padWidth = width * 0.55
-        let padHeight = rowHeight * 2 + rowSpacing
-        let baseRow: CGFloat = 5
-        let totalOffset = baseRow * (rowHeight + rowSpacing)
-        let knobSize = (padWidth - rowSpacing * 3) / 2
-
-        return HStack {
-            Spacer()
-            VStack(spacing: rowSpacing) {
-                VStack(spacing: rowSpacing) {
-                    ForEach(0..<2) { row in
-                        HStack(spacing: rowSpacing) {
-                            ForEach(0..<2) { col in
-                                let index = row * 2 + col
-                                noteButton(at: index, size: knobSize)
-                            }
-                        }
-                    }
-                }
-                if let selection = selectedNote {
-                    Text(selection == correctNote ? "Correct" : "Try Again")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(selection == correctNote ? .green : .red)
-                        .transition(.opacity)
-                }
-            }
-            .padding(18)
-            .frame(width: padWidth, height: padHeight + rowSpacing + 12)
-            .background(
-                RoundedRectangle(cornerRadius: 18)
-                    .fill(
-                        LinearGradient(colors: [
-                            Color(red: 0.82, green: 0.82, blue: 0.84),
-                            Color(red: 0.62, green: 0.63, blue: 0.66),
-                            Color(red: 0.78, green: 0.79, blue: 0.82)
-                        ], startPoint: .topLeading, endPoint: .bottomTrailing)
-                    )
-                    .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 8)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 18)
-                    .stroke(
-                        LinearGradient(colors: [
-                            Color.white.opacity(0.7),
-                            Color.black.opacity(0.2)
-                        ], startPoint: .topLeading, endPoint: .bottomTrailing),
-                        lineWidth: 1.5
-                    )
-            )
-            Spacer()
-        }
-        .frame(width: width)
-        .offset(y: totalOffset)
-    }
-
-    private func noteButton(at index: Int, size: CGFloat) -> some View {
-        let label = noteOptions.indices.contains(index) ? noteOptions[index] : "--"
-        let isSelected = selectedNote == label
-        let isCorrect = label == correctNote
-        return Button {
-            handleNoteSelection(label)
-        } label: {
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(colors: [
-                            Color.black,
-                            Color(red: 0.08, green: 0.08, blue: 0.08)
-                        ], center: .center, startRadius: 4, endRadius: size * 0.6)
-                    )
-                    .overlay(
-                        Circle()
-                            .stroke(Color.white.opacity(0.08), lineWidth: 2)
-                    )
-                    .shadow(color: Color.black.opacity(0.35), radius: 8, x: 0, y: 6)
-
-                Circle()
-                    .stroke(isSelected ? (isCorrect ? Color.green : Color.red) : Color.white.opacity(0.15), lineWidth: 3)
-                    .blur(radius: isSelected ? 0 : 1)
-
-                VStack(spacing: 6) {
-                    Text(label)
-                        .font(.system(size: 18, weight: .heavy))
-                        .foregroundColor(.white)
-                        .shadow(color: .black, radius: 2, x: 0, y: 1)
-
-                    Rectangle()
-                        .fill(Color.white.opacity(0.9))
-                        .frame(width: 3, height: size * 0.25)
-                        .cornerRadius(1.5)
-                        .shadow(color: .black.opacity(0.6), radius: 1, x: 0, y: 1)
-                }
-                .offset(y: -2)
-            }
-            .frame(width: size, height: size)
-        }
-        .buttonStyle(.plain)
-        .disabled(label == "--")
-    }
-
-    private func fretWoodOverlay(
-        width: CGFloat,
-        rowHeight: CGFloat,
-        rowSpacing: CGFloat,
-        offsetRows: Int
-    ) -> some View {
-        let rowsCovered: CGFloat = 3
-        let overlayHeight = rowsCovered * rowHeight + (rowsCovered - 1) * rowSpacing
-        let baseRow: CGFloat = 2
-        let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
-
-        return RoundedRectangle(cornerRadius: 10)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.93, green: 0.80, blue: 0.60),
-                        Color(red: 0.74, green: 0.56, blue: 0.39),
-                        Color(red: 0.54, green: 0.33, blue: 0.18)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .frame(width: width, height: overlayHeight)
-            .overlay(
-                VStack(spacing: rowSpacing) {
-                    ForEach(0..<3, id: \.self) { _ in
-                        Rectangle()
-                            .fill(Color.white.opacity(0.15))
-                            .frame(height: 2)
-                    }
-                }
-                .padding(.vertical, rowSpacing)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.black.opacity(0.1), lineWidth: 1)
-            )
-            .offset(y: totalOffset)
-            .allowsHitTesting(false)
-    }
-
-    private func fretWireOverlay(
-        width: CGFloat,
-        rowHeight: CGFloat,
-        rowSpacing: CGFloat,
-        offsetRows: Int
-    ) -> some View {
-        let fretCount = 3
-        let baseRow: CGFloat = 2
-        let totalOffset = (baseRow + CGFloat(offsetRows)) * (rowHeight + rowSpacing)
-        return ZStack(alignment: .top) {
-            ForEach(1...fretCount, id: \.self) { index in
-                Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color(red: 0.85, green: 0.85, blue: 0.88),
-                                Color(red: 0.65, green: 0.66, blue: 0.70)
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .frame(width: width, height: rowHeight * 0.12)
-                    .offset(y: totalOffset + CGFloat(index) * (rowHeight + rowSpacing) - (rowHeight * 0.06))
-                    .shadow(color: Color.black.opacity(0.25), radius: 3, x: 0, y: 1)
-            }
-        }
-        .allowsHitTesting(false)
-    }
-
-    private func toggleFrets() {
-        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-            fretsShiftedDown.toggle()
-        }
-        generateNoteOptions()
     }
 
     private func toggleAmpSwitch() {
@@ -666,12 +695,11 @@ struct ContentView: View {
             appPhase = .round(number: currentRound, description: roundDescription(for: currentRound))
         case .round(let number, _):
             if number < 3 {
-                currentRound = number + 1
-                appPhase = .round(number: currentRound, description: roundDescription(for: currentRound))
+                let nextRound = number + 1
+                appPhase = .round(number: nextRound, description: roundDescription(for: nextRound))
             } else {
                 appPhase = .chord(name: "E minor 6", hint: "Choose all the chord tones from the knobs")
             }
-            fretsShiftedDown.toggle()
         case .chord:
             appPhase = .welcome
             currentRound = 1
@@ -690,26 +718,497 @@ struct ContentView: View {
 
     private func handleNoteSelection(_ note: String) {
         selectedNote = note
-        if note == correctNote {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                generateNoteOptions()
-            }
-        }
+        generateNoteOptions()
     }
 
     private func generateNoteOptions() {
-        guard !notePool.isEmpty else { return }
-        let shuffled = notePool.shuffled()
-        let newCorrect = shuffled.first ?? "E"
-        var options: Set<String> = [newCorrect]
+        let notes = ["E", "F", "F♯", "G", "G♯", "A", "A♯", "B", "C", "C♯", "D", "D♯"]
+        var options: Set<String> = []
         while options.count < 4 {
-            if let option = notePool.randomElement() {
+            if let option = notes.randomElement() {
                 options.insert(option)
             }
         }
-        correctNote = newCorrect
         noteOptions = Array(options).shuffled()
         selectedNote = nil
+    }
+
+    private func fretLabel(for fret: Int) -> String {
+        return fret <= 0 ? "Open Strings" : "Fret \(fret)"
+    }
+}
+
+// (All remaining structs are unchanged and exactly as in your last working file)
+
+private struct TopStatusOverlay: View {
+    let topMessage: String
+    let leftLabel: String
+    let rightLabel: String
+    let gapHeight: CGFloat
+    let horizontalPadding: CGFloat
+
+    var body: some View {
+        let safeHeight = max(gapHeight, 0)
+        let bannerFont = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        let measuredWidth = max(
+            textWidth(for: leftLabel, font: bannerFont),
+            textWidth(for: rightLabel, font: bannerFont),
+            textWidth(for: "Open Strings", font: bannerFont)
+        )
+        let bannerWidth = measuredWidth + 32
+        let bannerHeight = max(min(safeHeight * 0.32, 52), 44)
+        return ZStack(alignment: .top) {
+            WideStatusBanner(text: topMessage)
+                .frame(height: safeHeight * 0.5)
+                .offset(y: -(safeHeight * 0.2) - 12)
+
+            VStack {
+                Spacer(minLength: 0)
+                HStack(spacing: 16) {
+                    MiniTVFrame(text: leftLabel, width: bannerWidth, height: bannerHeight)
+                    MiniTVFrame(text: rightLabel, width: bannerWidth, height: bannerHeight)
+                }
+            }
+        }
+        .padding(.horizontal, horizontalPadding)
+        .frame(height: safeHeight, alignment: .bottom)
+        .allowsHitTesting(false)
+    }
+
+    private func textWidth(for text: String, font: UIFont) -> CGFloat {
+        let attributes = [NSAttributedString.Key.font: font]
+        let size = text.size(withAttributes: attributes)
+        return ceil(size.width)
+    }
+}
+
+private struct MiniTVFrame: View {
+    let text: String
+    let width: CGFloat
+    let height: CGFloat
+
+    var body: some View {
+        let bezelWidth = width + 24
+        let bezelHeight = height + 18
+
+        return ZStack {
+            RoundedRectangle(cornerRadius: 26, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [Color(red: 0.08, green: 0.08, blue: 0.1), Color(red: 0.18, green: 0.18, blue: 0.2)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .shadow(color: Color.black.opacity(0.6), radius: 8, x: 0, y: 4)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 26, style: .continuous)
+                        .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                )
+
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(Color.black.opacity(0.65), lineWidth: 3)
+                .padding(3)
+
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(Color.black.opacity(0.8))
+                .padding(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                )
+
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .padding(12)
+                .shadow(color: Color.black.opacity(0.35), radius: 4, x: 0, y: 2)
+
+            Text(text)
+                .font(.system(.title3, design: .rounded).weight(.semibold))
+                .foregroundColor(.white)
+                .minimumScaleFactor(0.7)
+        }
+        .frame(width: bezelWidth, height: bezelHeight)
+    }
+}
+
+private struct WideStatusBanner: View {
+    let text: String
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 24, style: .continuous)
+            .fill(
+                LinearGradient(
+                    colors: [Color(red: 0.88, green: 0.18, blue: 0.3), Color(red: 0.98, green: 0.54, blue: 0.26)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .stroke(Color.white.opacity(0.45), lineWidth: 1.2)
+            )
+            .shadow(color: Color.black.opacity(0.35), radius: 12, x: 0, y: 8)
+            .overlay(
+                Text(text)
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 3)
+                    .padding(.horizontal, 24)
+                    .multilineTextAlignment(.center)
+            )
+            .allowsHitTesting(false)
+    }
+}
+
+private extension ContentView {
+    func debugGridOverlay(size: CGSize, columns: Int, rows: Int) -> some View {
+        let cellWidth = size.width / CGFloat(columns)
+        let cellHeight = size.height / CGFloat(rows)
+
+        return ZStack {
+            Path { path in
+                for column in 0...columns {
+                    let x = CGFloat(column) * cellWidth
+                    path.move(to: CGPoint(x: x, y: 0))
+                    path.addLine(to: CGPoint(x: x, y: size.height))
+                }
+
+                for row in 0...rows {
+                    let y = CGFloat(row) * cellHeight
+                    path.move(to: CGPoint(x: 0, y: y))
+                    path.addLine(to: CGPoint(x: size.width, y: y))
+                }
+            }
+            .stroke(Color.red.opacity(0.9), lineWidth: 1)
+
+            ForEach(0..<rows, id: \.self) { row in
+                ForEach(0..<columns, id: \.self) { column in
+                    let index = row * columns + column + 1
+                    Text("\(index)")
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color.red.opacity(1.0))
+                        .position(
+                            x: CGFloat(column) * cellWidth + cellWidth / 2,
+                            y: CGFloat(row) * cellHeight + cellHeight / 2
+                        )
+                }
+            }
+        }
+    }
+}
+
+private struct NutFirstFretHighlight: View {
+    let width: CGFloat
+    let height: CGFloat
+    let cornerRadius: CGFloat
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .stroke(Color.red.opacity(0.9), lineWidth: max(width * 0.004, 2))
+            .shadow(color: Color.red.opacity(0.25), radius: 8, x: 0, y: 4)
+            .frame(width: width, height: height)
+            .allowsHitTesting(false)
+    }
+}
+
+private struct BindingLayer: View {
+    var body: some View {
+        GeometryReader { geo in
+            let stripWidth = max(geo.size.width * 0.02, 6)
+
+            ZStack(alignment: .top) {
+                HStack {
+                    bindingStrip(width: stripWidth, height: geo.size.height)
+                    Spacer()
+                    bindingStrip(width: stripWidth, height: geo.size.height)
+                }
+                
+                Rectangle()
+                    .fill(Color(red: 0.65, green: 0.62, blue: 0.58))
+                    .frame(width: geo.size.width - stripWidth * 2, height: 1)
+                    .position(x: geo.size.width / 2, y: 0.5)
+            }
+        }
+        .allowsHitTesting(false)
+    }
+
+    private func bindingStrip(width: CGFloat, height: CGFloat) -> some View {
+        RoundedRectangle(cornerRadius: width / 2)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.97, green: 0.95, blue: 0.88),
+                        Color(red: 0.91, green: 0.87, blue: 0.78)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .overlay(
+                VStack {
+                    Color.white.opacity(0.35)
+                        .frame(height: 1)
+                    Spacer()
+                }
+            )
+            .frame(width: width, height: height)
+            .shadow(color: Color.black.opacity(0.25), radius: 4, x: 1, y: 0)
+    }
+}
+
+private struct FretWireLayer: View {
+    let fretRatios: [CGFloat]
+
+    var body: some View {
+        GeometryReader { geo in
+            let height = geo.size.height
+            let width = geo.size.width * 1.04
+            let wireThickness = max(geo.size.height * 0.0018, 2)
+            ZStack(alignment: .topLeading) {
+                ForEach(1..<fretRatios.count, id: \.self) { index in
+                    let ratio = fretRatios[index]
+                    RoundedRectangle(cornerRadius: wireThickness / 2, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color(red: 0.96, green: 0.96, blue: 0.94),
+                                    Color(red: 0.7, green: 0.72, blue: 0.75),
+                                    Color(red: 0.45, green: 0.47, blue: 0.5),
+                                    Color(red: 0.98, green: 0.98, blue: 0.99)
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: wireThickness / 2)
+                                .stroke(Color.black.opacity(0.3), lineWidth: 0.35)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: wireThickness / 2)
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [Color.white.opacity(0.8), .clear],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    ),
+                                    lineWidth: 0.7
+                                )
+                        )
+                        .shadow(color: Color.black.opacity(0.35), radius: 2, x: 0, y: 1)
+                        .frame(width: width, height: wireThickness)
+                        .offset(
+                            x: -(width - geo.size.width) / 2,
+                            y: ratio * height - wireThickness / 2
+                        )
+                }
+            }
+        }
+        .allowsHitTesting(false)
+    }
+}
+
+private struct FretMarkerLayer: View {
+    let fretRatios: [CGFloat]
+
+    private let markedFrets: [Int] = [3, 5, 7, 9]
+
+    var body: some View {
+        GeometryReader { geo in
+            let width = geo.size.width
+            let height = geo.size.height
+            let markerDiameter = max(min(width, height) * 0.135, 36)
+
+            ZStack {
+                ForEach(markedFrets, id: \.self) { fret in
+                    if fretRatios.indices.contains(fret), fretRatios.indices.contains(fret - 1) {
+                        let start = fretRatios[fret - 1]
+                        let end = fretRatios[fret]
+                        let yPosition = ((start + end) / 2) * height
+
+                        Circle()
+                            .fill(
+                                RadialGradient(
+                                    colors: [
+                                        Color.white.opacity(0.98),
+                                        Color(red: 0.93, green: 0.93, blue: 0.9),
+                                        Color(red: 0.72, green: 0.72, blue: 0.7)
+                                    ],
+                                    center: .center,
+                                    startRadius: markerDiameter * 0.05,
+                                    endRadius: markerDiameter * 0.6
+                                )
+                            )
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.black.opacity(0.18), lineWidth: 1)
+                            )
+                            .frame(width: markerDiameter, height: markerDiameter)
+                            .position(x: width / 2, y: yPosition)
+                            .shadow(color: Color.black.opacity(0.18), radius: 2, x: 0, y: 1)
+                    }
+                }
+            }
+        }
+        .allowsHitTesting(false)
+    }
+}
+
+private struct NutLayer: View {
+    let width: CGFloat
+    let height: CGFloat
+
+    private let stratNutWidthInches: CGFloat = 1.650
+    private let stratStringSpanInches: CGFloat = 1.362
+    private let totalStrings: Int = 6
+
+    var body: some View {
+        GeometryReader { geo in
+            let nutHeight = geo.size.height
+            let bevelHeight = nutHeight * 0.25
+            let widthPerInch = geo.size.width / stratNutWidthInches
+            let interStringSpacing = (stratStringSpanInches / CGFloat(totalStrings - 1)) * widthPerInch
+            let edgeMargin = ((stratNutWidthInches - stratStringSpanInches) / 2) * widthPerInch
+            let grooveCenters = (0..<totalStrings).map { index in
+                edgeMargin + CGFloat(index) * interStringSpacing
+            }
+
+            ZStack(alignment: .top) {
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 0.98, green: 0.97, blue: 0.95),
+                                Color(red: 0.92, green: 0.91, blue: 0.88)
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 1)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(Color.black.opacity(0.1), lineWidth: 1)
+                    )
+                    .frame(height: nutHeight + bevelHeight)
+
+                Rectangle()
+                    .fill(Color.white.opacity(0.45))
+                    .frame(width: geo.size.width * 0.98, height: bevelHeight)
+                    .offset(y: nutHeight * 0.15)
+                    .mask(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.gray, Color.gray.opacity(0.4)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+
+                let grooveWidth = max(1, geo.size.width * 0.01)
+                let grooveHeight = bevelHeight * 1.4
+                ForEach(0..<totalStrings, id: \.self) { index in
+                    Rectangle()
+                        .fill(Color.black.opacity(0.35))
+                        .frame(width: grooveWidth, height: grooveHeight)
+                        .cornerRadius(grooveWidth / 2)
+                        .offset(
+                            x: grooveCenters[index] - geo.size.width / 2,
+                            y: nutHeight * 0.1
+                        )
+                }
+
+                Rectangle()
+                    .fill(Color.black.opacity(0.25))
+                    .frame(width: 1, height: nutHeight + bevelHeight * 0.6)
+                    .offset(y: nutHeight * 0.2)
+            }
+        }
+        .frame(width: width, height: height)
+        .padding(.bottom, height * 0.05)
+        .allowsHitTesting(false)
+    }
+}
+
+private struct DarkMatteOverlay: View {
+    let canvasSize: CGSize
+    let highlightWidth: CGFloat
+    let highlightHeight: CGFloat
+    let highlightCenter: CGPoint
+    let highlightCornerRadius: CGFloat
+
+    var body: some View {
+        ZStack {
+            ZStack(alignment: .bottom) {
+                VStack(spacing: 0) {
+                    Image("TweedSample")
+                        .resizable()
+                        .scaledToFill()
+                        .scaleEffect(x: 1.15, y: 1.25, anchor: .center)
+                        .frame(width: canvasSize.width, height: canvasSize.height * 1.1)
+                    Image("TweedSample")
+                        .resizable()
+                        .scaledToFill()
+                        .scaleEffect(x: 1.15, y: 1.25, anchor: .center)
+                        .frame(width: canvasSize.width, height: canvasSize.height * 1.1)
+                    Image("TweedSample")
+                        .resizable()
+                        .scaledToFill()
+                        .scaleEffect(x: 1.15, y: 1.25, anchor: .center)
+                        .frame(width: canvasSize.width, height: canvasSize.height * 1.1)
+                }
+                .frame(width: canvasSize.width, height: canvasSize.height * 3.3, alignment: .bottom)
+            }
+            .frame(width: canvasSize.width, height: canvasSize.height, alignment: .bottom)
+            .clipped()
+            .overlay(
+                Color.black.opacity(0.12)
+                    .blendMode(.multiply)
+            )
+            .overlay(
+                LinearGradient(
+                    colors: [Color.white.opacity(0.08), Color.clear, Color.black.opacity(0.18)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+
+            RoundedRectangle(cornerRadius: highlightCornerRadius, style: .continuous)
+                .fill(Color.black)
+                .frame(width: highlightWidth, height: highlightHeight)
+                .position(x: highlightCenter.x, y: highlightCenter.y)
+                .blendMode(.destinationOut)
+        }
+        .frame(width: canvasSize.width, height: canvasSize.height)
+        .compositingGroup()
+        .allowsHitTesting(false)
+    }
+}
+
+private struct ProjectLinebackerOverlay: View {
+    let fretRatios: [CGFloat]
+    let neckHeight: CGFloat
+    
+    var body: some View {
+        GeometryReader { geometry in
+            let neckWidth = geometry.size.width
+            let bindingInset = max(neckWidth * 0.02, 6)
+            let lineWidth = neckWidth - (bindingInset * 2)
+            
+            ForEach(1..<fretRatios.count, id: \.self) { index in
+                let currentRatio = fretRatios[index]
+                let previousRatio = fretRatios[index - 1]
+                let midpointRatio = (currentRatio + previousRatio) / 2.0
+                let yPosition = midpointRatio * neckHeight
+                
+                Rectangle()
+                    .fill(Color.blue)
+                    .frame(width: lineWidth, height: 3)
+                    .position(x: neckWidth / 2, y: yPosition)
+                    .allowsHitTesting(false)
+            }
+        }
+        .allowsHitTesting(false)
     }
 }
 
@@ -717,131 +1216,3 @@ struct ContentView: View {
     ContentView()
 }
 
-struct HeadstockShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let w = rect.width
-        let h = rect.height
-        let curveDepth = w * 0.12
-
-        path.move(to: CGPoint(x: w * 0.5, y: 0))
-        path.addCurve(
-            to: CGPoint(x: w * 0.1, y: h * 0.18),
-            control1: CGPoint(x: w * 0.35, y: h * 0.05),
-            control2: CGPoint(x: w * 0.2, y: h * 0.08)
-        )
-
-        path.addCurve(
-            to: CGPoint(x: w * 0.08, y: h * 0.38),
-            control1: CGPoint(x: w * 0.02, y: h * 0.24),
-            control2: CGPoint(x: 0, y: h * 0.32)
-        )
-
-        path.addCurve(
-            to: CGPoint(x: w * 0.12, y: h * 0.78),
-            control1: CGPoint(x: w * 0.04, y: h * 0.48),
-            control2: CGPoint(x: w * 0.05, y: h * 0.66)
-        )
-
-        path.addCurve(
-            to: CGPoint(x: w * 0.2, y: h),
-            control1: CGPoint(x: w * 0.1, y: h * 0.92),
-            control2: CGPoint(x: w * 0.12, y: h)
-        )
-
-        path.addLine(to: CGPoint(x: w * 0.8, y: h))
-
-        path.addCurve(
-            to: CGPoint(x: w * 0.88, y: h * 0.78),
-            control1: CGPoint(x: w * 0.88, y: h),
-            control2: CGPoint(x: w * 0.9, y: h * 0.92)
-        )
-
-        path.addCurve(
-            to: CGPoint(x: w * 0.92, y: h * 0.38),
-            control1: CGPoint(x: w * 0.95, y: h * 0.66),
-            control2: CGPoint(x: w * 0.96, y: h * 0.48)
-        )
-
-        path.addCurve(
-            to: CGPoint(x: w * 0.9, y: h * 0.18),
-            control1: CGPoint(x: w, y: h * 0.32),
-            control2: CGPoint(x: w * 0.98, y: h * 0.24)
-        )
-
-        path.addCurve(
-            to: CGPoint(x: w * 0.5, y: 0),
-            control1: CGPoint(x: w * 0.8, y: h * 0.08),
-            control2: CGPoint(x: w * 0.65, y: h * 0.05)
-        )
-
-        path.closeSubpath()
-
-        let dipWidth = curveDepth
-        let dipHeight = h * 0.12
-        let dipRect = CGRect(x: (w - dipWidth) / 2, y: h * 0.04, width: dipWidth, height: dipHeight)
-        path.addRect(dipRect)
-
-        return path
-    }
-}
-
-struct TweedBackground: View {
-    var body: some View {
-        GeometryReader { proxy in
-            let size = max(proxy.size.width, proxy.size.height)
-            ZStack {
-                Color(red: 0.95, green: 0.90, blue: 0.78)
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.96, green: 0.92, blue: 0.82).opacity(0.9),
-                        Color(red: 0.90, green: 0.84, blue: 0.70).opacity(0.9)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                Canvas { context, _ in
-                    let stripeColor = Color(red: 0.82, green: 0.72, blue: 0.56).opacity(0.25)
-                    let stripeWidth: CGFloat = 6
-                    let spacing: CGFloat = 14
-                    for index in -2...Int(size / spacing) + 2 {
-                        var path = Path()
-                        let offset = CGFloat(index) * spacing
-                        path.move(to: CGPoint(x: offset, y: -size))
-                        path.addLine(to: CGPoint(x: offset + size, y: size * 2))
-                        context.stroke(path, with: .color(stripeColor), lineWidth: stripeWidth)
-                    }
-                }
-                .blendMode(.multiply)
-            }
-        }
-    }
-}
-
-struct ChickenHeadPointer: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let w = rect.width
-        let h = rect.height
-        path.move(to: CGPoint(x: w * 0.25, y: h * 0.1))
-        path.addCurve(
-            to: CGPoint(x: w * 0.75, y: h * 0.15),
-            control1: CGPoint(x: w * 0.42, y: 0),
-            control2: CGPoint(x: w * 0.58, y: 0.05)
-        )
-        path.addLine(to: CGPoint(x: w * 0.78, y: h * 0.55))
-        path.addCurve(
-            to: CGPoint(x: w * 0.55, y: h * 0.95),
-            control1: CGPoint(x: w * 0.88, y: h * 0.75),
-            control2: CGPoint(x: w * 0.75, y: h * 0.92)
-        )
-        path.addLine(to: CGPoint(x: w * 0.45, y: h * 0.95))
-        path.addCurve(
-            to: CGPoint(x: w * 0.22, y: h * 0.55),
-            control1: CGPoint(x: w * 0.25, y: h * 0.92),
-            control2: CGPoint(x: w * 0.12, y: h * 0.75)
-        )
-        path.closeSubpath()
-        return path
-    }
-}

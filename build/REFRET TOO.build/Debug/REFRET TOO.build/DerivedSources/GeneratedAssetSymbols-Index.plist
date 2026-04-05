@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>colors</key>
+	<array/>
+	<key>images</key>
+	<array>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameChromeSet</string>
+			<key>relativePath</key>
+			<string>./ChromeSet.imageset</string>
+			<key>swiftSymbol</key>
+			<string>chromeSet</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameControlPanelSET</string>
+			<key>relativePath</key>
+			<string>./ControlPanelSET.imageset</string>
+			<key>swiftSymbol</key>
+			<string>controlPanelSET</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameDisplayExamplesTwoA</string>
+			<key>relativePath</key>
+			<string>./DisplayExamplesTwoA.imageset</string>
+			<key>swiftSymbol</key>
+			<string>displayExamplesTwoA</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameDisplayExamplesTwoB</string>
+			<key>relativePath</key>
+			<string>./DisplayExamplesTwoB.imageset</string>
+			<key>swiftSymbol</key>
+			<string>displayExamplesTwoB</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameDisplayExamplesTwoC</string>
+			<key>relativePath</key>
+			<string>./DisplayExamplesTwoC.imageset</string>
+			<key>swiftSymbol</key>
+			<string>displayExamplesTwoC</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameFRETBOARDSSET</string>
+			<key>relativePath</key>
+			<string>./FRETBOARDSSET.imageset</string>
+			<key>swiftSymbol</key>
+			<string>FRETBOARDSSET</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameFretWOODSET</string>
+			<key>relativePath</key>
+			<string>./FretWOODSET !.imageset</string>
+			<key>swiftSymbol</key>
+			<string>fretWOODSET</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameFretWoodSET2</string>
+			<key>relativePath</key>
+			<string>./FretWoodSET 2.imageset</string>
+			<key>swiftSymbol</key>
+			<string>fretWoodSET2</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameKNOBSET</string>
+			<key>relativePath</key>
+			<string>./KNOBSET !.imageset</string>
+			<key>swiftSymbol</key>
+			<string>KNOBSET</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameRosewoodOne</string>
+			<key>relativePath</key>
+			<string>./RosewoodOne.imageset</string>
+			<key>swiftSymbol</key>
+			<string>rosewoodOne</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName_TESTPATTERN_SET</string>
+			<key>relativePath</key>
+			<string>./TESTPATTERN SET.imageset</string>
+			<key>swiftSymbol</key>
+			<string>TESTPATTERN_SET</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName_TUBE_SET_3</string>
+			<key>relativePath</key>
+			<string>./TUBE SET 3.imageset</string>
+			<key>swiftSymbol</key>
+			<string>TUBE_SET_3</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTVSET</string>
+			<key>relativePath</key>
+			<string>./TVSET.imageset</string>
+			<key>swiftSymbol</key>
+			<string>TVSET</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTubeSET4</string>
+			<key>relativePath</key>
+			<string>./TubeSET 4.imageset</string>
+			<key>swiftSymbol</key>
+			<string>tubeSET4</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTubeSet</string>
+			<key>relativePath</key>
+			<string>./TubeSet !.imageset</string>
+			<key>swiftSymbol</key>
+			<string>tubeSet</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTubeSet2</string>
+			<key>relativePath</key>
+			<string>./TubeSet 2.imageset</string>
+			<key>swiftSymbol</key>
+			<string>tubeSet2</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTweedSample</string>
+			<key>relativePath</key>
+			<string>./TweedSample.imageset</string>
+			<key>swiftSymbol</key>
+			<string>tweedSample</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTweedSampleTwo</string>
+			<key>relativePath</key>
+			<string>./TweedSampleTwo.imageset</string>
+			<key>swiftSymbol</key>
+			<string>tweedSampleTwo</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTweedSampleTwo1</string>
+			<key>relativePath</key>
+			<string>./TweedSampleTwo 1.imageset</string>
+			<key>swiftSymbol</key>
+			<string>tweedSampleTwo1</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName_VU_METERSET</string>
+			<key>relativePath</key>
+			<string>./VU METERSET !.imageset</string>
+			<key>swiftSymbol</key>
+			<string>VU_METERSET</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameVUSET</string>
+			<key>relativePath</key>
+			<string>./VUSET.imageset</string>
+			<key>swiftSymbol</key>
+			<string>VUSET</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameChicken</string>
+			<key>relativePath</key>
+			<string>./chicken.imageset</string>
+			<key>swiftSymbol</key>
+			<string>chicken</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameKnobReference</string>
+			<key>relativePath</key>
+			<string>./knob Reference.imageset</string>
+			<key>swiftSymbol</key>
+			<string>knobReference</string>
+		</dict>
+	</array>
+	<key>symbols</key>
+	<array/>
+</dict>
+</plist>

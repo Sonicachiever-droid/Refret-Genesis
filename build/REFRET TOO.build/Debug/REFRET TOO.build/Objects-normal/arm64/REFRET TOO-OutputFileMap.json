@@ -1,0 +1,69 @@
+{
+  "" : {
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET TOO-primary.dia",
+    "emit-module-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET TOO-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET TOO-primary-emit-module.dia",
+    "pch" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET TOO-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET TOO-primary.swiftdeps"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/ContentView.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/GameManager.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GameManager.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GameManager.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GameManager.dia",
+    "index-unit-output-path" : "/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GameManager.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GameManager.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GameManager.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GameManager.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GameManager~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Item.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/Item.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/Item.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/Item.dia",
+    "index-unit-output-path" : "/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/Item.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/Item.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/Item.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/Item.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/Item~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/REFRET_TOOApp.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET_TOOApp.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET_TOOApp.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET_TOOApp.dia",
+    "index-unit-output-path" : "/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET_TOOApp.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET_TOOApp.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET_TOOApp.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET_TOOApp.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/REFRET_TOOApp~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/WoodShaderEffect.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/WoodShaderEffect.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/WoodShaderEffect.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/WoodShaderEffect.dia",
+    "index-unit-output-path" : "/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/WoodShaderEffect.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/WoodShaderEffect.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/WoodShaderEffect.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/WoodShaderEffect.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/WoodShaderEffect~partial.swiftmodule"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Debug/REFRET TOO.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}

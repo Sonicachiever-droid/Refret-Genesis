@@ -1,0 +1,36 @@
+{
+  "" : {
+    "const-values" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary.swiftconstvalues",
+    "dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary.d",
+    "diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary.dia",
+    "emit-module-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary-emit-module.dia",
+    "pch" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET TOO-primary.swiftdeps"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/ContentView.swift" : {
+    "index-unit-output-path" : "/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/ContentView.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/ContentView.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/ContentView.o"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/Item.swift" : {
+    "index-unit-output-path" : "/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/Item.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/Item.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/Item.o"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/REFRET_TOOApp.swift" : {
+    "index-unit-output-path" : "/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET_TOOApp.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET_TOOApp.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/REFRET_TOOApp.o"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/REFRET TOO/WoodShaderEffect.swift" : {
+    "index-unit-output-path" : "/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/WoodShaderEffect.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/WoodShaderEffect.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/WoodShaderEffect.o"
+  },
+  "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/thomaskane/CascadeProjects/REFRET TOO/REFRET TOO/build/REFRET TOO.build/Release/REFRET TOO.build/Objects-normal/x86_64/GeneratedAssetSymbols.o"
+  }
+}
