@@ -451,9 +451,9 @@ struct BoxView: View {
     
     var body: some View {
         Text(content.isEmpty && isCurrent ? "↩" : content)
-            .font(.system(size: 16, weight: .medium, design: .rounded))
+            .font(.system(size: 32, weight: .medium, design: .rounded))
             .foregroundColor(isCurrent ? .white : .primary)
-            .frame(width: 50, height: 50)
+            .frame(width: 80, height: 80)
             .background(
                 RoundedRectangle(cornerRadius: 8)
                     .fill(isCurrent ? Color.blue : Color.clear)

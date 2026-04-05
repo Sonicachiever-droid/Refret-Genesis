@@ -1,0 +1,68 @@
+{
+  "buildCommand" : {
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildOnly"
+  },
+  "configuredTargets" : [
+    {
+      "guid" : "720bf15ce2f97a0819de8a410285c8f04c04bca95338b8ae68052f500c6dae5c"
+    }
+  ],
+  "containerPath" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/ScaleListenerExpress.xcodeproj",
+  "continueBuildingAfterErrors" : false,
+  "dependencyScope" : "workspace",
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "build",
+    "activeArchitecture" : "arm64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "platform" : "macosx",
+      "sdk" : "macosx26.2",
+      "sdkVariant" : "macos",
+      "supportedArchitectures" : [
+        "arm64e",
+        "arm64",
+        "x86_64"
+      ],
+      "targetArchitecture" : "arm64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Products",
+      "derivedDataPath" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build",
+      "indexDataStoreFolderPath" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Index.noindex/PrecompiledHeaders",
+      "pchPath" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Debug",
+    "overrides" : {
+      "commandLine" : {
+        "table" : {
+
+        }
+      },
+      "synthesized" : {
+        "table" : {
+          "ACTION" : "build",
+          "CLANG_COVERAGE_MAPPING" : "YES",
+          "CLANG_PROFILE_DATA_DIRECTORY" : "/Users/thomaskane/CascadeProjects/PassiveScaleListener/ScaleListenerExpress/build/Build/ProfileData",
+          "COLOR_DIAGNOSTICS" : "YES",
+          "diagnostic_message_length" : "160",
+          "ENABLE_PREVIEWS" : "NO",
+          "ENABLE_XOJIT_PREVIEWS" : "YES",
+          "ONLY_ACTIVE_ARCH" : "YES"
+        }
+      }
+    }
+  },
+  "schemeCommand" : "launch",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}
