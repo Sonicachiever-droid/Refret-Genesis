@@ -1,0 +1,18 @@
+//
+//  Numbers_1__Pupil_Tests.swift
+//  Numbers 1 (Pupil)Tests
+//
+//  Created by Thomas Kane on 4/3/26.
+//
+
+import Testing
+
+struct Numbers_1__Pupil_Tests {
+
+    @Test func example() async throws {
+        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+        // Swift Testing Documentation
+        // https://developer.apple.com/documentation/testing
+    }
+
+}
