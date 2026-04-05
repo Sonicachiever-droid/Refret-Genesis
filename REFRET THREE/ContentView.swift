@@ -17,6 +17,7 @@ private enum NeckComponent: Int, CaseIterable {
     case openStringLabels = 7
     case debugGrid = 8
     case roundCompletedButton = 9
+    case nutFirstFretOverlay = 10
 }
 
 struct ContentView: View {
@@ -25,10 +26,11 @@ struct ContentView: View {
     private let scaleLengthInches: Double = 25.5
     private let markerFrets: [Int] = [3, 5, 7, 9, 12, 15, 17, 19]
     private let openStringNotes: [String] = ["E", "A", "D", "G", "B", "E"]
-    private let activeComponents: Set<NeckComponent> = [.fretboard, .nut, .binding, .fretWires, .debugGrid]
+    private let activeComponents: Set<NeckComponent> = [.fretboard, .nut, .binding, .fretWires, .debugGrid, .nutFirstFretOverlay]
     @State private var currentFretStart: Int = 0
     @State private var showOpenStringCapsules: Bool = true
-    
+    @State private var currentWindowRow: Int = 0
+
     private var maxFretOffset: Int { totalFrets }
     private var minFretOffset: Int { -totalFrets }
 
@@ -40,7 +42,7 @@ struct ContentView: View {
             let visibleFrets = min(totalFrets, 5)
             let visibleFretIndex = min(visibleFrets, fretRatios.count - 1)
             let visibleRatio = max(fretRatios[visibleFretIndex], 0.05)
-            let visibleClipHeight = proxy.size.height * 0.78
+            let visibleClipHeight = proxy.size.height * 0.96
             let unclippedHeight = visibleClipHeight / visibleRatio
             let minimumNeckHeight = proxy.size.height * 1.35
             let neckHeight = max(unclippedHeight, minimumNeckHeight)
@@ -66,116 +68,135 @@ struct ContentView: View {
             let neckSlideOffset = neckTopOffset - slideRatio * neckHeight
             let nutSlideAdjustment = neckSlideOffset - neckTopOffset
             let labelBandOffset = neckSlideOffset - labelBandHeight * 0.65
-            let showFretboard = isActive(.fretboard)
-            let showNut = isActive(.nut)
-            let showBinding = isActive(.binding)
-            let showFretWires = isActive(.fretWires)
-            let showMarkers = isActive(.fretMarkers)
-            let showStrings = isActive(.strings)
-            let showOpenLabels = isActive(.openStringLabels) && showOpenStringCapsules
-            let showPrimaryStack = showFretboard || showNut || showBinding || showFretWires || showMarkers || showStrings || showOpenLabels
+            let firstFretRatio = fretRatios.indices.contains(1) ? fretRatios[1] : (fretRatios.last ?? 0)
+            let firstFretHeight = firstFretRatio * neckHeight
+            let nutPaddingHeight = nutVisualHeight * 1.35
+            let highlightHeight = max(firstFretHeight + nutPaddingHeight, neckHeight * 0.08)
+            let highlightTopGridLineY = CGFloat(currentWindowRow) * gridRowHeight
+            let highlightCenterY = highlightTopGridLineY + highlightHeight / 2
+            let highlightAvailableWidth = max(proxy.size.width - padding * 2, 0)
+            let highlightExtraWidth = max(highlightAvailableWidth - neckWidth, 0)
+            let highlightWidth = neckWidth + highlightExtraWidth / 2
+            let highlightCornerRadius = min(24, highlightWidth * 0.08)
+
+            let unsignedN = abs(currentFretStart)
+            let clampedN = min(unsignedN, fretRatios.count - 2)
+            let topRatio = fretRatios[clampedN]
+            let bottomRatio = fretRatios[clampedN + 1]
+            let midRatio = (topRatio + bottomRatio) / 2.0
+            let sign: CGFloat = currentFretStart >= 0 ? 1.0 : -1.0
+            let activeMidpoint = midRatio * neckHeight * sign
+
+            let nutTargetY = highlightTopGridLineY + 2 * gridRowHeight
+            let neckTopY = nutTargetY - activeMidpoint
+            let neckOffsetY = neckTopY - proxy.size.height / 2 + neckHeight / 2
 
             ZStack {
-                Color(red: 0.15, green: 0.15, blue: 0.18)
+                Color.black
                     .ignoresSafeArea()
 
                 HStack {
                     Spacer()
                     ZStack {
-                        if showFretboard {
-                            Image("FretWoodSET 2")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: neckWidth, height: neckHeight)
-                                .clipped()
-                                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        ZStack(alignment: .top) {
+                            ZStack {
+                                MapleSegmentedBackground(
+                                    fretRatios: fretRatios,
+                                    cornerRadius: 10
+                                )
+                                BindingLayer()
+                                FretWireLayer(fretRatios: fretRatios)
+                            }
+                            .frame(width: neckWidth, height: neckHeight)
+                            .overlay {
+                                ProjectLinebackerOverlay(fretRatios: fretRatios, neckHeight: neckHeight)
+                            }
 
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                            NutLayer(width: neckWidth * 0.99, height: nutVisualHeight)
+                                .frame(width: neckWidth * 0.99, height: nutVisualHeight)
+                                .offset(y: -nutVisualHeight * 0.85)
                         }
-
-                        if showBinding {
-                            BindingLayer()
-                                .frame(width: neckWidth, height: neckHeight)
-                        }
-
-                        if showMarkers {
-                            FretMarkerLayer(markerData: markerData)
-                                .frame(width: neckWidth, height: neckHeight)
-                        }
-
-                        if showFretWires {
-                            FretWireLayer(fretRatios: fretRatios)
-                                .frame(width: neckWidth, height: neckHeight)
-                        }
-
-                        if showOpenLabels {
-                            OpenStringLabelLayer(notes: openStringNotes, totalStrings: totalStrings)
-                                .frame(width: neckWidth, height: labelBandHeight)
-                        }
+                        .frame(width: neckWidth, height: neckHeight)
+                        .offset(y: neckOffsetY)
                     }
-                    .frame(width: neckWidth, height: neckHeight)
-                    .offset(y: neckSlideOffset)
+                    .frame(width: neckWidth, height: visibleClipHeight)
                     .clipped()
-                    .frame(width: neckWidth, height: visibleClipHeight, alignment: .top)
                     Spacer()
                 }
                 .padding(.horizontal, padding)
-                
-                if showNut {
-                    HStack {
-                        Spacer()
-                        NutLayer(width: neckWidth * 0.99, height: nutVisualHeight)
-                            .frame(width: neckWidth * 0.99, height: nutVisualHeight)
-                            .offset(y: nutAdjustedOffset + nutSlideAdjustment)
-                        Spacer()
-                    }
-                    .padding(.horizontal, padding)
+
+                GeometryReader { matteGeo in
+                    TweedMatteOverlay(
+                        canvasSize: matteGeo.size,
+                        highlightWidth: highlightWidth,
+                        highlightHeight: highlightHeight,
+                        highlightCenter: CGPoint(x: matteGeo.size.width / 2, y: highlightCenterY),
+                        highlightCornerRadius: highlightCornerRadius
+                    )
                 }
-                
+                .allowsHitTesting(false)
+                .ignoresSafeArea()
+
+                GeometryReader { overlayGeo in
+                    NutFirstFretHighlight(
+                        width: highlightWidth,
+                        height: highlightHeight,
+                        cornerRadius: highlightCornerRadius
+                    )
+                    .overlay {
+                        Rectangle()
+                            .fill(Color.green)
+                            .frame(width: highlightWidth, height: 3)
+                    }
+                    .position(
+                        x: overlayGeo.size.width / 2,
+                        y: highlightCenterY
+                    )
+                }
+                .padding(.horizontal, padding)
+                .allowsHitTesting(false)
+                .ignoresSafeArea()
+
                 DeveloperButtonStack(
-                    shiftUp: { shiftFret(by: 1) },
-                    shiftDown: { shiftFret(by: -1) },
-                    canShiftUp: currentFretStart < maxFretOffset,
-                    canShiftDown: currentFretStart > minFretOffset
+                    windowShiftUp: { shiftWindow(by: -1) },
+                    windowShiftDown: { shiftWindow(by: 1) },
+                    neckShiftUp: { shiftFretSpan(by: 1) },
+                    neckShiftDown: { shiftFretSpan(by: -1) },
+                    canWindowShiftUp: currentWindowRow > 0,
+                    canWindowShiftDown: currentWindowRow < debugGridRows - 1,
+                    canNeckShiftUp: currentFretStart < maxFretOffset,
+                    canNeckShiftDown: currentFretStart > minFretOffset
                 )
-                .position(x: proxy.size.width / 2, y: proxy.size.height / 2)
+                .padding(.bottom, proxy.size.height * 0.05)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
             }
             .overlay {
-                Group {
-                    if isActive(.debugGrid) {
-                        debugGridOverlay(size: proxy.size, columns: debugGridColumns, rows: debugGridRows)
-                            .allowsHitTesting(false)
-                            .opacity(0.3)
-                    }
-                }
-            }
-            .overlay(alignment: .topLeading) {
-                Group {
-                    if isActive(.roundCompletedButton) {
-                        RoundCompletedButtonLayer(
-                            size: proxy.size,
-                            columns: debugGridColumns,
-                            rows: debugGridRows,
-                            action: advanceFret
-                        )
-                        .allowsHitTesting(false)
-                    }
-                }
+                debugGridOverlay(size: proxy.size, columns: debugGridColumns, rows: debugGridRows)
+                    .allowsHitTesting(false)
+                    .opacity(0.8)
             }
         }
     }
 
-    private func advanceFret() {
+    private func advanceFretSpan() {
         withAnimation(.easeInOut(duration: 0.6)) {
             currentFretStart = min(currentFretStart + 1, totalFrets)
         }
     }
     
-    private func shiftFret(by delta: Int) {
+    private func shiftFretSpan(by delta: Int) {
         guard delta != 0 else { return }
         withAnimation(.easeInOut(duration: 0.5)) {
             currentFretStart = min(max(currentFretStart + delta, minFretOffset), maxFretOffset)
+        }
+    }
+
+    private func shiftWindow(by delta: Int) {
+        let proposed = currentWindowRow + delta
+        let clamped = min(max(proposed, 0), 7) // 8 rows total, 0 to 7
+        guard clamped != currentWindowRow else { return }
+        withAnimation(.easeInOut(duration: 0.45)) {
+            currentWindowRow = clamped
         }
     }
 
@@ -293,13 +314,13 @@ private struct OpenStringLabelLayer: View {
     }
 }
 
-// MARK: - Fret Geometry
+// MARK: - Fret Geometry (ratios reference fretwire boundaries)
 
 private enum FretMath {
     static func fretPositionRatios(totalFrets: Int, scaleLength: Double) -> [CGFloat] {
         guard totalFrets > 0, scaleLength > 0 else { return [] }
-        return (0...totalFrets).map { fret in
-            let distance = scaleLength - scaleLength / pow(2.0, Double(fret) / 12.0)
+        return (0...totalFrets).map { fretwireIndex in
+            let distance = scaleLength - scaleLength / pow(2.0, Double(fretwireIndex) / 12.0)
             return CGFloat(distance / scaleLength)
         }
     }
@@ -309,13 +330,13 @@ private enum FretMath {
         markerFrets: [Int]
     ) -> [FretMarkerData] {
         var results: [FretMarkerData] = []
-        for fret in markerFrets {
-            let currentIndex = min(max(fret, 0), fretRatios.count - 1)
+        for fretSpan in markerFrets {
+            let currentIndex = min(max(fretSpan, 0), fretRatios.count - 1)
             let previousIndex = max(currentIndex - 1, 0)
             let previousRatio = fretRatios[previousIndex]
             let currentRatio = fretRatios[currentIndex]
             let ratio = (previousRatio + currentRatio) / 2
-            results.append(FretMarkerData(fretNumber: fret, ratio: ratio))
+            results.append(FretMarkerData(fretNumber: fretSpan, ratio: ratio))
         }
         return results
     }
@@ -597,14 +618,14 @@ private extension ContentView {
                     path.addLine(to: CGPoint(x: size.width, y: y))
                 }
             }
-            .stroke(Color.red.opacity(0.45), lineWidth: 1)
+            .stroke(Color.red.opacity(0.9), lineWidth: 1)
 
             ForEach(0..<rows, id: \.self) { row in
                 ForEach(0..<columns, id: \.self) { column in
                     let index = row * columns + column + 1
                     Text("\(index)")
                         .font(.system(size: 12, weight: .bold, design: .monospaced))
-                        .foregroundColor(Color.red.opacity(0.85))
+                        .foregroundColor(Color.red.opacity(1.0))
                         .position(
                             x: CGFloat(column) * cellWidth + cellWidth / 2,
                             y: CGFloat(row) * cellHeight + cellHeight / 2
@@ -613,25 +634,172 @@ private extension ContentView {
             }
         }
     }
+
+}
+
+private struct NutFirstFretHighlight: View {
+    let width: CGFloat
+    let height: CGFloat
+    let cornerRadius: CGFloat
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .stroke(Color.red.opacity(0.9), lineWidth: max(width * 0.004, 2))
+            .shadow(color: Color.red.opacity(0.25), radius: 8, x: 0, y: 4)
+            .frame(width: width, height: height)
+            .allowsHitTesting(false)
+    }
+}
+
+private struct TweedMatteOverlay: View {
+    let canvasSize: CGSize
+    let highlightWidth: CGFloat
+    let highlightHeight: CGFloat
+    let highlightCenter: CGPoint
+    let highlightCornerRadius: CGFloat
+
+    var body: some View {
+        ZStack {
+            Image("TweedSample")
+                .resizable()
+                .scaledToFill()
+                .scaleEffect(x: 1.15, y: 1.6, anchor: .center)
+                .frame(width: canvasSize.width, height: canvasSize.height)
+                .clipped()
+                .overlay(
+                    Color.black.opacity(0.12)
+                        .blendMode(.multiply)
+                )
+                .overlay(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.08), Color.clear, Color.black.opacity(0.18)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+
+            RoundedRectangle(cornerRadius: highlightCornerRadius, style: .continuous)
+                .fill(Color.black)
+                .frame(width: highlightWidth, height: highlightHeight)
+                .position(x: highlightCenter.x, y: highlightCenter.y)
+                .blendMode(.destinationOut)
+        }
+        .frame(width: canvasSize.width, height: canvasSize.height)
+        .compositingGroup()
+        .allowsHitTesting(false)
+    }
 }
 
 // MARK: - Developer Controls
 
-private struct DeveloperButtonStack: View {
-    let shiftUp: () -> Void
-    let shiftDown: () -> Void
-    let canShiftUp: Bool
-    let canShiftDown: Bool
+private struct MapleSegmentedBackground: View {
+    let fretRatios: [CGFloat]
+    let cornerRadius: CGFloat
 
     var body: some View {
-        HStack(spacing: 24) {
-            devButton(icon: "arrow.down", action: shiftDown, isEnabled: canShiftDown)
-            devButton(icon: "arrow.up", action: shiftUp, isEnabled: canShiftUp)
+        GeometryReader { geometry in
+            let neckHeight = geometry.size.height
+            let neckWidth = geometry.size.width
+            let segments = segmentBounds(from: fretRatios)
+            let bindingInset = max(neckWidth * 0.02, 6)
+
+            ZStack(alignment: .top) {
+                VStack(spacing: 0) {
+                    ForEach(Array(segments.enumerated()), id: \.offset) { index, bounds in
+                        let segmentHeight = max((bounds.end - bounds.start) * neckHeight, 1)
+                        Image("FretWoodSET2Maple")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: neckWidth, height: segmentHeight)
+                            .clipped()
+                    }
+                }
+                .padding(.horizontal, bindingInset)
+
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
+
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.black.opacity(0.14),
+                                Color.clear,
+                                Color.black.opacity(0.18)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .blendMode(.multiply)
+
+                VStack(spacing: 0) {
+                    ForEach(Array(segments.enumerated()), id: \.offset) { index, bounds in
+                        Spacer()
+                            .frame(height: max((bounds.end - bounds.start) * neckHeight, 1))
+                            .overlay(
+                                Rectangle()
+                                    .fill(Color.white.opacity(((index + 1) % 3 == 0) ? 0.065 : 0))
+                                    .frame(height: 1.2)
+                                    .opacity(bounds.end >= 1 ? 0 : 1)
+                            )
+                    }
+                }
+                .padding(.horizontal, bindingInset)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         }
-        .padding(24)
+    }
+
+    private func segmentBounds(from ratios: [CGFloat]) -> [(start: CGFloat, end: CGFloat)] {
+        guard ratios.count >= 2 else { return [(0, 1)] }
+        var pairs: [(CGFloat, CGFloat)] = []
+        for index in 0..<(ratios.count - 1) {
+            let start = ratios[index]
+            let end = ratios[index + 1]
+            pairs.append((start, end))
+        }
+        if let last = ratios.last, last < 1 {
+            pairs.append((last, 1))
+        }
+        return pairs
+    }
+}
+
+private struct DeveloperButtonStack: View {
+    let windowShiftUp: () -> Void
+    let windowShiftDown: () -> Void
+    let neckShiftUp: () -> Void
+    let neckShiftDown: () -> Void
+    let canWindowShiftUp: Bool
+    let canWindowShiftDown: Bool
+    let canNeckShiftUp: Bool
+    let canNeckShiftDown: Bool
+
+    var body: some View {
+        HStack(spacing: 32) {
+            VStack(spacing: 8) {
+                devButton(icon: "arrow.up", action: neckShiftUp, isEnabled: canNeckShiftUp)
+                devButton(icon: "arrow.down", action: neckShiftDown, isEnabled: canNeckShiftDown)
+                Text("NECK")
+                    .font(.caption2)
+                    .foregroundColor(.white)
+                    .bold()
+            }
+            
+            VStack(spacing: 8) {
+                devButton(icon: "arrow.up", action: windowShiftUp, isEnabled: canWindowShiftUp)
+                devButton(icon: "arrow.down", action: windowShiftDown, isEnabled: canWindowShiftDown)
+                Text("WINDOW")
+                    .font(.caption2)
+                    .foregroundColor(.white)
+                    .bold()
+            }
+        }
+        .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(Color.black.opacity(0.35))
+                .fill(Color.black.opacity(0.45))
                 .blur(radius: 2)
         )
     }
@@ -667,4 +835,31 @@ private struct DeveloperButtonStack: View {
 
 #Preview {
     ContentView()
+}
+
+private struct ProjectLinebackerOverlay: View {
+    let fretRatios: [CGFloat]
+    let neckHeight: CGFloat
+    
+    var body: some View {
+        GeometryReader { geometry in
+            let neckWidth = geometry.size.width
+            let bindingInset = max(neckWidth * 0.02, 6)
+            let lineWidth = neckWidth - (bindingInset * 2)
+            
+            ForEach(1..<fretRatios.count, id: \.self) { index in
+                let currentRatio = fretRatios[index]
+                let previousRatio = fretRatios[index - 1]
+                let midpointRatio = (currentRatio + previousRatio) / 2.0
+                let yPosition = midpointRatio * neckHeight
+                
+                Rectangle()
+                    .fill(Color.blue)
+                    .frame(width: lineWidth, height: 3)
+                    .position(x: neckWidth / 2, y: yPosition)
+                    .allowsHitTesting(false)
+            }
+        }
+        .allowsHitTesting(false)
+    }
 }
