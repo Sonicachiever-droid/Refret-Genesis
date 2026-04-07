@@ -6,7 +6,6 @@ enum GameplayMenuOption: String, CaseIterable, Identifiable {
     case home
     case learn
     case phases
-    case account
     case audio
 
     var id: String { rawValue }
@@ -15,11 +14,9 @@ enum GameplayMenuOption: String, CaseIterable, Identifiable {
         case .home: return "HOME"
         case .learn: return "PLAY"
         case .phases: return "GUIDE"
-        case .account: return "SETTINGS"
         case .audio: return "AUDIO"
         }
     }
-
 }
 
 enum RefretMode: String, CaseIterable, Identifiable {
@@ -496,7 +493,7 @@ private struct GameplayControlPlateShell: View {
     let onToggleMenu: () -> Void
     let onSelectMenuOption: (GameplayMenuOption) -> Void
 
-    private let menuOptions: [GameplayMenuOption] = [.home, .learn, .phases, .account, .audio]
+    private let menuOptions: [GameplayMenuOption] = [.home, .learn, .phases, .audio]
 
     var body: some View {
         VStack(spacing: 10) {
@@ -1500,8 +1497,14 @@ struct ContentView: View {
     let beatBPM: Int
     let beatVolume: Double
     let stringVolume: Double
+    @Binding var playStartingFret: Int
+    @Binding var playRepetitions: Int
+    @Binding var playDirectionRawValue: String
+    @Binding var playEnableHighFrets: Bool
+    @Binding var playLessonStyle: String
     @Binding var walletDollars: Int
     @Binding var balanceDollars: Int
+    @AppStorage("numbers3.runtime.directionLockActive") private var directionLockActive: Bool = false
 
     @State private var audioSettings = AudioSettings()
     @State private var showAudioPage: Bool = false
@@ -1635,6 +1638,8 @@ struct ContentView: View {
     
     // Chord system integration
     @StateObject private var chordGenerator = ChordGenerator()
+    // Random style integration
+    @StateObject private var randomNoteGenerator = RandomNoteGenerator()
     @State private var correctAnswerSide: AnswerSide = .left
     @State private var isResolvingAnswer: Bool = false
     @State private var activePickedStringNumbers: [Int] = [1]
@@ -1681,7 +1686,7 @@ struct ContentView: View {
     @State private var streakMeterFailureActive: Bool = false
     @State private var streakMeterFailureVisibleColumns: Int = 0
     @State private var lastPromptedCorrectNote: String? = nil
-    @State private var lastPromptedStringHalf: Int? = nil
+    @State private var lastPromptedStringHalf: AnswerSide? = nil
     @State private var lastPromptedStringNumber: Int? = nil
     @State private var recentPromptedCorrectNotes: [String] = []
     @State private var beginnerRuntime = BeginnerRuntimeState()
@@ -1737,6 +1742,10 @@ struct ContentView: View {
         var rewardScheduledMIDINotes: [Int] = []
         var rewardScheduledNoteTextByString: [Int: String] = [:]
         var rewardSustainMultiplier: Double = 3.0
+        // Random style state
+        var randomNoteSequence: [String] = []
+        var usedNoteLocations: Set<String> = []
+        var randomSequenceProgressIndex: Int = 0
     }
 
     private struct BeginnerRewardPolicyKey: Hashable {
@@ -1849,26 +1858,38 @@ struct ContentView: View {
         return notes.prefix(count).joined(separator: " ")
     }
 
+    private var beginnerCurrentRoundLabel: String {
+        "BEGINNER ROUND \(max(currentRound, 0))"
+    }
+
+    private var shouldShowLegacyRoundZeroIntro: Bool {
+        beginnerRoundOneStartingFret == 0
+    }
+
     private var beginnerRoundStatusText: String? {
         guard layoutMode == .beginner else { return nil }
         switch beginnerRuntime.coursePhase {
         case .round1Ascending:
+            if !beginnerRuntime.answerBoxReady,
+               !beginnerRuntime.roundOneIntroActive {
+                return nil
+            }
             switch beginnerRoundZeroIntroDisplayPhase {
             case .centeredRoundZeroChordMode:
                 return nil
             case .roundZeroHeader:
-                return "BEGINNER ROUND 0"
+                return beginnerCurrentRoundLabel
             case .roundZeroScaleTitle:
-                return "BEGINNER ROUND 0\nEm Pentatonic"
+                return "\(beginnerCurrentRoundLabel)\n\(beginnerCurrentScaleTitle)"
             case .noteReveal, .inactive:
                 break
             }
             let progressLine = beginnerPentatonicProgressText
             let roundOneSubtitle = beginnerCurrentScaleTitle
             if progressLine.isEmpty {
-                return "BEGINNER ROUND 1\n\(roundOneSubtitle)"
+                return "\(beginnerCurrentRoundLabel)\n\(roundOneSubtitle)"
             }
-            return "BEGINNER ROUND 1\n\(roundOneSubtitle)\n\(progressLine)"
+            return "\(beginnerCurrentRoundLabel)\n\(roundOneSubtitle)\n\(progressLine)"
         case .round2Descending:
             return "BEGINNER ROUND 2"
         case .round1Celebration, .round2Arming, .round2Celebration:
@@ -1879,7 +1900,7 @@ struct ContentView: View {
     private var beginnerCenteredStatusMessage: String? {
         guard layoutMode == .beginner else { return nil }
         if beginnerRoundZeroIntroDisplayPhase == .centeredRoundZeroChordMode {
-            return "BEGINNER ROUND 0\nCHORD MODE"
+            return "\(beginnerCurrentRoundLabel)\nCHORD MODE"
         }
         if beginnerRuntime.coursePhase == .round2Arming {
             return "BEGINNER ROUND 2\nARMED"
@@ -1932,20 +1953,40 @@ struct ContentView: View {
         }
     }
 
+    private var playDirection: LessonDirection {
+        LessonDirection(rawValue: playDirectionRawValue) ?? .ascending
+    }
+
+    private var effectivePlayRepetitions: Int {
+        max(playRepetitions, 1)
+    }
+
     private var beginnerRoundTwoStartsDescending: Bool {
-        audioSettings.beginnerStartDirection == .descendingFlats
+        playDirection == .descending
+    }
+
+    private var beginnerLowerFretBoundary: Int {
+        0
+    }
+
+    private var beginnerUpperFretBoundary: Int {
+        playEnableHighFrets ? 19 : 12
+    }
+
+    private var clampedBeginnerStartingFret: Int {
+        min(max(playStartingFret, beginnerLowerFretBoundary), beginnerUpperFretBoundary)
     }
 
     private var beginnerRoundTwoStartingFret: Int {
-        min(max(audioSettings.beginnerStartingFret, 0), 12)
+        clampedBeginnerStartingFret
     }
 
     private var beginnerRoundOneStartsDescending: Bool {
-        audioSettings.beginnerStartDirection == .descendingFlats
+        playDirection == .descending
     }
 
     private var beginnerRoundOneStartingFret: Int {
-        min(max(audioSettings.beginnerStartingFret, 0), 12)
+        clampedBeginnerStartingFret
     }
 
     private var isInitialRoundOneScaleIntro: Bool {
@@ -1988,6 +2029,19 @@ struct ContentView: View {
         return backingTrackShouldPlayInGameplay
     }
 
+    private var canPressStopButton: Bool {
+        !isRoundArmed && !isCodeScreensaverMode && !isRoundPaused
+    }
+
+    private var canPressResetButton: Bool {
+        !startupStartButtonAttentionActive
+    }
+
+    private var shouldLockPlayDirection: Bool {
+        guard layoutMode == .beginner else { return false }
+        return !isRoundArmed
+    }
+
     private var beginnerStartupArmedText: String {
         if layoutMode == .beginner, beginnerRuntime.coursePhase == .round2Arming || beginnerRuntime.coursePhase == .round2Descending {
             return "BEGINNER ROUND 2 ARMED"
@@ -2002,6 +2056,11 @@ struct ContentView: View {
         beatBPM: Int = 80,
         beatVolume: Double = 0.8,
         stringVolume: Double = 0.8,
+        playStartingFret: Binding<Int> = .constant(0),
+        playRepetitions: Binding<Int> = .constant(5),
+        playDirectionRawValue: Binding<String> = .constant(LessonDirection.ascending.rawValue),
+        playEnableHighFrets: Binding<Bool> = .constant(false),
+        playLessonStyle: Binding<String> = .constant("random"),
         walletDollars: Binding<Int> = .constant(0),
         balanceDollars: Binding<Int> = .constant(0)
     ) {
@@ -2011,6 +2070,11 @@ struct ContentView: View {
         self.beatBPM = beatBPM
         self.beatVolume = beatVolume
         self.stringVolume = stringVolume
+        self._playStartingFret = playStartingFret
+        self._playRepetitions = playRepetitions
+        self._playDirectionRawValue = playDirectionRawValue
+        self._playEnableHighFrets = playEnableHighFrets
+        self._playLessonStyle = playLessonStyle
         self._walletDollars = walletDollars
         self._balanceDollars = balanceDollars
     }
@@ -2063,7 +2127,9 @@ struct ContentView: View {
                 : "STRING \(promptStrings[0])"
             let isGameplayStarted = !isCodeScreensaverMode
             let displayedFretStatusLabel = isGameplayStarted ? fretStatusLabel : ""
-            let displayedStringStatusLabel = isGameplayStarted ? stringStatusLabel : ""
+            let displayedStringStatusLabel: String = playLessonStyle == "random" 
+                ? "RANDOM STYLE" 
+                : (isGameplayStarted ? stringStatusLabel : "")
             let roundStatusLabel = "ROUND \(currentRound + 1)"
             let screenBannerFont = UIFont.systemFont(ofSize: 20, weight: .semibold)
             let screenMeasuredWidth = max(
@@ -2449,7 +2515,7 @@ struct ContentView: View {
             .overlay(alignment: .bottom) {
                 GameplayControlPlateShell(
                     isMenuExpanded: gameplayMenuExpanded,
-                    isStartupInputLockActive: startupStartButtonAttentionActive,
+                    isStartupInputLockActive: false,
                     onHint: {
                         handleHintButtonPress()
                     },
@@ -2634,14 +2700,14 @@ struct ContentView: View {
                         )
                     Button("STOP") { handleRoundStopButton() }
                         .frame(minWidth: 58, minHeight: 34, maxHeight: 34)
-                        .disabled(startupStartButtonAttentionActive)
+                        .disabled(!canPressStopButton)
                         .background(
                             RoundedRectangle(cornerRadius: 7, style: .continuous)
                                 .stroke(Color.black.opacity(0.34), lineWidth: 1.0)
                         )
                     Button("RESET") { handleRoundResetButton() }
                         .frame(minWidth: 58, minHeight: 34, maxHeight: 34)
-                        .disabled(startupStartButtonAttentionActive)
+                        .disabled(!canPressResetButton)
                         .background(
                             RoundedRectangle(cornerRadius: 7, style: .continuous)
                                 .stroke(Color.black.opacity(0.34), lineWidth: 1.0)
@@ -2721,9 +2787,7 @@ struct ContentView: View {
                     .allowsHitTesting(true)
                 }
             }
-            .onAppear {
-                initializeGameplaySession()
-            }
+            .onAppear(perform: handleContentOnAppear)
             .sheet(isPresented: $showAudioPage) {
                 AudioPageView(
                     audioSettings: audioSettings,
@@ -2785,9 +2849,11 @@ struct ContentView: View {
                     roundRevealElapsedBeats = 0
                     roundRevealLastTickDate = nil
                 }
+                updateDirectionLockState()
                 syncBackingTrackPlayback()
             }
             .onChange(of: isCodeScreensaverMode) { _, isScreensaverMode in
+                updateDirectionLockState()
                 syncBackingTrackPlayback()
                 if isScreensaverMode {
                     beginnerRuntime.beatLightFlashOn = false
@@ -2798,6 +2864,16 @@ struct ContentView: View {
             .onChange(of: currentRound) { _, newValue in
                 _ = newValue
                 applyBeginnerBassTransposeForCurrentStage()
+            }
+            .onChange(of: playRepetitions) { _, _ in
+                guard layoutMode == .beginner else { return }
+
+                if isRoundArmed || isRoundPaused {
+                    beginnerRuntime.scaleRepetitionsRemaining = beginnerTargetScaleRepetitionsRemaining()
+                    return
+                }
+
+                applyLivePlayRepetitionChangeIfNeeded()
             }
             .onReceive(Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()) { date in
                 handleMainTimerTick(date)
@@ -2957,6 +3033,35 @@ struct ContentView: View {
         }
     }
 
+    private func applyLivePlayRepetitionChangeIfNeeded() {
+        guard layoutMode == .beginner,
+              !isRoundArmed,
+              !isRoundPaused
+        else { return }
+
+        guard beginnerRuntime.coursePhase == .round1Ascending || beginnerRuntime.coursePhase == .round2Descending else {
+            return
+        }
+
+        beginnerRuntime.scaleRepetitionsRemaining = beginnerTargetScaleRepetitionsRemaining()
+    }
+
+    private func beginnerTargetScaleRepetitionsRemaining() -> Int {
+        if beginnerRuntime.coursePhase == .round2Descending {
+            return max(effectivePlayRepetitions - beginnerRuntime.correctAnswersAtCurrentFret, 1)
+        }
+        return effectivePlayRepetitions
+    }
+
+    private func updateDirectionLockState() {
+        directionLockActive = shouldLockPlayDirection
+    }
+
+    private func handleContentOnAppear() {
+        initializeGameplaySession()
+        updateDirectionLockState()
+    }
+
     private func initializeGameplaySession() {
         audioSettings = AudioSettings()
         availableBackingTracks = BackingTrack.discoverBundledTracks()
@@ -3053,7 +3158,7 @@ struct ContentView: View {
         beginnerRuntime.roundOneIntroActive = false
         beginnerRuntime.roundOneSequenceStartDate = nil
         beginnerRuntime.beatLightIntroMeasureSkipped = false
-        beginnerRuntime.scaleRepetitionsRemaining = max(audioSettings.beginnerLessonRepeat.rawValue, 1)
+        beginnerRuntime.scaleRepetitionsRemaining = effectivePlayRepetitions
         beginnerRuntime.scaleSequenceIndex = 0
         beginnerRuntime.scaleStageIndex = 0
         beginnerRuntime.scaleCycleSemitoneOffset = currentRound
@@ -3068,6 +3173,11 @@ struct ContentView: View {
         beginnerRuntime.rewardScheduledMIDINotes = []
         beginnerRuntime.rewardScheduledNoteTextByString = [:]
         beginnerRuntime.rewardSustainMultiplier = 3.0
+        
+        // Initialize Random style state if needed
+        if playLessonStyle == "random" {
+            randomNoteGenerator.generateNoteSequence(for: currentRound, useFlats: beginnerUsesFlats)
+        }
         applyBeginnerBassTransposeForCurrentStage()
         prepareCurrentQuestion()
     }
@@ -3245,36 +3355,25 @@ struct ContentView: View {
         beginnerRuntime.rewardScheduledMIDINotes = []
         beginnerRuntime.rewardScheduledNoteTextByString = [:]
         beginnerRuntime.rewardSustainMultiplier = 3.0
-        beginnerRuntime.scaleRepetitionsRemaining = 1
+        beginnerRuntime.scaleRepetitionsRemaining = effectivePlayRepetitions
         if completedStageWasCycleEnd {
             let nextFret: Int?
             if isDescendingPhase {
-                nextFret = currentRound > 0 ? currentRound - 1 : nil
+                nextFret = currentRound > beginnerLowerFretBoundary ? currentRound - 1 : nil
             } else {
-                nextFret = currentRound < 12 ? currentRound + 1 : nil
+                nextFret = currentRound < beginnerUpperFretBoundary ? currentRound + 1 : nil
             }
 
             if let nextFret {
                 beginnerRuntime.scaleCycleSemitoneOffset = nextFret
-                beginnerRuntime.scaleStageIndex = 0
-                currentRound = nextFret
-                withAnimation(.easeInOut(duration: 1.3)) {
-                    currentFretStart = nextFret
-                }
-                prepareCurrentQuestion()
-            } else {
-                beginnerRuntime.scaleCycleSemitoneOffset = currentRound
                 beginnerRuntime.scaleStageIndex = 0
                 beginnerRuntime.scaleSequenceIndex = 0
                 beginnerRuntime.pentatonicRevealCount = 0
                 beginnerRuntime.roundOneIntroActive = false
                 beginnerRuntime.roundOneSequenceStartDate = nil
                 beginnerRuntime.revealStartBeatBucket = nil
-                beginnerRuntime.answerBoxReady = false
-                beginnerRuntime.lastPickedNote = nil
-                activePickedStringNumbers = []
-                armBeginnerRoundTwo()
-                return
+                beginnerRuntime.pendingRewardStageAdvance = false
+                beginnerRuntime.rewardSelectedString = nil
             }
         } else {
             beginnerRuntime.scaleStageIndex = min(beginnerRuntime.scaleStageIndex + 1, beginnerScaleStages.count - 1)
@@ -3311,7 +3410,18 @@ struct ContentView: View {
         }
 
         if beginnerRuntime.coursePhase == .round1Ascending {
-            midiEngine.setBassTransposeSemitones(beginnerCurrentBassSemitoneTarget)
+            if playLessonStyle == "random" {
+                // Random style: play root note only
+                let rootNote = FretNoteCalculator.noteAt(string: 6, fret: max(currentRound, 0), useFlats: beginnerUsesFlats)
+                let rootMIDI = midiNoteValue(forNote: rootNote)
+                if rootMIDI != nil {
+                    // Note: SimpleMIDIEngine doesn't support individual note playback
+                    // This would need to be implemented or use GuitarNoteEngine instead
+                }
+            } else {
+                // Chord style: existing behavior
+                midiEngine.setBassTransposeSemitones(beginnerCurrentBassSemitoneTarget)
+            }
             return
         }
 
@@ -3339,7 +3449,7 @@ struct ContentView: View {
         beginnerRuntime.roundOneSequenceStartDate = currentDate
         beginnerRuntime.pentatonicRevealCount = 0
         beginnerRuntime.revealStartBeatBucket = Int(floor(roundRevealElapsedBeats))
-        beginnerRuntime.showRoundZeroIntroSequence = true
+        beginnerRuntime.showRoundZeroIntroSequence = shouldShowLegacyRoundZeroIntro
         beginnerRuntime.lastPickedNote = nil
         beginnerRuntime.answerBoxReady = false
     }
@@ -3563,28 +3673,32 @@ struct ContentView: View {
 
         if layoutMode == .beginner {
             if beginnerRuntime.coursePhase == .round2Descending {
-                let requiredCorrectAnswers = max(audioSettings.beginnerLessonRepeat.rawValue, 1)
+                let requiredCorrectAnswers = effectivePlayRepetitions
                 let completedAtCurrentFret = beginnerRuntime.correctAnswersAtCurrentFret
 
                 if completedAtCurrentFret >= requiredCorrectAnswers {
                     beginnerRuntime.correctAnswersAtCurrentFret = 0
-                    beginnerRuntime.scaleRepetitionsRemaining = requiredCorrectAnswers
+                    // Reset repetitions for the new chord after this note completes
+                    // This will be set in the advance logic, not here
 
                     if beginnerRoundTwoStartsDescending {
-                        if currentRound > 0 {
+                        if currentRound > beginnerLowerFretBoundary {
                             currentRound -= 1
                         } else {
                             beginBeginnerRoundTwoCelebration()
                             return
                         }
                     } else {
-                        if currentRound < 12 {
+                        if currentRound < beginnerUpperFretBoundary {
                             currentRound += 1
                         } else {
                             beginBeginnerRoundTwoCelebration()
                             return
                         }
                     }
+                    
+                    // Reset repetitions for the new chord
+                    beginnerRuntime.scaleRepetitionsRemaining = requiredCorrectAnswers
                 } else {
                     beginnerRuntime.scaleRepetitionsRemaining = max(requiredCorrectAnswers - completedAtCurrentFret, 1)
                 }
@@ -3601,14 +3715,14 @@ struct ContentView: View {
         } else {
             roundStringIndex = 0
             if !isPhaseDescending {
-                if currentRound < 12 {
+                if currentRound < beginnerUpperFretBoundary {
                     currentRound += 1
                 } else {
                     startGameFromBeginning()
                     return
                 }
             } else {
-                if currentRound > 0 {
+                if currentRound > beginnerLowerFretBoundary {
                     currentRound -= 1
                 } else {
                     startGameFromBeginning()
@@ -3616,10 +3730,33 @@ struct ContentView: View {
                 }
             }
         }
-        prepareCurrentQuestion()
     }
-
+    
+        
     private func prepareCurrentQuestion() {
+    if playLessonStyle == "random" {
+        // Random style: use note sequence from generator
+        guard let nextNote = randomNoteGenerator.getNextNote(currentFret: max(currentRound, 0)) else { return }
+        let fret = max(currentRound, 0)
+        let useFlats = layoutMode == .beginner ? beginnerUsesFlats : false
+        let correctNote = nextNote
+        let incorrectNote = randomIncorrectNote(excluding: correctNote, useFlats: useFlats)
+        let correctOnLeft = Bool.random()
+        
+        if correctOnLeft {
+            leftChoiceNote = correctNote
+            rightChoiceNote = incorrectNote
+        } else {
+            leftChoiceNote = incorrectNote
+            rightChoiceNote = correctNote
+        }
+        
+        currentPromptStrings = [6] // Always use string 6 for Random style
+        lastPromptedCorrectNote = correctNote
+        lastPromptedStringHalf = .left
+        lastPromptedStringNumber = 6
+    } else {
+        // Chord style: existing behavior
         let fret = max(currentRound, 0)
         let useFlats = layoutMode == .beginner ? beginnerUsesFlats : false
         let targetString = activeStringOrder.isEmpty ? 1 : activeStringOrder.randomElement() ?? 1
@@ -3630,30 +3767,18 @@ struct ContentView: View {
         if correctOnLeft {
             leftChoiceNote = correctNote
             rightChoiceNote = incorrectNote
-            correctAnswerSide = .left
         } else {
             leftChoiceNote = incorrectNote
             rightChoiceNote = correctNote
-            correctAnswerSide = .right
         }
 
         currentPromptStrings = [targetString]
-        currentCorrectNote = correctNote
-        activePickedStringNumbers = currentPromptStrings
-        currentQuestionIsAccidental = correctNote.contains("#") || correctNote.contains("b")
-        activeAnswerFeedback = nil
-        questionBoxAssistActive = false
-        if !isCodeScreensaverMode && modeVariant == .beat && beatCountInRemaining == 0 {
-            let bpm = Double(max(beatBPM, 60))
-            beatQuestionDeadline = .now.addingTimeInterval(max(0.75, 120.0 / bpm))
-        } else {
-            beatQuestionDeadline = nil
-        }
-
+        lastPromptedCorrectNote = correctNote
         withAnimation(.easeInOut(duration: 1.3)) {
             currentFretStart = fret
         }
     }
+}
 
     private func payoutForRound(_ round: Int) -> Int {
         _ = round
@@ -3911,6 +4036,7 @@ struct ContentView: View {
         roundRevealElapsedBeats = 0
         roundRevealLastTickDate = nil
         startGameFromBeginning(animateNeckSlideFromStartup: animateNeckSlideFromStartup)
+        updateDirectionLockState()
         if !animateNeckSlideFromStartup {
             syncBackingTrackPlayback()
         }
@@ -3934,6 +4060,11 @@ struct ContentView: View {
             return
         }
 
+        if isRoundPaused {
+            resumeRoundFromTransportStop(forceIfPaused: true)
+            return
+        }
+
         if !isRoundArmed {
             return
         }
@@ -3942,10 +4073,7 @@ struct ContentView: View {
     }
 
     private func handleRoundStopButton() {
-        guard !isRoundArmed,
-              !isCodeScreensaverMode,
-              !isRoundPaused
-        else { return }
+        guard canPressStopButton else { return }
 
         isRoundPaused = true
         transportStoppedForResume = true
@@ -3955,10 +4083,11 @@ struct ContentView: View {
         beginnerRuntime.beatLightFlashOn = false
         beginnerRuntime.beatLightLastProcessedBeat = nil
         beginnerRuntime.beatLightIntroMeasureSkipped = false
+        updateDirectionLockState()
     }
 
-    private func resumeRoundFromTransportStop() {
-        guard transportStoppedForResume else { return }
+    private func resumeRoundFromTransportStop(forceIfPaused: Bool = false) {
+        guard transportStoppedForResume || (forceIfPaused && isRoundPaused) else { return }
 
         transportStoppedForResume = false
         isRoundPaused = false
@@ -3968,9 +4097,12 @@ struct ContentView: View {
         beginnerRuntime.beatLightFlashOn = false
         beginnerRuntime.beatLightLastProcessedBeat = nil
         beginnerRuntime.beatLightIntroMeasureSkipped = false
+        updateDirectionLockState()
     }
 
     private func handleRoundResetButton() {
+        guard canPressResetButton else { return }
+
         if layoutMode == .beginner {
             beginnerRuntime.coursePhase = .round1Ascending
         }
@@ -3992,6 +4124,7 @@ struct ContentView: View {
         startGameFromBeginning()
         developerPromptText = ""
         beginnerRuntime.answerBoxReady = false
+        updateDirectionLockState()
     }
 
     private func postponeBeatDeadlineForAssist() {
@@ -4059,7 +4192,7 @@ struct ContentView: View {
         streakMeterFailureActive = false
         streakMeterFailureVisibleColumns = 0
         beginnerRuntime.correctAnswersAtCurrentFret = 0
-        beginnerRuntime.scaleRepetitionsRemaining = max(audioSettings.beginnerLessonRepeat.rawValue, 1)
+        beginnerRuntime.scaleRepetitionsRemaining = effectivePlayRepetitions
         lastPromptedCorrectNote = nil
         lastPromptedStringHalf = nil
         lastPromptedStringNumber = nil
@@ -4069,6 +4202,21 @@ struct ContentView: View {
         beginnerRuntime.celebrationFlashOn = false
         beginnerRuntime.celebrationNextFlashDate = nil
         prepareCurrentQuestion()
+    }
+    
+    // MARK: - Private Helper Methods
+    
+    private func midiNoteValue(forNote note: String) -> Int? {
+        let noteToMIDI: [String: Int] = [
+            "C": 60, "C#": 61, "Db": 61,
+            "D": 62, "D#": 63, "Eb": 63,
+            "E": 64,
+            "F": 65, "F#": 66, "Gb": 66,
+            "G": 67, "G#": 68, "Ab": 68,
+            "A": 69, "A#": 70, "Bb": 70,
+            "B": 71
+        ]
+        return noteToMIDI[note]
     }
 }
 

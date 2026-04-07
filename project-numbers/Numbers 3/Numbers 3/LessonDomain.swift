@@ -4,7 +4,6 @@ enum Numbers3HubTab: Hashable {
     case home
     case play
     case instructions
-    case settings
 }
 
 enum GameMode: String, CaseIterable, Identifiable {
@@ -34,16 +33,12 @@ enum SoundMode: String, CaseIterable, Identifiable {
 struct LessonSetup: Equatable {
     var startingFret: Int = 0
     var direction: LessonDirection = .ascending
-    var repetitions: Int = 2
+    var repetitions: Int = 5
     var soundMode: SoundMode = .silent
 }
 
 struct LessonSettings: Equatable {
-    var restartOnMistake: Bool = true
-    var gentleOpeningEnabled: Bool = true
     var allowFlexibleStartingFret: Bool = true
-    var showReferenceNoteNames: Bool = false
-    var showStringNumbers: Bool = true
 }
 
 struct LessonProgress: Equatable {
