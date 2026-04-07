@@ -1868,6 +1868,19 @@ struct ContentView: View {
 
     private var beginnerRoundStatusText: String? {
         guard layoutMode == .beginner else { return nil }
+        
+        // Random style: show all 6 shuffled notes
+        if playLessonStyle == "random" {
+            guard beginnerRuntime.coursePhase == .round1Ascending || beginnerRuntime.coursePhase == .round2Descending else { return nil }
+            guard !isCodeScreensaverMode else { return nil }
+            
+            let roundLabel = "BEGINNER ROUND \(max(currentRound, 0))"
+            let styleLabel = "RANDOM STYLE"
+            let allNotes = randomNoteGenerator.currentNoteSequence.joined(separator: " ")
+            return "\(roundLabel)\n\(styleLabel)\n\(allNotes)"
+        }
+        
+        // Chord style: existing behavior
         switch beginnerRuntime.coursePhase {
         case .round1Ascending:
             if !beginnerRuntime.answerBoxReady,
@@ -1899,6 +1912,23 @@ struct ContentView: View {
 
     private var beginnerCenteredStatusMessage: String? {
         guard layoutMode == .beginner else { return nil }
+        
+        // Random style: show intro message during startup
+        if playLessonStyle == "random" {
+            if isCodeScreensaverMode && startupSequenceActivated {
+                let startupState = StartupSequenceView.state(
+                    for: startupSequenceElapsed,
+                    showFullSequence: false,
+                    armedText: "RANDOM MODE ARMED"
+                )
+                if startupState.phase == .armed {
+                    return "RANDOM MODE\nARMED"
+                }
+            }
+            return nil
+        }
+        
+        // Chord style: existing behavior
         if beginnerRoundZeroIntroDisplayPhase == .centeredRoundZeroChordMode {
             return "\(beginnerCurrentRoundLabel)\nCHORD MODE"
         }
@@ -1909,6 +1939,9 @@ struct ContentView: View {
     }
 
     private var beginnerCenteredStatusColor: Color {
+        if playLessonStyle == "random" {
+            return beginnerRuntime.celebrationFlashOn ? Color.green.opacity(0.98) : Color.green.opacity(0.28)
+        }
         if beginnerRoundZeroIntroDisplayPhase == .centeredRoundZeroChordMode {
             return Color.green.opacity(0.96)
         }
@@ -3907,6 +3940,62 @@ struct ContentView: View {
     }
 
     private func handleBeginnerRoundOneProgressionIfNeeded(selectedNote: String, selectedString: Int) {
+        // Random style: check against random note sequence
+        if playLessonStyle == "random" {
+            guard beginnerRuntime.coursePhase == .round1Ascending || beginnerRuntime.coursePhase == .round2Descending else { return }
+            
+            let sequence = randomNoteGenerator.currentNoteSequence
+            guard !sequence.isEmpty else { return }
+            
+            let currentIndex = randomNoteGenerator.sequenceProgressIndex
+            guard currentIndex < sequence.count else { return }
+            
+            let expectedNote = sequence[currentIndex]
+            
+            if selectedNote == expectedNote {
+                // Correct answer - advance in sequence
+                randomNoteGenerator.sequenceProgressIndex += 1
+                
+                // Check if sequence is complete
+                if randomNoteGenerator.isSequenceComplete() {
+                    // All 6 notes completed - check repetitions
+                    if beginnerRuntime.scaleRepetitionsRemaining <= 1 {
+                        // Move to next fret
+                        beginnerRuntime.scaleRepetitionsRemaining = effectivePlayRepetitions
+                        randomNoteGenerator.resetForNewFret()
+                        
+                        if !isPhaseDescending {
+                            if currentRound < beginnerUpperFretBoundary {
+                                currentRound += 1
+                            } else {
+                                beginBeginnerRoundOneCelebration()
+                                return
+                            }
+                        } else {
+                            if currentRound > beginnerLowerFretBoundary {
+                                currentRound -= 1
+                            } else {
+                                beginBeginnerRoundOneCelebration()
+                                return
+                            }
+                        }
+                        
+                        // Generate new sequence for new fret
+                        let useFlats = layoutMode == .beginner ? beginnerUsesFlats : false
+                        randomNoteGenerator.generateNoteSequence(for: max(currentRound, 0), useFlats: useFlats)
+                    } else {
+                        // Another repetition - reset sequence and shuffle
+                        beginnerRuntime.scaleRepetitionsRemaining -= 1
+                        randomNoteGenerator.resetForNewFret()
+                        let useFlats = layoutMode == .beginner ? beginnerUsesFlats : false
+                        randomNoteGenerator.generateNoteSequence(for: max(currentRound, 0), useFlats: useFlats)
+                    }
+                }
+            }
+            return
+        }
+        
+        // Chord style: existing behavior
         guard beginnerRuntime.coursePhase == .round1Ascending,
               beginnerRuntime.pentatonicRevealCount >= beginnerCurrentScaleNotes.count
         else { return }
